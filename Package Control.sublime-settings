@@ -1,0 +1,29 @@
+{
+	"bootstrapped": true,
+	"in_process_packages":
+	[
+	],
+	"installed_packages":
+	[
+		"42 Headers",
+		"A File Icon",
+		"All Autocomplete",
+		"ApacheConf",
+		"AutoFileName",
+		"Boxy Theme",
+		"BracketHighlighter",
+		"C Improved",
+		"DocBlockr",
+		"Dockerfile Syntax Highlighting",
+		"Git",
+		"GitGutter",
+		"GitStatus",
+		"INI",
+		"Monokai Extended",
+		"Package Control",
+		"SideBarEnhancements",
+		"SublimeCodeIntel",
+		"SublimeLinter",
+		"SublimeLinter-clang"
+	]
+}

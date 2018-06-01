@@ -1,0 +1,11 @@
+*.dSYM/
+.idea/
+.Spotlight-V100
+.DS_Store
+.Trashes
+._*
+Desktop.ini
+Thumbs.db
+*.out
+*.o
+*.a
