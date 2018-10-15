@@ -17,6 +17,7 @@
 |----------------------------|--------------------------------------|
 | Create new screen window   | `^a` + `c`                           |
 | Kill current screen window | `^a` + `k`                           |
+| List windows               | `^a` + `"`                           |
 | Change to n-window         | `^a` + `[0-9]`                       |
 | Change to next window      | `^a` + `n`                           |
 | Change to previous window  | `^a` + `p`                           |
