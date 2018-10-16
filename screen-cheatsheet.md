@@ -28,6 +28,6 @@
 | Description                 | Command        |
 |-----------------------------|----------------|
 | Split terminal horizontally | `^a` + `S`     |
-| Split terminal vertically   | `^a` + `|`     |
+| Split terminal vertically   | `^a` + `\|`    |
 | Go to terminal split area   | `^a` + `[TAB]` |
 | Quit split area             | `^a` + `X`     |
