@@ -10,7 +10,6 @@
 		"All Autocomplete",
 		"ApacheConf",
 		"AutoFileName",
-		"Theme - Gravity",
 		"BracketHighlighter",
 		"C Improved",
 		"DocBlockr",
@@ -18,11 +17,11 @@
 		"Git",
 		"GitGutter",
 		"GitStatus",
-		"Monokai Extended",
 		"Package Control",
 		"SideBarEnhancements",
 		"SublimeCodeIntel",
 		"SublimeLinter",
-		"SublimeLinter-clang"
+		"SublimeLinter-clang",
+		"Theme - Gravity"
 	]
 }
