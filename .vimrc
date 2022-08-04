@@ -44,8 +44,8 @@ set smartindent                 " Do smart indenting
 set hlsearch                    " Highlight search matches
 set incsearch                   " Incremental search
 set hidden                      " Hide buffers when they are abandoned
-set tabstop=2                   " Number of columns a tab character has
-set shiftwidth=2                " Number of columns a new level of indentation has
+set tabstop=4                   " Number of columns a tab character has
+set shiftwidth=4                " Number of columns a new level of indentation has
 set expandtab                   " Expand tabs into spaces
 set smarttab                    " Smart tab insertion on new lines
 set backspace=indent,eol,start  " Make backspace behaves as in most other programs
@@ -78,15 +78,20 @@ autocmd BufNewFile,BufReadPost Makefile,*.makefile,*.mk set filetype=make
 autocmd BufNewFile,BufReadPost *.h,*.hpp,*.c,*.cc,*.cpp set filetype=cpp
 autocmd BufNewFile,BufReadPost Dockerfile,Dockerfile.* set filetype=dockerfile
 autocmd BufNewFile,BufReadPost *.tf,*.tfvars set filetype=terraform
+autocmd BufNewFile,BufReadPost *.yaml,*.yml set filetype=yaml
 
 " Use tab indentation for Makefile
 autocmd FileType make set tabstop=8 shiftwidth=8 softtabstop=0 noexpandtab
+
+" Use two spaces indentation for Markdown
+autocmd FileType markdown set tabstop=2 shiftwidth=2 softtabstop=0
 
 " Set formatter for various filetypes
 autocmd FileType markdown set equalprg=prettier\ --parser\ markdown
 autocmd FileType cpp set equalprg=clang-format\ -style=Microsoft
 autocmd FileType python set equalprg=black\ --quiet\ -
 autocmd FileType terraform set equalprg=terraform\ fmt\ -
+autocmd FileType yaml set equalprg=yamlfmt
 
 " Enable markdown folding
 let g:markdown_folding = 1

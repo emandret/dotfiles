@@ -125,6 +125,7 @@ bindkey \^U backward-kill-line
 # Safe aliases
 type grc >/dev/null 2>&1 && alias ls='grc ls --color=always -FC'
 type python3 >/dev/null 2>&1 && alias python='python3'
+type dig >/dev/null 2>&1 && alias myip='dig +short myip.opendns.com @resolver4.opendns.com'
 
 # Source external config
 [[ -s "/opt/homebrew/etc/grc.zsh" ]] && source /opt/homebrew/etc/grc.zsh
@@ -132,3 +133,11 @@ type python3 >/dev/null 2>&1 && alias python='python3'
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+
+# AWS profile
+export AWS_PROFILE=staging
+
+# Krew plugin manager
+export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
+
+
