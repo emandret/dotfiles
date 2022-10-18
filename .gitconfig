@@ -1,19 +1,29 @@
 [user]
-  name = Edwy MANDRET
-  email = emandret@student.42.fr
+    name = Edwy MANDRET
+    email = emandret@student.42.fr
 [url "ssh://git@github.com/explogx"]
-	insteadOf = https://github.com/explogx
+    insteadOf = https://github.com/explogx
 [init]
-	defaultBranch = main
+    defaultBranch = main
 [blame]
-	coloring = repeatedLines
+    coloring = repeatedLines
 [core]
-	editor = vim
+    editor = vim
 [diff]
-	tool = vimdiff
+    tool = vimdiff
 [difftool]
-	prompt = false
+    prompt = false
 [alias]
-  tree = log --graph --oneline --all
+    tree = log --graph --oneline --all
 [github]
-	user = explogx
+    user = explogx
+[credential "https://git-codecommit.eu-west-1.amazonaws.com"]
+    helper = !aws codecommit credential-helper $@
+    UseHttpPath = true
+[credential "https://github.com"]
+    helper = osxkeychain
+[merge]
+    tool = vimdiff
+    conflictstyle = merge
+[mergetool]
+    prompt = false
