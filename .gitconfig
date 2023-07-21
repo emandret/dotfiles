@@ -1,8 +1,8 @@
 [user]
     name = Edwy MANDRET
     email = emandret@student.42.fr
-[url "ssh://git@github.com/explogx"]
-    insteadOf = https://github.com/explogx
+[url "ssh://git@github.com/emandret"]
+    insteadOf = https://github.com/emandret
 [init]
     defaultBranch = main
 [blame]
@@ -16,7 +16,7 @@
 [alias]
     tree = log --graph --oneline --all
 [github]
-    user = explogx
+    user = emandret
 [credential "https://git-codecommit.eu-west-1.amazonaws.com"]
     helper = !aws codecommit credential-helper $@
     UseHttpPath = true
