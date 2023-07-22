@@ -1,6 +1,6 @@
 # Enable the subsequent settings only in interactive sessions
 case $- in
-  *i*) ;;
+    *i*) ;;
     *) return;;
 esac
 
@@ -145,73 +145,28 @@ source "$OSH"/oh-my-bash.sh
 # alias bashconfig="mate ~/.bashrc"
 # alias ohmybash="mate ~/.oh-my-bash"
 
-grc_aliases=(
-    cat
-    cvs
-    df
-    diff
-    dig
-    gcc
-    g++
-    ls
-    ifconfig
-    make
-    mount
-    mtr
-    netstat
-    ping
-    ps
-    w
-    who
-    tail
-    traceroute
-    wdiff
-    blkid
-    du
-    docker
-    env
-    id
-    ip
-    iostat
-    last
-    lsattr
-    lsblk
-    lspci
-    lsmod
-    lsof
-    getfacl
-    getsebool
-    ulimit
-    uptime
-    nmap
-    fdisk
-    findmnt
-    free
-    semanage
-    sar
-    ss
-    sysctl
+ignore_cmds=(
     systemctl
-    stat
-    showmount
-    tune2fs
-    tcpdump
-    kubectl
 )
 
 if command -v grc >/dev/null 2>&1; then
-    for a in "${grc_aliases[@]}"; do
-        alias "$a"="grc $a"
+
+    cmds="$(ls /usr/share/grc/ | sed 's/^conf\.//g')"
+
+    for cmd in $cmds; do
+        if [[ ! "${ignore_cmds[@]}" =~ $cmd ]]; then
+            command -v $cmd >/dev/null 2>&1 && alias $cmd="$(which grc) --colour=auto $cmd"
+        fi
     done
 
-    # Sudo helper
     sudo_grc() {
-        if [[ "${grc_aliases[*]}" =~ "$1" ]]; then
+        if [[ "$cmds" =~ $1 && ! "${ignore_cmds[@]}" =~ $1 ]]; then
             command sudo grc $1 ${@:2}
         else
             command sudo $@
         fi
     }
+
     alias sudo=sudo_grc
 fi
 
