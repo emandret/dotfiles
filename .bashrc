@@ -1,6 +1,6 @@
 # Enable the subsequent settings only in interactive sessions
 case $- in
-    *i*) ;;
+  *i*) ;;
     *) return;;
 esac
 
@@ -145,40 +145,49 @@ source "$OSH"/oh-my-bash.sh
 # alias bashconfig="mate ~/.bashrc"
 # alias ohmybash="mate ~/.oh-my-bash"
 
-ignore_cmds=(
-    systemctl
+grc_cmds=(
+    curl
+    diff
+    dig
+    env
+    ip
+    iptables
+    kubectl
+    last
+    ldap
+    lsof
+    mount
+    nmap
+    ps
+    tcpdump
+    traceroute
+    whois
 )
 
+# Alias supported commands to their colourised versions.
 if command -v grc >/dev/null 2>&1; then
+    grc_supported_cmds="$(ls /usr/share/grc/ | sed 's/^conf\.//g')"
 
-    cmds="$(ls /usr/share/grc/ | sed 's/^conf\.//g')"
-
-    for cmd in $cmds; do
-        if [[ ! "${ignore_cmds[@]}" =~ $cmd ]]; then
+    for cmd in "${grc_cmds[@]}"; do
+        if [[ "$grc_supported_cmds" =~ $cmd ]]; then
             command -v $cmd >/dev/null 2>&1 && alias $cmd="$(which grc) --colour=auto $cmd"
         fi
     done
 
-    sudo_grc() {
-        if [[ "$cmds" =~ $1 && ! "${ignore_cmds[@]}" =~ $1 ]]; then
+    _sudo_grc() {
+        if [[ "${grc_cmds[@]}" =~ $1 && "$grc_supported_cmds" =~ $1 ]]; then
             command sudo grc $1 ${@:2}
         else
             command sudo $@
         fi
     }
-
-    alias sudo=sudo_grc
+    alias sudo=_sudo_grc
 fi
 
-# GPG interactive prompt
+
+# Make sure GnuPG uses the current TTY (terminal) in an interactive shell.
 export GPG_TTY=$(tty)
 
-# Bypass BEGO proxy for curl
 ncurl() {
     no_proxy='*' curl $@
-}
-
-# LD6 nodes
-sshm() {
-    sshpass -p 'Berenberg' ssh -o PubkeyAuthentication=no -o PreferredAuthentications=password ubuntu@${1} ${@:2}
 }
