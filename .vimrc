@@ -51,8 +51,8 @@ set smarttab                    " Smart tab insertion on new lines
 set backspace=indent,eol,start  " Make backspace behaves as in most other programs
 set timeoutlen=200              " Short timeout for commands
 
-" Map CTRL-N to `:let @/ = ""`
-nnoremap <silent><C-N> :let @/ = ""<CR>
+" Map CTRL-S to `:let @/ = ""`
+nnoremap <silent><C-S> :let @/ = ""<CR>
 
 " Remap j and k to their gj and gk counterparts and vice-versa
 nnoremap j gj
@@ -165,3 +165,9 @@ highlight SignColumn guibg=NONE ctermbg=NONE
 
 " Fold unmatched portions of text
 cnoreabbrev <silent>foldsearch setlocal foldexpr=(getline(v:lnum)=~@/)?0:(getline(v:lnum-1)=~@/)\\|\\|(getline(v:lnum+1)=~@/)?1:2 foldmethod=expr foldlevel=0<CR>
+
+" NERDTree shortcuts
+nnoremap <leader>n :NERDTreeFocus<CR>
+nnoremap <C-n> :NERDTree<CR>
+nnoremap <C-t> :NERDTreeToggle<CR>
+nnoremap <C-f> :NERDTreeFind<CR>
