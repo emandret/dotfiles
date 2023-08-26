@@ -82,7 +82,6 @@ OMB_USE_SUDO=true
 # Add wisely, as too many completions slow down shell startup.
 completions=(
     git
-    composer
     ssh
     kubectl
     helm
@@ -103,7 +102,6 @@ aliases=(
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(
     git
-    bashmarks
     kubectl
     ansible
 )
@@ -184,7 +182,6 @@ if command -v grc >/dev/null 2>&1; then
     }
     alias sudo=_sudo_grc
 fi
-
 
 # Make sure GnuPG uses the current TTY (terminal) in an interactive shell.
 export GPG_TTY=$(tty)
