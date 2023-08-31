@@ -144,47 +144,8 @@ source "$OSH"/oh-my-bash.sh
 # Example aliases
 # alias bashconfig="mate ~/.bashrc"
 # alias ohmybash="mate ~/.oh-my-bash"
-
-grc_cmds=(
-    curl
-    diff
-    dig
-    env
-    ip
-    iptables
-    kubectl
-    last
-    ldap
-    lsof
-    mount
-    nmap
-    ps
-    tcpdump
-    traceroute
-    whois
-    docker
-)
-
-# Alias supported commands to their colourised versions.
-if command -v grc >/dev/null 2>&1; then
-    grc_supported_cmds="$(ls /usr/share/grc/ | sed 's/^conf\.//g')"
-
-    for cmd in "${grc_cmds[@]}"; do
-        if [[ "$grc_supported_cmds" =~ $cmd ]]; then
-            command -v $cmd >/dev/null 2>&1 && alias $cmd="$(which grc) --colour=auto $cmd"
-        fi
-    done
-
-    _sudo_grc() {
-        if [[ "${grc_cmds[@]}" =~ $1 && "$grc_supported_cmds" =~ $1 ]]; then
-            command sudo grc $1 ${@:2}
-        else
-            command sudo $@
-        fi
-    }
-    alias sudo=_sudo_grc
-fi
-
+alias kubectl='kubecolor'
+alias ip='ip -c'
 
 # Make sure GnuPG uses the current TTY (terminal) in an interactive shell.
 export GPG_TTY=$(tty)
