@@ -82,7 +82,6 @@ OMB_USE_SUDO=true
 # Add wisely, as too many completions slow down shell startup.
 completions=(
     git
-    composer
     ssh
     kubectl
     helm
@@ -103,7 +102,6 @@ aliases=(
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(
     git
-    bashmarks
     kubectl
     ansible
 )
@@ -144,6 +142,7 @@ source "$OSH"/oh-my-bash.sh
 # Example aliases
 # alias bashconfig="mate ~/.bashrc"
 # alias ohmybash="mate ~/.oh-my-bash"
+
 alias kubectl='kubecolor'
 alias ip='ip -c'
 
