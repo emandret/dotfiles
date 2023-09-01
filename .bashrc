@@ -143,12 +143,12 @@ source "$OSH"/oh-my-bash.sh
 # alias bashconfig="mate ~/.bashrc"
 # alias ohmybash="mate ~/.oh-my-bash"
 
-alias kubectl='kubecolor'
 alias ip='ip -c'
+alias kubectl='kubecolor'
 
 # Make sure GnuPG uses the current TTY (terminal) in an interactive shell.
 export GPG_TTY=$(tty)
 
-ncurl() {
-    no_proxy='*' curl $@
+no_proxy() {
+    NO_PROXY='*' no_proxy='*' eval $@
 }
