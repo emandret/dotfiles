@@ -1,7 +1,7 @@
 # Enable the subsequent settings only in interactive sessions
 case $- in
-  *i*) ;;
-    *) return;;
+*i*) ;;
+  *) return;;
 esac
 
 # Path to your oh-my-bash installation.
@@ -9,7 +9,7 @@ export OSH="$HOME/.oh-my-bash"
 
 # Set name of the theme to load. Optionally, if you set this to "random"
 # it'll load a random theme each time that oh-my-bash is loaded.
-OSH_THEME="dulcie"
+OSH_THEME="sirup"
 
 # Uncomment the following line to use case-sensitive completion.
 # OMB_CASE_SENSITIVE="true"
@@ -81,11 +81,8 @@ OMB_USE_SUDO=true
 # Example format: completions=(ssh git bundler gem pip pip3)
 # Add wisely, as too many completions slow down shell startup.
 completions=(
-    git
-    ssh
-    kubectl
-    helm
-    docker
+  git
+  ssh
 )
 
 # Which aliases would you like to load? (aliases can be found in ~/.oh-my-bash/aliases/*)
@@ -93,7 +90,7 @@ completions=(
 # Example format: aliases=(vagrant composer git-avh)
 # Add wisely, as too many aliases slow down shell startup.
 aliases=(
-    general
+  general
 )
 
 # Which plugins would you like to load? (plugins can be found in ~/.oh-my-bash/plugins/*)
@@ -101,9 +98,8 @@ aliases=(
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(
-    git
-    kubectl
-    ansible
+  kubectl
+  git
 )
 
 # Which plugins would you like to conditionally load? (plugins can be found in ~/.oh-my-bash/plugins/*)
@@ -113,7 +109,7 @@ plugins=(
 #      plugins+=(tmux-autoattach)
 #  fi
 
-source "$OSH"/oh-my-bash.sh
+source "$OSH/oh-my-bash.sh"
 
 # User configuration
 # export MANPATH="/usr/local/man:$MANPATH"
@@ -142,50 +138,11 @@ source "$OSH"/oh-my-bash.sh
 # Example aliases
 # alias bashconfig="mate ~/.bashrc"
 # alias ohmybash="mate ~/.oh-my-bash"
-
-grc_cmds=(
-    curl
-    diff
-    dig
-    env
-    ip
-    iptables
-    kubectl
-    last
-    ldap
-    lsof
-    mount
-    nmap
-    ps
-    tcpdump
-    traceroute
-    whois
-    docker
-)
-
-# Alias supported commands to their colourised versions.
-if command -v grc >/dev/null 2>&1; then
-    grc_supported_cmds="$(ls /usr/share/grc/ | sed 's/^conf\.//g')"
-
-    for cmd in "${grc_cmds[@]}"; do
-        if [[ "$grc_supported_cmds" =~ $cmd ]]; then
-            command -v $cmd >/dev/null 2>&1 && alias $cmd="$(which grc) --colour=auto $cmd"
-        fi
-    done
-
-    _sudo_grc() {
-        if [[ "${grc_cmds[@]}" =~ $1 && "$grc_supported_cmds" =~ $1 ]]; then
-            command sudo grc $1 ${@:2}
-        else
-            command sudo $@
-        fi
-    }
-    alias sudo=_sudo_grc
-fi
+alias kubectl='kubecolor'
 
 # Make sure GnuPG uses the current TTY (terminal) in an interactive shell.
 export GPG_TTY=$(tty)
 
-ncurl() {
-    no_proxy='*' curl $@
+np() {
+  NO_PROXY='*' no_proxy='*' eval $@
 }
