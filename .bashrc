@@ -138,6 +138,7 @@ source "$OSH/oh-my-bash.sh"
 # Example aliases
 # alias bashconfig="mate ~/.bashrc"
 # alias ohmybash="mate ~/.oh-my-bash"
+alias ip='ip -c'
 alias kubectl='kubecolor'
 
 # Make sure GnuPG uses the current TTY (terminal) in an interactive shell.
