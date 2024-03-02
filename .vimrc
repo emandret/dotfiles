@@ -93,9 +93,6 @@ autocmd FileType python set equalprg=black\ --quiet\ -
 autocmd FileType terraform set equalprg=terraform\ fmt\ -
 autocmd FileType yaml set equalprg=yamlfmt
 
-" Enable markdown folding
-let g:markdown_folding = 1
-
 " Autoclosing
 inoremap ( ()<Left>
 inoremap [ []<Left>
@@ -103,70 +100,45 @@ inoremap { {}<Left>
 inoremap {<CR> {<CR>}<Esc>O
 inoremap {;<CR> {<CR>};<Esc>O
 
-" Use terminal bg with papercolor
-let g:PaperColor_Theme_Options = {
-      \ 'theme': {
-      \   'default': {
-      \     'transparent_background': 1
-      \   }
-      \ }
-      \ }
+" Enable markdown folding
+let g:markdown_folding = 1
 
-" Enable papercolor theme
-colorscheme papercolor
+" To load plugins using the vim-plug plugin manager you must run `:PlugInstall` and `:UpdateRemotePlugins` on the first start
+call plug#begin()
+Plug 'bluz71/vim-nightfly-colors', { 'as': 'nightfly' }
+Plug 'itchyny/lightline.vim'
+Plug 'vim-syntastic/syntastic'
+Plug 'airblade/vim-gitgutter'
+Plug 'preservim/nerdtree'
+Plug 'jasonccox/vim-wayland-clipboard'
+call plug#end()
 
-" For vim-lightline
-let g:lightline = {
-      \ 'colorscheme': 'powerline',
-      \ 'enable': {
-      \   'statusline': 1,
-      \   'tabline': 1,
-      \ },
-      \ 'subseparator': {
-      \   'left':  '\uFF5C',
-      \   'right': '\uFF5C'
-      \ },
-      \ 'active': {
-      \   'left': [
-      \     ['mode', 'paste'],
-      \     ['gitbranch', 'readonly', 'filename', 'modified']
-      \   ]
-      \ },
-      \ 'component_function': {
-      \   'gitbranch': 'gitbranch#name'
-      \ }
-      \ }
+" bluz71/vim-nightfly-colors
+colorscheme nightfly
 
-" For vim-syntastic
+" itchyny/lightline.vim
+let g:lightline = { 'colorscheme': 'nightfly', 'enable': { 'statusline': 1, 'tabline': 1, }, 'subseparator': { 'left':  '\uFF5C', 'right': '\uFF5C' }, 'active': { 'left': [ ['mode', 'paste'], ['gitbranch', 'readonly', 'filename', 'modified'] ] }, 'component_function': { 'gitbranch': 'gitbranch#name' } }
+
+" vim-syntastic/syntastic
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_auto_loc_list = 1
+let g:syntastic_check_on_open = 0
+let g:syntastic_check_on_wq = 0
 if exists("&statusline")
   set statusline+=%#warningmsg#
   set statusline+=%{SyntasticStatuslineFlag()}
   set statusline+=%*
 endif
-
-let g:syntastic_always_populate_loc_list = 1
-let g:syntastic_auto_loc_list = 1
-let g:syntastic_check_on_open = 0
-let g:syntastic_check_on_wq = 0
-
 if exists("&completeopt")
   set completeopt-=preview
 endif
-
 autocmd CursorMovedI * if pumvisible() == 0 | pclose | endif
 autocmd InsertLeave * if pumvisible() == 0 | pclose | endif
 
-let g:syntastic_terraform_tffilter_plan = 1
-let g:terraform_completion_keys = 1
-let g:terraform_registry_module_completion = 0
-
-" For vim-gitgutter
+" airblade/vim-gitgutter
 highlight SignColumn guibg=NONE ctermbg=NONE
 
-" Fold unmatched portions of text
-cnoreabbrev <silent>foldsearch setlocal foldexpr=(getline(v:lnum)=~@/)?0:(getline(v:lnum-1)=~@/)\\|\\|(getline(v:lnum+1)=~@/)?1:2 foldmethod=expr foldlevel=0<CR>
-
-" NERDTree shortcuts
+" preservim/nerdtree
 nnoremap <leader>n :NERDTreeFocus<CR>
 nnoremap <C-n> :NERDTree<CR>
 nnoremap <C-t> :NERDTreeToggle<CR>
