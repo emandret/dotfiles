@@ -9,7 +9,7 @@ export OSH="$HOME/.oh-my-bash"
 
 # Set name of the theme to load. Optionally, if you set this to "random"
 # it'll load a random theme each time that oh-my-bash is loaded.
-OSH_THEME="slick"
+OSH_THEME="pure"
 
 # Uncomment the following line to use case-sensitive completion.
 # OMB_CASE_SENSITIVE="true"
@@ -111,6 +111,9 @@ plugins=(
 
 source "$OSH/oh-my-bash.sh"
 
+# Allow shell redirections to overwrite existing files
+set +o noclobber
+
 # User configuration
 # export MANPATH="/usr/local/man:$MANPATH"
 
@@ -137,6 +140,9 @@ fi
 
 export PATH
 
+# Make sure GnuPG uses the current TTY (terminal) in an interactive shell
+export GPG_TTY=$(tty)
+
 # Set personal aliases, overriding those provided by oh-my-bash libs,
 # plugins, and themes. Aliases can be placed here, though oh-my-bash
 # users are encouraged to define aliases within the OSH_CUSTOM folder.
@@ -145,12 +151,15 @@ export PATH
 # Example aliases
 # alias bashconfig="mate ~/.bashrc"
 # alias ohmybash="mate ~/.oh-my-bash"
+
+# Enable colorized output for iproute2 commands
 alias ip='ip -c'
+
+# Set brightness using the DDC/CI protocol
+alias set-brightness='sudo ddcutil setvcp 10'
+
+# Kubernetes aliases
 alias kubectl='kubecolor'
-
-# Make sure GnuPG uses the current TTY (terminal) in an interactive shell.
-export GPG_TTY=$(tty)
-
-np() {
-  NO_PROXY='*' no_proxy='*' eval $@
-}
+alias keyscan-nodes='kubectl get no -oname | cut -d/ -f2 | xargs -n1 ssh-keyscan >> $HOME/.ssh/known_hosts -H'
+alias krga='f(){ kubectl api-resources --verbs=list --namespaced=true -oname | xargs -n1 kubectl get --show-kind --ignore-not-found "$@"; unset -f f; }; f'
+alias kge='kubectl get events --sort-by=.lastTimestamp'
