@@ -95,14 +95,12 @@ source $ZSH/oh-my-zsh.sh
 
 # User configuration
 
-# CTRL-U to cut text from cursor to beginning of line
 bindkey \^U backward-kill-line
 
-# Make sure GnuPG uses the current TTY (terminal) in an interactive shell
-export GPG_TTY=$(tty)
-
-# Ansible vault password
+#export GPG_TTY=$(tty)
+export AWS_PROFILE=staging
 export ANSIBLE_VAULT_PASSWORD_FILE=~/.ansible_vault_password_file
+export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
 
 # export MANPATH="/usr/local/man:$MANPATH"
 
@@ -140,8 +138,3 @@ export ANSIBLE_VAULT_PASSWORD_FILE=~/.ansible_vault_password_file
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
-# AWS profile
-export AWS_PROFILE=staging
-
-# Krew plugin manager
-export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
