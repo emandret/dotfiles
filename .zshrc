@@ -11,7 +11,7 @@ export PATH=~/.local/bin:/opt/homebrew/bin:/usr/local/bin:$PATH
 # Note: the ~/.local directory mimics /usr/local and has been added by systemd as an extension to the XDG user directories standard. See https://www.freedesktop.org/software/systemd/man/file-hierarchy.html for more.
 
 # Path to your oh-my-zsh installation.
-export ZSH="/Users/ema/.oh-my-zsh"
+export ZSH=~/.oh-my-zsh
 
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time oh-my-zsh is loaded, in which case,
@@ -98,6 +98,12 @@ source $ZSH/oh-my-zsh.sh
 # CTRL-U to cut text from cursor to beginning of line
 bindkey \^U backward-kill-line
 
+# Make sure GnuPG uses the current TTY (terminal) in an interactive shell
+export GPG_TTY=$(tty)
+
+# Ansible vault password
+export ANSIBLE_VAULT_PASSWORD_FILE=~/.ansible_vault_password_file
+
 # export MANPATH="/usr/local/man:$MANPATH"
 
 # You may need to manually set your language environment
@@ -123,9 +129,9 @@ bindkey \^U backward-kill-line
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
 # Safe aliases
-type grc >/dev/null 2>&1 && alias ls='grc ls --color=always -FC'
-type python3 >/dev/null 2>&1 && alias python='python3'
-type dig >/dev/null 2>&1 && alias myip='dig +short myip.opendns.com @resolver4.opendns.com'
+[[ -x $(command -v ip) ]] && alias ip='ip -c'
+[[ -x $(command -v dig) ]] && alias myip='dig +short myip.opendns.com @resolver4.opendns.com'
+[[ -x $(command -v kubecolor) ]] && alias kubectl='kubecolor'
 
 # Source external config
 [[ -s "/opt/homebrew/etc/grc.zsh" ]] && source /opt/homebrew/etc/grc.zsh
@@ -139,5 +145,3 @@ export AWS_PROFILE=staging
 
 # Krew plugin manager
 export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
-
-
