@@ -1,14 +1,5 @@
-# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
-# Initialization code that may require console input (password prompts, [y/n]
-# confirmations, etc.) must go above this block; everything else may go below.
-if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
-  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
-fi
-
 # If you come from bash you might have to change your $PATH.
-export PATH=~/.local/bin:/opt/homebrew/bin:/usr/local/bin:$PATH
-
-# Note: the ~/.local directory mimics /usr/local and has been added by systemd as an extension to the XDG user directories standard. See https://www.freedesktop.org/software/systemd/man/file-hierarchy.html for more.
+export PATH=~/bin:~/.local/bin:/usr/local/bin:$PATH
 
 # Path to your oh-my-zsh installation.
 export ZSH=~/.oh-my-zsh
@@ -17,7 +8,7 @@ export ZSH=~/.oh-my-zsh
 # load a random theme each time oh-my-zsh is loaded, in which case,
 # to know which specific one was loaded, run: echo $RANDOM_THEME
 # See https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
-ZSH_THEME="powerlevel10k/powerlevel10k"
+ZSH_THEME="candy"
 
 # Set list of themes to pick from when loading at random
 # Setting this variable when ZSH_THEME=random will cause zsh to load
@@ -81,12 +72,8 @@ ZSH_THEME="powerlevel10k/powerlevel10k"
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(
   git
-  brew
-  macos
-  github
   docker
   kubectl
-  terraform
   colored-man-pages
   zsh-syntax-highlighting
 )
@@ -98,9 +85,7 @@ source $ZSH/oh-my-zsh.sh
 bindkey \^U backward-kill-line
 
 #export GPG_TTY=$(tty)
-export AWS_PROFILE=staging
 export ANSIBLE_VAULT_PASSWORD_FILE=~/.ansible_vault_password_file
-export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
 
 # export MANPATH="/usr/local/man:$MANPATH"
 
@@ -125,16 +110,28 @@ export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
+#
 
-# Safe aliases
+# Set personal aliases, overriding those provided by oh-my-bash libs,
+# plugins, and themes. Aliases can be placed here, though oh-my-bash
+# users are encouraged to define aliases within the OSH_CUSTOM folder.
+# For a full list of active aliases, run `alias`.
+#
+# Example aliases
+# alias bashconfig="mate ~/.bashrc"
+# alias ohmybash="mate ~/.oh-my-bash"
+
 [[ -x $(command -v ip) ]] && alias ip='ip -c'
 [[ -x $(command -v dig) ]] && alias myip='dig +short myip.opendns.com @resolver4.opendns.com'
 [[ -x $(command -v kubecolor) ]] && alias kubectl='kubecolor'
 
-# Source external config
-[[ -s "/opt/homebrew/etc/grc.zsh" ]] && source /opt/homebrew/etc/grc.zsh
-[[ -s "~/.iterm2_shell_integration.zsh" ]] && source ~/.iterm2_shell_integration.zsh
+source <(kubectl completion zsh)
+source <(kubectl completion zsh | sed -e 's/kubectl/kubecolor/g')
 
-# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
-[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+alias kga='f(){ kubectl get $(kubectl api-resources --verbs=list --namespaced=true -oname | tr '\''[:space:]'\'' '\'','\'') --show-kind --ignore-not-found "$@"; unset -f f; }; f'
+alias kge='f(){ ARGS=( --sort-by=.lastTimestamp --all-namespaces ); if [[ $# -gt 0 ]]; then ARGS=( "${ARGS[@]}" "--field-selector=involvedObject.name=$1" "${@:2}" ); fi; kubectl get events "${ARGS[@]}"; unset -f f; }; f'
+alias ssh-keyscan-nodes='kubectl get no -oname | cut -d/ -f2 | xargs -n1 ssh-keyscan >>$HOME/.ssh/known_hosts -H'
+alias debug-egress-gateway='f(){ kubectl -n egress-gateways debug -it $(kubectl -n egress-gateways get po -l "egress-gateway=$1" -o jsonpath='\''{.items[0].metadata.name}'\'') --image=docker.io/wbitt/network-multitool --target=egress-gateway -- bash; unset -f f; }; f'
 
+alias tigera-manager-token='kubectl create token tigera-manager -n tigera-manager --duration=84600s'
+alias tigera-es-password='kubectl get secret tigera-secure-es-elastic-user -n tigera-elasticsearch -o go-template='\''{{.data.elastic | base64decode}}'\'''
