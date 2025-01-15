@@ -6,7 +6,7 @@
     <string>user.keyremap</string>
     <key>ProgramArguments</key>
     <array>
-      <string>0script0</string>
+      <string>@SCRIPT_PATH@</string>
     </array>
     <key>RunAtLoad</key>
     <true/>

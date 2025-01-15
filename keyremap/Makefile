@@ -7,7 +7,7 @@ install:
 	mkdir -p $$(dirname $(SCRIPT_PATH))
 	mkdir -p $$(dirname $(PLIST_PATH))
 	cp keyremap.sh $(SCRIPT_PATH) && chmod +x $(SCRIPT_PATH)
-	sed -i '.bak' -e 's#0script0#$(SCRIPT_PATH)#g' user.keyremap.plist
+	sed -i '.bak' -e 's#@SCRIPT_PATH@#$(SCRIPT_PATH)#g' user.keyremap.plist
 	mv user.keyremap.plist $(PLIST_PATH)
 	mv user.keyremap.plist.bak user.keyremap.plist
 	launchctl load -w $(PLIST_PATH)

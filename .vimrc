@@ -29,7 +29,7 @@ autocmd BufWritePre * %s/\s\+$//e
 " according to the detected filetype
 filetype plugin indent on
 
-set laststatus=2                " Enable status line
+set laststatus=1                " Enable status line
 set noshowmode                  " Do not show mode in status line
 set number                      " Show line numbers
 set relativenumber              " Show relative line numbers
@@ -44,8 +44,8 @@ set smartindent                 " Do smart indenting
 set hlsearch                    " Highlight search matches
 set incsearch                   " Incremental search
 set hidden                      " Hide buffers when they are abandoned
-set tabstop=4                   " Number of columns a tab character has
-set shiftwidth=4                " Number of columns a new level of indentation has
+set tabstop=2                   " Number of columns a tab character has
+set shiftwidth=2                " Number of columns a new level of indentation has
 set expandtab                   " Expand tabs into spaces
 set smarttab                    " Smart tab insertion on new lines
 set backspace=indent,eol,start  " Make backspace behaves as in most other programs
@@ -102,44 +102,3 @@ inoremap {;<CR> {<CR>};<Esc>O
 
 " Enable markdown folding
 let g:markdown_folding = 1
-
-" To load plugins using the vim-plug plugin manager you must run `:PlugInstall` and `:UpdateRemotePlugins` on the first start
-call plug#begin()
-Plug 'bluz71/vim-nightfly-colors', { 'as': 'nightfly' }
-Plug 'itchyny/lightline.vim'
-Plug 'vim-syntastic/syntastic'
-Plug 'airblade/vim-gitgutter'
-Plug 'preservim/nerdtree'
-Plug 'jasonccox/vim-wayland-clipboard'
-call plug#end()
-
-" bluz71/vim-nightfly-colors
-colorscheme nightfly
-
-" itchyny/lightline.vim
-let g:lightline = { 'colorscheme': 'nightfly', 'enable': { 'statusline': 1, 'tabline': 1, }, 'subseparator': { 'left':  '\uFF5C', 'right': '\uFF5C' }, 'active': { 'left': [ ['mode', 'paste'], ['gitbranch', 'readonly', 'filename', 'modified'] ] }, 'component_function': { 'gitbranch': 'gitbranch#name' } }
-
-" vim-syntastic/syntastic
-let g:syntastic_always_populate_loc_list = 1
-let g:syntastic_auto_loc_list = 1
-let g:syntastic_check_on_open = 0
-let g:syntastic_check_on_wq = 0
-if exists("&statusline")
-  set statusline+=%#warningmsg#
-  set statusline+=%{SyntasticStatuslineFlag()}
-  set statusline+=%*
-endif
-if exists("&completeopt")
-  set completeopt-=preview
-endif
-autocmd CursorMovedI * if pumvisible() == 0 | pclose | endif
-autocmd InsertLeave * if pumvisible() == 0 | pclose | endif
-
-" airblade/vim-gitgutter
-highlight SignColumn guibg=NONE ctermbg=NONE
-
-" preservim/nerdtree
-nnoremap <leader>n :NERDTreeFocus<CR>
-nnoremap <C-n> :NERDTree<CR>
-nnoremap <C-t> :NERDTreeToggle<CR>
-nnoremap <C-f> :NERDTreeFind<CR>
