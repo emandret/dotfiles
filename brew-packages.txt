@@ -2,10 +2,13 @@ black
 clang-format
 coreutils
 gnupg
+go
 helm
 htop
 jq
 kind
+kubernetes-cli
+libvirt
 nmap
 pandoc
 prettier
