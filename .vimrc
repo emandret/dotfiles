@@ -1,6 +1,5 @@
-"
+" ------------------------------------------------------------------------------
 " GENERAL SETTINGS
-"
 
 " set encoding to utf-8
 scriptencoding utf-8
@@ -9,17 +8,17 @@ setglobal fileencoding=utf-8
 
 " drawing box vertical bar
 if exists('&fillchars')
-  set fillchars=vert:\\u2502
+set fillchars=vert:\\u2502
 endif
 
 " enable hex colors by default
 if has('termguicolors')
-  set termguicolors
+set termguicolors
 endif
 
 " enable syntax highlighting by default
 if has('syntax')
-  syntax on
+syntax on
 endif
 
 " if using a dark background within the editing area and syntax highlighting
@@ -27,10 +26,10 @@ endif
 set background=dark
 colorscheme ron
 
-" uncomment the following to have vim jump to the last position when
-" reopening a file
+" uncomment the following to have vim jump to the last position when reopening
+" a file
 if has('autocmd')
-  au BufReadPost * if line("'\"") > 1 && line("'\"") <= line('$') | exe "normal! g'\"" | endif
+au BufReadPost * if line("'\"") > 1 && line("'\"") <= line('$') | exe "normal! g'\"" | endif
 endif
 
 " trim unwanted trailing whitespaces on save
@@ -40,52 +39,99 @@ autocmd BufWritePre * %s/\s\+$//e
 " according to the detected filetype
 filetype plugin indent on
 
-"
+" ------------------------------------------------------------------------------
 " EDITOR SETTINGS
-"
 
-" behavior
-set mouse=a                         " enable mouse support in all modes
-set backspace=indent,eol,start      " allow the backspace key to remove indentation, line breaks, and start of insert
-set clipboard^=unnamed,unnamedplus  " use the system clipboard (`*` and `+` registers) for all yank, delete, and paste operations
-set hidden                          " automatically hide unsaved buffers when they are abandoned (instead of unloading them or causing an error)
-set autoread                        " automatically reload a file if it has been modified outside of Vim
-set swapfile                        " enable swapfiles to recover unsaved changes if Vim crashes
-set directory=~/.vim/swapfiles      " store all swapfiles at this location
-set timeoutlen=200                  " set the time in milliseconds Vim should wait after a key is pressed to see if a mapped sequence is completed
+" enable mouse support in all modes
+set mouse=a
 
-" status
-set laststatus=2                    " ensure the status line is always displayed at the bottom of the editor
-set showmode                        " show the current editing mode in the bottom right corner
-set showcmd                         " show incomplete commands in the bottom right corner
+" allow the backspace key to remove indentation, line breaks, and start of
+" insert
+set backspace=indent,eol,start
 
-" line numbers
-set number                          " show absolute line numbers on the left side of the editor
-set relativenumber                  " show line numbers relative to the current cursor position
-set ruler                           " show the cursor position (line and column numbers) in the status line
+" use the system clipboard (`*` and `+` registers) for all yank, delete, and
+" paste operations
+set clipboard^=unnamed,unnamedplus
 
-" folding
-set foldmethod=indent               " set the folding method to be based on indentation
-set foldlevelstart=1                " open top-level folds only
+" automatically hide unsaved buffers when they are abandoned (instead of
+" unloading them or causing an error)
+set hidden
 
-" search
-set ignorecase                      " make searches case-insensitive
-set smartcase                       " make searches case-sensitive if the search pattern includes uppercase letters
-set hlsearch                        " highlight search matches
-set incsearch                       " highlight search matches incrementally as you type the search pattern
-set showmatch                       " highlight matching pairs of brackets, curly braces, or parentheses
+" automatically reload a file if it has been modified outside of vim
+set autoread
 
+" enable swapfiles to recover unsaved changes if vim crashes
+set swapfile
+
+" store all swapfiles at this location
+set directory=~/.vim/swapfiles
+
+" set the time in milliseconds vim should wait after a key is pressed to see if
+" a mapped sequence is completed
+set timeoutlen=200
+
+" ensure the status line is always displayed at the bottom of the editor
+set laststatus=2
+
+" show the current editing mode in the bottom right corner
+set showmode
+
+" show incomplete commands in the bottom right corner
+set showcmd
+
+" show absolute line numbers on the left side of the editor
+set number
+
+" show line numbers relative to the current cursor position
+set relativenumber
+
+" show the cursor position (line and column numbers) in the status line
+set ruler
+
+" set the folding method to be based on indentation
+set foldmethod=indent
+
+" open top-level folds only
+set foldlevelstart=1
+
+" make searches case-insensitive
+set ignorecase
+
+" make searches case-sensitive if the search pattern includes uppercase
+" letters
+set smartcase
+
+" highlight search matches
+set hlsearch
+
+" highlight search matches incrementally as you type the search pattern
+set incsearch
+
+" highlight matching pairs of brackets, curly braces, or parentheses
+set showmatch
+
+" set the width of a tab character in columns
+set tabstop=2
+
+" set how many whitespaces (tabs or spaces) shall be inserted for each level of
 " indentation
-set tabstop=2                       " set the width of a tab character in columns
-set shiftwidth=2                    " set how many whitespaces (tabs or spaces) shall be inserted for each level of indentation
-set autoindent                      " automatically indent new lines
-set smartindent                     " enable smart syntax-based indentation
-set expandtab                       " enable soft tabs (convert tabs into spaces)
-set softtabstop=-1                  " use the `shiftwidth` value for soft tabs (how many spaces to insert or remove when tab or backspace is pressed)
+set shiftwidth=2
 
-"
+" automatically indent new lines
+set autoindent
+
+" enable smart syntax-based indentation
+set smartindent
+
+" enable soft tabs (convert tabs into spaces)
+set expandtab
+
+" use the `shiftwidth` value for soft tabs (how many spaces to insert or remove
+" when tab or backspace is pressed)
+set softtabstop=-1
+
+" ------------------------------------------------------------------------------
 " KEY MAPPINGS
-"
 
 " map ctrl-/ to `:let @/=''`
 nnoremap <silent><C-_> :let @/=''<CR>
@@ -101,13 +147,11 @@ nnoremap <Left> <Nop>
 nnoremap <Down> <Nop>
 nnoremap <Up> <Nop>
 nnoremap <Right> <Nop>
-nnoremap <BS> <Nop>
 
 vnoremap <Left> <Nop>
 vnoremap <Down> <Nop>
 vnoremap <Up> <Nop>
 vnoremap <Right> <Nop>
-vnoremap <BS> <Nop>
 
 " autoclosing
 inoremap ( ()<Left>
@@ -116,9 +160,8 @@ inoremap { {}<Left>
 inoremap {<CR> {<CR>}<Esc>O
 inoremap {;<CR> {<CR>};<Esc>O
 
-"
+" ------------------------------------------------------------------------------
 " FILETYPES
-"
 
 " set filetypes for specific matched buffer names
 autocmd BufNewFile,BufReadPost Makefile,*.makefile,*.mk set filetype=make
