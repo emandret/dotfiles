@@ -10,9 +10,9 @@ mount_or_remount_home() {
   fi
 
   if ! grep -qs "${HOME}" /proc/self/mountinfo; then
-    sudo mount -o bind "${HOME}" "${ROAMING_HOME}"
+    sudo mount -o bind "${ROAMING_HOME}" "${HOME}"
   else
-    sudo mount -o bind,remount "${HOME}" "${ROAMING_HOME}"
+    sudo mount -o bind,remount "${ROAMING_HOME}" "${HOME}"
   fi
 }
 
@@ -23,7 +23,6 @@ install_user_settings() {
     )
   done
 }
-
 
 if [[ -d ${DEVPOD_PERSISTENT_STORAGE_DEDICATED_MOUNTPATH} ]]; then
   export ROAMING_HOME="${DEVPOD_PERSISTENT_STORAGE_DEDICATED_MOUNTPATH}/${C3_USERNAME}_home"
