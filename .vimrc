@@ -1,4 +1,6 @@
+"
 " GENERAL SETTINGS
+"
 
 " set encoding to utf-8
 scriptencoding utf-8
@@ -38,8 +40,9 @@ autocmd BufWritePre * %s/\s\+$//e
 " according to the detected filetype
 filetype plugin indent on
 
-
+"
 " EDITOR SETTINGS
+"
 
 " behavior
 set mouse=a                         " enable mouse support in all modes
@@ -80,8 +83,9 @@ set smartindent                     " enable smart syntax-based indentation
 set expandtab                       " enable soft tabs (convert tabs into spaces)
 set softtabstop=-1                  " use the `shiftwidth` value for soft tabs (how many spaces to insert or remove when tab or backspace is pressed)
 
-
+"
 " KEY MAPPINGS
+"
 
 " map ctrl-/ to `:let @/=''`
 nnoremap <silent><C-_> :let @/=''<CR>
@@ -112,8 +116,9 @@ inoremap { {}<Left>
 inoremap {<CR> {<CR>}<Esc>O
 inoremap {;<CR> {<CR>};<Esc>O
 
-
+"
 " FILETYPES
+"
 
 " set filetypes for specific matched buffer names
 autocmd BufNewFile,BufReadPost Makefile,*.makefile,*.mk set filetype=make
