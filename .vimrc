@@ -8,17 +8,17 @@ setglobal fileencoding=utf-8
 
 " drawing box vertical bar
 if exists('&fillchars')
-set fillchars=vert:\\u2502
+  set fillchars=vert:\\u2502
 endif
 
 " enable hex colors by default
 if has('termguicolors')
-set termguicolors
+  set termguicolors
 endif
 
 " enable syntax highlighting by default
 if has('syntax')
-syntax on
+  syntax on
 endif
 
 " if using a dark background within the editing area and syntax highlighting
@@ -29,7 +29,7 @@ colorscheme ron
 " uncomment the following to have vim jump to the last position when reopening
 " a file
 if has('autocmd')
-au BufReadPost * if line("'\"") > 1 && line("'\"") <= line('$') | exe "normal! g'\"" | endif
+  au BufReadPost * if line("'\"") > 1 && line("'\"") <= line('$') | exe "normal! g'\"" | endif
 endif
 
 " trim unwanted trailing whitespaces on save
@@ -180,3 +180,81 @@ autocmd FileType cpp set equalprg=clang-format\ -style=Microsoft
 autocmd FileType python set equalprg=black\ --quiet\ -
 autocmd FileType terraform set equalprg=terraform\ fmt\ -
 autocmd FileType yaml set equalprg=yamlfmt
+
+" ------------------------------------------------------------------------------
+" PLUGIN LIST
+
+call plug#begin('~/.vim/bundle')
+  " nord-vim
+  Plug 'https://github.com/nordtheme/vim.git'
+  " nerdtree
+  Plug 'https://github.com/preservim/nerdtree.git'
+  " vim-airline
+  Plug 'https://github.com/vim-airline/vim-airline.git'
+  " vim-gitgutter
+  Plug 'https://github.com/airblade/vim-gitgutter.git'
+  " vim-go
+  Plug 'https://github.com/fatih/vim-go.git', { 'do': ':GoInstallBinaries' }
+  " ale
+  Plug 'https://github.com/dense-analysis/ale.git'
+call plug#end()
+
+" ------------------------------------------------------------------------------
+" PLUGIN CONF
+
+" markdown
+let g:markdown_folding=1
+
+" nord-vim
+let g:nord_cursor_line_number_background=1
+let g:nord_uniform_status_lines=1
+let g:nord_bold_vertical_split_line=0
+let g:nord_bold=1
+let g:nord_italic=1
+let g:nord_italic_comments=1
+
+colorscheme nord
+
+" nerdtree
+let NERDTreeShowHidden=1
+
+autocmd StdinReadPre * let s:std_in=1
+autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) && !exists('s:std_in') | exe 'NERDTree' argv()[0] | wincmd p | ene | exe 'cd '.argv()[0] | wincmd q | endif
+
+nnoremap <C-n> :NERDTree<CR>
+nnoremap <C-t> :NERDTreeToggle<CR>
+nnoremap <C-f> :NERDTreeFind<CR>
+
+" vim-airline
+set laststatus=0
+set noshowmode
+set noshowcmd
+
+" vim-gitgutter
+let g:gitgutter_map_keys=0
+
+" vim-go
+let g:go_fmt_command='goimports'
+let g:go_auto_type_info=1
+let g:go_fmt_autosave=1
+let g:go_info_mode='gopls'
+let g:go_gopls_enabled=1
+let g:go_fmt_experimental=1
+
+" vim-go debug mode
+let g:go_debug=['lsp']
+let g:go_echo_command_info=1
+let g:go_debug_address='127.0.0.1:1905'
+let g:go_def_mapping_enabled=0
+
+" restart gopls language server
+command! GoRestartGopls call go#lsp#Restart()
+
+" ale
+let g:ale_linters={
+  \  'markdown': ['mdl'],
+  \  'go': ['gofmt', 'golint', 'go vet', 'golangserver'],
+  \  'latex': ['proselint', 'chktex', 'lacheck'],
+  \  'tex': ['proselint', 'chktex', 'lacheck'],
+  \  'cpp': ['g++']
+  \}
