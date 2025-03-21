@@ -133,7 +133,7 @@ set softtabstop=-1
 " ------------------------------------------------------------------------------
 " KEY MAPPINGS
 
-" map ctrl-/ to `:let @/=''`
+" map Ctrl-/ to `:let @/=''`
 nnoremap <silent><C-_> :let @/=''<CR>
 
 " remap j and k to their gj and gk counterparts and vice-versa
