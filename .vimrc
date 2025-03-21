@@ -1,6 +1,9 @@
 " ------------------------------------------------------------------------------
 " GENERAL SETTINGS
 
+" set term to support colors
+set term=xterm-256color
+
 " set encoding to utf-8
 scriptencoding utf-8
 set encoding=utf-8
