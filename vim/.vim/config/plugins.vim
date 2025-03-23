@@ -1,5 +1,14 @@
-" nord-vim
+" THEMES
+
+" nord
 Plug 'https://github.com/nordtheme/vim.git'
+
+" gruvbox
+Plug 'https://github.com/morhetz/gruvbox.git'
+
+" onedark
+Plug 'https://github.com/joshdick/onedark.vim.git'
+
 
 " nerdtree
 Plug 'https://github.com/preservim/nerdtree.git'

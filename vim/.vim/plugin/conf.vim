@@ -1,6 +1,8 @@
 " ------------------------------------------------------------------------------
 " PLUGIN CONF
 
+colorscheme onedark
+
 " markdown
 let g:markdown_folding=1
 
