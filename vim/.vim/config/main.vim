@@ -29,7 +29,7 @@ endif
 set background=dark
 colorscheme ron
 
-" Uncomment the following to have vim jump to the last position when reopening
+" Uncomment the following to have Vim jump to the last position when reopening
 " a file
 if has('autocmd')
   au BufReadPost * if line("'\"") > 1 && line("'\"") <= line('$') | exe "normal! g'\"" | endif
@@ -38,7 +38,7 @@ endif
 " Trim unwanted trailing whitespaces on save
 autocmd BufWritePre * %s/\s\+$//e
 
-" Uncomment the following to have vim load indentation rules and plugins
+" Uncomment the following to have Vim load indentation rules and plugins
 " according to the detected filetype
 filetype plugin indent on
 
@@ -60,16 +60,16 @@ set clipboard^=unnamed,unnamedplus
 " unloading them or causing an error)
 set hidden
 
-" Automatically reload a file if it has been modified outside of vim
+" Automatically reload a file if it has been modified outside of Vim
 set autoread
 
-" Enable swapfiles to recover unsaved changes if vim crashes
+" Enable swapfiles to recover unsaved changes if Vim crashes
 set swapfile
 
 " Store all swapfiles at this location
 set directory=/tmp
 
-" Set the time in milliseconds vim should wait after a key is pressed to see if
+" Set the time in milliseconds Vim should wait after a key is pressed to see if
 " a mapped sequence is completed
 set timeoutlen=200
 
