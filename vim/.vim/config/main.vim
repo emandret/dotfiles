@@ -95,8 +95,8 @@ set ruler
 " Set the folding method to be based on indentation
 set foldmethod=indent
 
-" Open top-level folds only
-set foldlevelstart=1
+" Open folds up to 10 nested indentation levels
+set foldlevelstart=10
 
 " Make searches case-insensitive
 set ignorecase
