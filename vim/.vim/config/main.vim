@@ -92,11 +92,8 @@ set relativenumber
 " Show the cursor position (line and column numbers) in the status line
 set ruler
 
-" Set the folding method to be based on indentation
-set foldmethod=indent
-
-" Open folds up to 10 nested indentation levels
-set foldlevelstart=10
+" Disable folds
+set nofoldenable
 
 " Make searches case-insensitive
 set ignorecase
