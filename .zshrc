@@ -114,25 +114,31 @@ export ANSIBLE_VAULT_PASSWORD_FILE=~/.ansible_vault_password_file
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
-# Safe aliases
-[[ -x $(command -v ip) ]] && alias ip='ip -c'
-[[ -x $(command -v dig) ]] && alias myip='dig +short myip.opendns.com @resolver4.opendns.com'
-
-if [[ -x $(command -v dig) ]]; then
-  # Kubernetes aliases
-  alias kga='f(){ kubectl get $(kubectl api-resources --verbs=list --namespaced=true -oname | tr '\''[:space:]'\'' '\'','\'') --show-kind --ignore-not-found "$@"; unset -f f; }; f'
-  alias kge='f(){ ARGS=( --sort-by=.lastTimestamp --all-namespaces ); if [[ $# -gt 0 ]]; then ARGS=( "${ARGS[@]}" "--field-selector=involvedObject.name=$1" "${@:2}" ); fi; kubectl get events "${ARGS[@]}"; unset -f f; }; f'
-
-  # SSH aliases
-  alias ssh-keyscan-nodes='kubectl get no -oname | cut -d/ -f2 | xargs -n1 ssh-keyscan >> ~/.ssh/known_hosts -H'
-
-  # Tigera aliases
-  alias tigera-manager-token='kubectl create token tigera-manager -n tigera-manager --duration=84600s'
-  alias tigera-es-password='kubectl get secret tigera-secure-es-elastic-user -n tigera-elasticsearch -o go-template='\''{{.data.elastic | base64decode}}'\'''
-  alias tigera-egress-gateway='f(){ kubectl -n egress-gateways debug -it $(kubectl -n egress-gateways get po -l "egress-gateway=$1" -o jsonpath='\''{.items[0].metadata.name}'\'') --image=docker.io/wbitt/network-multitool --target=egress-gateway -- bash; unset -f f; }; f'
+if [[ -x $(command -v ip) ]]; then
+  alias ip='ip -c'
 fi
 
-# Command autocomplete
+if [[ -x $(command -v dig) ]]; then
+  alias public-ip='dig +short myip.opendns.com @resolver4.opendns.com'
+fi
+
+if [[ -x $(command -v php-cs-fixer) ]]; then
+  alias php-cs-fixer='php-cs-fixer fix --rules='\''{"@Symfony": true, "method_chaining_indentation": true, "array_indentation": true, "binary_operator_spaces": {"align_double_arrow": true}, "method_argument_space": {"ensure_fully_multiline": true}, "braces": {"position_after_control_structures": "next"}}'\'
+fi
+
+if [[ -x $(command -v clang-tidy) ]] && [[ -x $(command -v clang-format) ]]; then
+  alias clang-format-all='f(){ clang-tidy **/*.{c,h} -fix -checks="*" -- $ARCHFLAGS && clang-format -i -style=file **/*.{c,h}; unset -f f; }'
+fi
+
+if [[ -x $(command -v kubectl) ]]; then
+  alias kga='f(){ kubectl get $(kubectl api-resources --verbs=list --namespaced=true -oname | tr '\''[:space:]'\'' '\'','\'') --show-kind --ignore-not-found "$@"; unset -f f; }; f'
+  alias kge='f(){ ARGS=( --sort-by=.lastTimestamp --all-namespaces ); if [[ $# -gt 0 ]]; then ARGS=( "${ARGS[@]}" "--field-selector=involvedObject.name=$1" "${@:2}" ); fi; kubectl get events "${ARGS[@]}"; unset -f f; }; f'
+  alias tigera-mgr-token='kubectl create token tigera-manager -n tigera-manager --duration=84600s'
+  alias tigera-es-user='kubectl get secret tigera-secure-es-elastic-user -n tigera-elasticsearch -o go-template='\''{{.data.elastic | base64decode}}'\'''
+  alias tigera-debug-egw='f(){ kubectl -n egress-gateways debug -it $(kubectl -n egress-gateways get po -l "egress-gateway=$1" -o jsonpath='\''{.items[0].metadata.name}'\'') --image=docker.io/wbitt/network-multitool --target=egress-gateway -- bash; unset -f f; }; f'
+
+  source <(kubectl completion zsh)
+fi
+
 autoload -U +X compinit && compinit
 autoload -U +X bashcompinit && bashcompinit
-source <(kubectl completion zsh)

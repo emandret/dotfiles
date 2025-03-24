@@ -22,7 +22,7 @@ endif
 " Enable syntax highlighting by default
 if has('syntax')
   syntax on
-autocmd BufEnter * syntax sync fromstart
+  autocmd BufEnter * syntax sync fromstart
 endif
 
 " If using a dark background within the editing area and syntax highlighting
@@ -184,3 +184,4 @@ autocmd FileType cpp set equalprg=clang-format\ -style=Microsoft
 autocmd FileType python set equalprg=black\ --quiet\ -
 autocmd FileType terraform set equalprg=terraform\ fmt\ -
 autocmd FileType yaml set equalprg=yamlfmt
+autocmd FileType sh set equalprg=shfmt\ -i\ 2\ -ci\ -sr
