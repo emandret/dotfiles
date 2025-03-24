@@ -22,6 +22,7 @@ endif
 " Enable syntax highlighting by default
 if has('syntax')
   syntax on
+  syntax sync fromstart
 endif
 
 " If using a dark background within the editing area and syntax highlighting
