@@ -47,7 +47,7 @@ filetype plugin indent on
 " EDITOR SETTINGS
 
 " Disable the use of the mouse
-set mouse=''
+set mouse=
 
 " Allow the backspace key to remove indentation, line breaks, and start of
 " insert
