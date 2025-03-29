@@ -46,8 +46,8 @@ filetype plugin indent on
 " ------------------------------------------------------------------------------
 " EDITOR SETTINGS
 
-" Enable mouse support in all modes
-set mouse=a
+" Disable the use of the mouse
+set mouse=''
 
 " Allow the backspace key to remove indentation, line breaks, and start of
 " insert
@@ -156,13 +156,6 @@ vnoremap <Left> <Nop>
 vnoremap <Down> <Nop>
 vnoremap <Up> <Nop>
 vnoremap <Right> <Nop>
-
-" Autoclosing
-inoremap ( ()<Left>
-inoremap [ []<Left>
-inoremap { {}<Left>
-inoremap {<CR> {<CR>}<Esc>O
-inoremap {;<CR> {<CR>};<Esc>O
 
 " ------------------------------------------------------------------------------
 " FILETYPES
