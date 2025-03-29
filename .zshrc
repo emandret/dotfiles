@@ -114,6 +114,20 @@ export ANSIBLE_VAULT_PASSWORD_FILE=~/.ansible_vault_password_file
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
+# Store npm packages in $HOME
+export NPM_PACKAGES=~/.npm-packages
+
+if [[ ! -s ~/.npmrc ]]; then
+  echo 'prefix=${NPM_PACKAGES}' >~/.npmrc
+fi
+
+# Update both PATH and NODE_PATH for node modules
+PATH="${NPM_PACKAGES}/bin:$PATH"
+NODE_PATH="${NPM_PACKAGES}/lib/node_modules:${NODE_PATH}"
+
+# Unset MANPATH so we can inherit from /etc/manpath
+unset MANPATH; MANPATH="${NPM_PACKAGES}/share/man:$(manpath)"
+
 if [[ -x $(command -v ip) ]]; then
   alias ip='ip -c'
 fi
@@ -136,9 +150,8 @@ if [[ -x $(command -v kubectl) ]]; then
   alias tigera-mgr-token='kubectl create token tigera-manager -n tigera-manager --duration=84600s'
   alias tigera-es-user='kubectl get secret tigera-secure-es-elastic-user -n tigera-elasticsearch -o go-template='\''{{.data.elastic | base64decode}}'\'''
   alias tigera-debug-egw='f(){ kubectl -n egress-gateways debug -it $(kubectl -n egress-gateways get po -l "egress-gateway=$1" -o jsonpath='\''{.items[0].metadata.name}'\'') --image=docker.io/wbitt/network-multitool --target=egress-gateway -- bash; unset -f f; }; f'
-
-  source <(kubectl completion zsh)
 fi
 
 autoload -U +X compinit && compinit
 autoload -U +X bashcompinit && bashcompinit
+source <(kubectl completion zsh)
