@@ -21,11 +21,15 @@ vim.opt.rtp:prepend(lazypath)
 -- Import plugins
 require("lazy").setup({
   spec = {
+    { import = "plugins.cmp" },
     { import = "plugins.colorscheme" },
-    { import = "plugins.lspconfig" },
+    { import = "plugins.conform" },
+    { import = "plugins.gitsigns" },
+    { import = "plugins.lsp" },
     { import = "plugins.lualine" },
     { import = "plugins.nvimtree" },
     { import = "plugins.telescope" },
+    { import = "plugins.toggleterm" },
     { import = "plugins.treesitter" },
   },
   checker = { enabled = true },
