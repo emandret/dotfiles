@@ -84,6 +84,10 @@ install_vim() {
   vim -T dumb --noplugin -u ~/.config/vim/plugins/list.vim +PlugInstall +qall
 }
 
+install_nvim() {
+  rm -rf ~/.config/nvim && ln -sf $CWD/.config/nvim ~/.config/nvim
+}
+
 install_zsh() {
   cp .zshrc ~
   sudo chsh -s $(which zsh) $(whoami)
