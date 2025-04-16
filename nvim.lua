@@ -236,17 +236,35 @@ vim.opt.rtp:prepend(lazypath)
 require("lazy").setup({
   spec = {
     -- Status line
-    { "nvim-lualine/lualine.nvim" },
+    {
+      "nvim-lualine/lualine.nvim"
+    },
     -- File explorer
-    { "nvim-tree/nvim-tree.lua", dependencies = { "nvim-tree/nvim-web-devicons" } },
+    {
+      "nvim-tree/nvim-tree.lua",
+      dependencies = { "nvim-tree/nvim-web-devicons" }
+    },
     -- Fuzzy finder
-    { "nvim-telescope/telescope.nvim", dependencies = { "nvim-lua/plenary.nvim" } },
+    {
+      "nvim-telescope/telescope.nvim",
+      dependencies = { "nvim-lua/plenary.nvim" }
+    },
     -- Treesitter parser support for syntax highlighting
-    { "nvim-treesitter/nvim-treesitter", build = ":TSUpdate" },
+    {
+      "nvim-treesitter/nvim-treesitter",
+      build = ":TSUpdate"
+    },
     -- LSP client config
-    { "neovim/nvim-lspconfig" },
+    {
+      "neovim/nvim-lspconfig"
+    },
     -- Colorscheme
-    { "folke/tokyonight.nvim" },
+    {
+      "folke/tokyonight.nvim",
+      config = function()
+        vim.cmd("colorscheme tokyonight")
+      end
+    },
   },
 
   -- Automatically check for plugin updates
