@@ -2,7 +2,7 @@
 
 set -eux
 
-DIR=$(cd -- "$(dirname -- "$(readlink -f -- "$0")")" &> /dev/null && pwd)
+export CWD=$(cd -- $(dirname -- $(readlink -f -- $0)) &> /dev/null && pwd)
 
 install_packages() {
   if [[ ! -d ~/.local/bin ]]; then
@@ -73,13 +73,19 @@ install_packages() {
 }
 
 install_vim() {
-  rm -rf ~/.vim && cp -r .vim ~/.vim
-  rm -f ~/.vimrc && ln -s .vim/vimrc ~/.vimrc
-  vim -T dumb --noplugin +PlugInstall +qall
+  rm -rf ~/.{vim,vimrc,viminfo}
+
+  curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
+    https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+
+  rm -rf ~/.config/vim && ln -sf $CWD/.config/vim ~/.config/vim
+  cp .vimrc ~
+
+  vim -T dumb --noplugin -u ~/.config/vim/plugins/list.vim +PlugInstall +qall
 }
 
 install_zsh() {
-  cp zshrc ~/.zshrc
+  cp .zshrc ~
   sudo chsh -s $(which zsh) $(whoami)
 }
 

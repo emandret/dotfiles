@@ -27,7 +27,6 @@ endif
 " if using a dark background within the editing area and syntax highlighting
 " turn on this option as well
 set background=dark
-colorscheme ron
 
 " uncomment the following to have vim jump to the last position when reopening
 " a file
@@ -67,7 +66,7 @@ set autoread
 set swapfile
 
 " store all swapfiles at this location
-set directory=~/.vim/swapfiles
+set directory=/tmp
 
 " set the time in milliseconds vim should wait after a key is pressed to see if
 " a mapped sequence is completed
@@ -95,7 +94,7 @@ set ruler
 set foldmethod=indent
 
 " open top-level folds only
-set foldlevelstart=1
+set foldlevelstart=20
 
 " make searches case-insensitive
 set ignorecase
@@ -146,15 +145,15 @@ nnoremap gj j
 nnoremap gk k
 
 " disable arrows keys and backspace except in insert mode
-nnoremap <Left> <Nop>
-nnoremap <Down> <Nop>
-nnoremap <Up> <Nop>
-nnoremap <Right> <Nop>
+nnoremap <LEFT> <NOP>
+nnoremap <DOWN> <NOP>
+nnoremap <UP> <NOP>
+nnoremap <RIGHT> <NOP>
 
-vnoremap <Left> <Nop>
-vnoremap <Down> <Nop>
-vnoremap <Up> <Nop>
-vnoremap <Right> <Nop>
+vnoremap <LEFT> <NOP>
+vnoremap <DOWN> <NOP>
+vnoremap <UP> <NOP>
+vnoremap <RIGHT> <NOP>
 
 " ------------------------------------------------------------------------------
 " FILETYPES
