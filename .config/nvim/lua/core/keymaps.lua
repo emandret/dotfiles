@@ -22,13 +22,13 @@ map("n", "gj", "j", opts)
 map("n", "gk", "k", opts)
 
 -- Disable arrow keys in normal mode
-map("n", "<LEFT>", "<NOP>", opts)
-map("n", "<DOWN>", "<NOP>", opts)
-map("n", "<UP>", "<NOP>", opts)
-map("n", "<RIGHT>", "<NOP>", opts)
+map("n", "<Left>", "<NOP>", opts)
+map("n", "<Down>", "<NOP>", opts)
+map("n", "<Up>", "<NOP>", opts)
+map("n", "<Right>", "<NOP>", opts)
 
 -- Disable arrow keys in visual mode
-map("v", "<LEFT>", "<NOP>", opts)
-map("v", "<DOWN>", "<NOP>", opts)
-map("v", "<UP>", "<NOP>", opts)
-map("v", "<RIGHT>", "<NOP>", opts)
+map("v", "<Left>", "<NOP>", opts)
+map("v", "<Down>", "<NOP>", opts)
+map("v", "<Up>", "<NOP>", opts)
+map("v", "<Right>", "<NOP>", opts)
