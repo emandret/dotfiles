@@ -1,2 +1,5 @@
-require("core")
-require("plugins")
+require("core.autocmds")
+require("core.filetypes")
+require("core.keymaps")
+require("core.options")
+require("core.plugins")
