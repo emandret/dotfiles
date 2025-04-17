@@ -1,3 +1,5 @@
+local servers = require("plugins.lsp.servers")
+
 return {
   "neovim/nvim-lspconfig",
   dependencies = {
@@ -5,6 +7,6 @@ return {
     "williamboman/mason-lspconfig.nvim",
   },
   config = function()
-    require("plugins.lsp.servers").setup()
+    require("plugins.lsp.client").setup(servers)
   end
 }
