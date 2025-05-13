@@ -1,5 +1,7 @@
-require("core.autocmds")
-require("core.filetypes")
-require("core.keymaps")
-require("core.options")
-require("core.plugins")
+-- Include core config
+require("config.options")
+require("config.keymaps")
+require("config.autocmds")
+
+-- Bootstrap lazy.nvim
+require("config.lazy")

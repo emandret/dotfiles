@@ -80,3 +80,28 @@ set.smartindent = true
 -- Convert tabs into spaces and use the shiftwidth value for soft tabs
 set.expandtab = true
 set.softtabstop = -1
+
+-- -----------------------------------------------------------------------------
+-- FILETYPES
+-- -----------------------------------------------------------------------------
+
+vim.filetype.add({
+  filename = {
+    ["Makefile"]    = "make",
+    ["Dockerfile"]  = "dockerfile",
+    ["Jenkinsfile"] = "groovy",
+  },
+  pattern = {
+    [".*%.makefile"] = "make",
+    [".*%.mk"]       = "make",
+    [".*%.h"]        = "cpp",
+    [".*%.hpp"]      = "cpp",
+    [".*%.c"]        = "cpp",
+    [".*%.cc"]       = "cpp",
+    [".*%.cpp"]      = "cpp",
+    [".*%.tf"]       = "terraform",
+    [".*%.tfvars"]   = "terraform",
+    [".*%.ya?ml"]    = "yaml",
+    [".*%.groovy"]   = "groovy",
+  }
+})
