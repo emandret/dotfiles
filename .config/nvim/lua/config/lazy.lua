@@ -18,14 +18,12 @@ vim.opt.rtp:prepend(lazypath)
 
 require("lazy").setup({
   spec = {
-    {'akinsho/bufferline.nvim', version = "*", dependencies = 'nvim-tree/nvim-web-devicons'},
-  },
-
-  install = {
-    colorscheme = {
-      "tokyonight",
-      "habamax"
-    },
+    -- user interface
+    { import = "plugins.ui.bufferline" },
+    { import = "plugins.ui.flash" },
+    { import = "plugins.ui.lualine" },
+    { import = "plugins.ui.tokyonight" },
+    { import = "plugins.ui.which-key" },
   },
 
   checker = { -- automatically check for plugin updates
