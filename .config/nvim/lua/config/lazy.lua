@@ -29,8 +29,8 @@ require("lazy").setup({
     { import = "plugins.ui.git-signs" },
     { import = "plugins.ui.lualine" },
     { import = "plugins.ui.nvim-tree" },
+    { import = "plugins.ui.onedark-nvim" },
     { import = "plugins.ui.toggleterm-nvim" },
-    { import = "plugins.ui.tokyonight" },
     { import = "plugins.ui.which-key" },
 
     -- Syntax highlighting
