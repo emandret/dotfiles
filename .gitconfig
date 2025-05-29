@@ -1,0 +1,32 @@
+[user]
+  name = Edwy MANDRET
+  email = emandret@student.42.fr
+[github]
+  user = emandret
+[url "ssh://git@github.com/emandret"]
+  insteadOf = https://github.com/emandret
+[init]
+  defaultBranch = main
+[blame]
+  coloring = repeatedLines
+[core]
+  editor = vim
+[diff]
+  tool = vimdiff
+[difftool]
+  prompt = false
+[merge]
+  tool = vimdiff
+  conflictstyle = merge
+[mergetool]
+  prompt = false
+[alias]
+  tree = log --graph --oneline --all
+[credential]
+  credentialStore = gpg
+  helper = /usr/local/bin/git-credential-manager
+[credential "https://git-codecommit.eu-west-1.amazonaws.com"]
+  helper = !aws codecommit credential-helper $@
+  UseHttpPath = true
+[credential "https://github.com"]
+  helper = osxkeychain

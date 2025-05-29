@@ -1,0 +1,12 @@
+alias ip='ip -c'
+alias public-ip='dig +short myip.opendns.com @resolver4.opendns.com'
+
+alias php-cs-fixer='php-cs-fixer fix --rules='\''{"@Symfony": true, "method_chaining_indentation": true, "array_indentation": true, "binary_operator_spaces": {"align_double_arrow": true}, "method_argument_space": {"ensure_fully_multiline": true}, "braces": {"position_after_control_structures": "next"}}'\'
+alias clang-format-all='f(){ clang-tidy **/*.{c,h} -fix -checks="*" -- $ARCHFLAGS && clang-format -i -style=file **/*.{c,h}; unset -f f; }'
+
+alias kga='f(){ kubectl get $(kubectl api-resources --verbs=list --namespaced=true -oname | tr '\''[:space:]'\'' '\'','\'') --show-kind --ignore-not-found "$@"; unset -f f; }; f'
+alias kge='f(){ ARGS=( --sort-by=.lastTimestamp --all-namespaces ); if [[ $# -gt 0 ]]; then ARGS=( "${ARGS[@]}" "--field-selector=involvedObject.name=$1" "${@:2}" ); fi; kubectl get events "${ARGS[@]}"; unset -f f; }; f'
+
+alias tigera-mgr-token='kubectl create token tigera-manager -n tigera-manager --duration=84600s'
+alias tigera-es-user='kubectl get secret tigera-secure-es-elastic-user -n tigera-elasticsearch -o go-template='\''{{.data.elastic | base64decode}}'\'''
+alias tigera-debug-egw='f(){ kubectl -n egress-gateways debug -it $(kubectl -n egress-gateways get po -l "egress-gateway=$1" -o jsonpath='\''{.items[0].metadata.name}'\'') --image=docker.io/wbitt/network-multitool --target=egress-gateway -- bash; unset -f f; }; f'
