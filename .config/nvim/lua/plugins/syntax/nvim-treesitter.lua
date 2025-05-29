@@ -2,15 +2,6 @@ return {
   {
     "nvim-treesitter/nvim-treesitter",
     build = ":TSUpdate",
-    dependencies = {
-      {
-        -- Add vim-matchup to highlight matching `()`, `[]`, and `{}` in Treesitter buffers.
-        "andymass/vim-matchup",
-        init = function()
-          vim.g.matchup_matchparen_offscreen = { method = "popup" }
-        end,
-      },
-    },
     event = "VeryLazy",
     lazy = vim.fn.argc(-1) == 0, -- Load treesitter early when opening a file from the cmdline
     init = function(plugin)

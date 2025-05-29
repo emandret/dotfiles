@@ -20,21 +20,26 @@ require("lazy").setup({
   spec = {
     -- Core
     { import = "plugins.core.lazydev" },
-    { import = "plugins.core.plenary" },
     { import = "plugins.core.persistence" },
+    { import = "plugins.core.plenary" },
 
     -- User interface
-    { import = "plugins.ui.nvim-tree" },
     { import = "plugins.ui.bufferline" },
     { import = "plugins.ui.flash" },
+    { import = "plugins.ui.git-signs" },
     { import = "plugins.ui.lualine" },
+    { import = "plugins.ui.nvim-tree" },
+    { import = "plugins.ui.toggleterm-nvim" },
     { import = "plugins.ui.tokyonight" },
     { import = "plugins.ui.which-key" },
 
     -- Syntax highlighting
     { import = "plugins.syntax.mini-nvim" },
-    { import = "plugins.syntax.nvim-treesitter" },
+    { import = "plugins.syntax.nvim-treesitter-context" },
     { import = "plugins.syntax.nvim-treesitter-textobjects" },
+    { import = "plugins.syntax.nvim-treesitter" },
+    { import = "plugins.syntax.ts-comments" },
+    { import = "plugins.syntax.vim-matchup" },
 
     -- Search and fuzzy finder
     { import = "plugins.search.grug-far" },
@@ -44,6 +49,10 @@ require("lazy").setup({
     { import = "plugins.lsp.mason-nvim" },
     { import = "plugins.lsp.nvim-lspconfig" },
 
+    -- Completion
+    { import = "plugins.completion.luasnip" },
+    { import = "plugins.completion.nvim-cmp" },
+
     -- Linting
     { import = "plugins.linting.nvim-lint" },
 
@@ -52,13 +61,6 @@ require("lazy").setup({
 
     -- Diagnostics
     { import = "plugins.diagnostics.trouble" },
-
-    -- Git integration
-    { import = "plugins.git.git-signs" },
-
-    -- Completion
-    { import = "plugins.completion.luasnip" },
-    { import = "plugins.completion.nvim-cmp" },
   },
 
   checker = { -- Automatically check for plugin updates
