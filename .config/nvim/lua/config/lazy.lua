@@ -98,3 +98,22 @@ vim.api.nvim_create_autocmd("User", {
     vim.cmd("colorscheme catppuccin")
   end,
 })
+
+-- Open directories provided as args
+vim.api.nvim_create_autocmd("VimEnter", {
+  callback = function(data)
+    local directory = vim.fn.isdirectory(data.file) == 1
+
+    -- Exit if not a directory
+    if not directory then
+      return
+    end
+
+    vim.cmd.enew() -- Create a new empty buffer
+    vim.cmd.bw(data.buf) -- Wipeout the directory buffer
+    vim.cmd.cd(data.file) -- Change to the directory
+
+    -- Open the directory tree
+    require("nvim-tree.api").tree.open()
+  end,
+})
