@@ -1,12 +1,21 @@
 return {
   {
     "nvim-tree/nvim-tree.lua",
+    keys = {
+      { "<Leader>e", "<Cmd>NvimTreeToggle<CR>", desc = "Toggle File Explorer" },
+    },
     opts = {
+      sync_root_with_cwd = true,
+      respect_buf_cwd = true,
+      update_focused_file = {
+        enable = true,
+        update_root = true,
+      },
       sort = {
         sorter = "case_sensitive",
       },
       view = {
-        width = 30,
+        width = 40,
       },
       renderer = {
         group_empty = true,
@@ -28,9 +37,6 @@ return {
         map("s", api.node.open.horizontal, "Open: Horizontal Split")
         map("v", api.node.open.vertical, "Open: Vertical Split")
       end,
-    },
-    keys = {
-      { "<Leader>e", "<Cmd>NvimTreeToggle<CR>", desc = "Toggle File Explorer" },
     },
   },
 }
