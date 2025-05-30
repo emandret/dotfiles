@@ -24,12 +24,12 @@ require("lazy").setup({
     { import = "plugins.core.persistence" },
     { import = "plugins.core.plenary" },
 
-    -- Treesitter
-    { import = "plugins.lang.nvim-treesitter" },
-    { import = "plugins.lang.nvim-treesitter-context" },
-    { import = "plugins.lang.nvim-treesitter-textobjects" },
+    -- Treesitter parser support
+    { import = "plugins.treesitter.nvim-treesitter" },
+    { import = "plugins.treesitter.nvim-treesitter-context" },
+    { import = "plugins.treesitter.nvim-treesitter-textobjects" },
 
-    -- Color scheme
+    -- Colorscheme
     { import = "plugins.colorscheme.catppuccin" },
     { import = "plugins.colorscheme.kanagawa" },
     { import = "plugins.colorscheme.tokyonight" },
@@ -53,10 +53,10 @@ require("lazy").setup({
     { import = "plugins.search.grug-far" },
     { import = "plugins.search.telescope" },
 
-    -- LSP servers and client config
+    -- LSP server and client config
     { import = "plugins.lsp.nvim-lspconfig" },
 
-    -- Completion
+    -- Autocompletion
     { import = "plugins.completion.luasnip" },
     { import = "plugins.completion.nvim-cmp" },
 

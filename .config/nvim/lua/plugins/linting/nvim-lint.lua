@@ -8,22 +8,40 @@ return {
       linters_by_ft = {
         ansible = { "ansible_lint" },
         bash = { "shellcheck" },
-        sh = { "shellcheck" },
-        c = { "clangtidy" },
-        cpp = { "clangtidy" },
         dockerfile = { "hadolint", "trivy" },
-        go = { "golangci_lint" },
+        env = { "dotenv_linter" },
+        go = { "golangcilint" },
         json = { "jsonlint" },
         lua = { "luacheck" },
         markdown = { "markdownlint" },
         python = { "flake8", "pylint" },
+        rego = { "regal", "opa_check" },
+        sh = { "shellcheck" },
         sql = { "sqlfluff" },
         terraform = { "tflint", "trivy" },
         yaml = { "yamllint" },
+        asm = { "asmfmt" },
+        c = { "clangd" },
+        cmake = { "cmakelint" },
+        cpp = { "clangd" },
+        css = { "eslint" },
+        dotenv = { "dotenv_linter" },
+        groovy = { "npm_groovy_lint" },
+        html = { "eslint" },
+        java = { "google_java_format" },
+        javascript = { "eslint" },
+        jsonnet = { "jsonnetfmt" },
+        nginx = { "nginx_lint" },
+        php = { "phpcs" },
+        ruby = { "rubyfmt" },
+        rust = { "rust_analyzer" },
+        tex = { "chktex" },
+        typescript = { "eslint" },
+        vim = { "vint" },
         -- Use the "*" filetype to run linters on all filetypes.
         -- ['*'] = { 'global linter' },
         -- Use the "_" filetype to run linters on filetypes that don't have other linters configured.
-        ["_"] = { "ast_grep" },
+        -- ['_'] = { 'fallback linter' },
         -- ["*"] = { "typos" },
       },
       -- LazyVim extension to easily override linter options
@@ -92,7 +110,7 @@ return {
         names = vim.tbl_filter(function(name)
           local linter = lint.linters[name]
           if not linter then
-            LazyVim.warn("Linter not found: " .. name, { title = "nvim-lint" })
+            vim.notify("[nvim-lint] linter not found: " .. name, vim.log.levels.WARN)
           end
           return linter and not (type(linter) == "table" and linter.condition and not linter.condition(ctx))
         end, names)
