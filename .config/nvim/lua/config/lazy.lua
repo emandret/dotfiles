@@ -23,13 +23,17 @@ require("lazy").setup({
     { import = "plugins.core.persistence" },
     { import = "plugins.core.plenary" },
 
+    -- Color scheme
+    { import = "plugins.colorscheme.catppuccin" },
+    { import = "plugins.colorscheme.kanagawa" },
+    { import = "plugins.colorscheme.tokyonight" },
+
     -- User interface
     { import = "plugins.ui.bufferline" },
     { import = "plugins.ui.flash" },
     { import = "plugins.ui.git-signs" },
     { import = "plugins.ui.lualine" },
     { import = "plugins.ui.nvim-tree" },
-    { import = "plugins.ui.onedark-nvim" },
     { import = "plugins.ui.toggleterm-nvim" },
     { import = "plugins.ui.which-key" },
 
@@ -82,4 +86,12 @@ require("lazy").setup({
       },
     },
   },
+})
+
+-- Set the colorscheme after Lazy has loaded all plugins
+vim.api.nvim_create_autocmd("User", {
+  pattern = "VeryLazy",
+  callback = function()
+    vim.cmd("colorscheme catppuccin")
+  end,
 })
