@@ -40,8 +40,10 @@ set.timeoutlen = 200
 -- Show the status line
 set.laststatus = 2
 
--- Show the mode and incomplete commands in the bottom right corner
-set.showmode = true
+-- Do not show the mode
+set.showmode = false
+
+-- Show incomplete commands in the bottom right corner
 set.showcmd = true
 
 -- Show the current absolute line number and relative line numbers
