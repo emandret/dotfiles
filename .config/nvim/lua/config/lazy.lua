@@ -20,6 +20,7 @@ require("lazy").setup({
   spec = {
     -- Core
     { import = "plugins.core.lazydev" },
+    { import = "plugins.core.mason-nvim" },
     { import = "plugins.core.persistence" },
     { import = "plugins.core.plenary" },
 
@@ -50,7 +51,6 @@ require("lazy").setup({
     { import = "plugins.search.telescope" },
 
     -- LSP servers and client config
-    { import = "plugins.lsp.mason-nvim" },
     { import = "plugins.lsp.nvim-lspconfig" },
 
     -- Completion
