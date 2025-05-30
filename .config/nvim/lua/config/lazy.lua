@@ -24,6 +24,11 @@ require("lazy").setup({
     { import = "plugins.core.persistence" },
     { import = "plugins.core.plenary" },
 
+    -- Treesitter
+    { import = "plugins.lang.nvim-treesitter" },
+    { import = "plugins.lang.nvim-treesitter-context" },
+    { import = "plugins.lang.nvim-treesitter-textobjects" },
+
     -- Color scheme
     { import = "plugins.colorscheme.catppuccin" },
     { import = "plugins.colorscheme.kanagawa" },
@@ -38,13 +43,11 @@ require("lazy").setup({
     { import = "plugins.ui.toggleterm-nvim" },
     { import = "plugins.ui.which-key" },
 
-    -- Syntax highlighting
-    { import = "plugins.syntax.mini-nvim" },
-    { import = "plugins.syntax.nvim-treesitter-context" },
-    { import = "plugins.syntax.nvim-treesitter-textobjects" },
-    { import = "plugins.syntax.nvim-treesitter" },
-    { import = "plugins.syntax.ts-comments" },
-    { import = "plugins.syntax.vim-matchup" },
+    -- Editor
+    { import = "plugins.editor.mini-nvim" },
+    { import = "plugins.editor.nvim-surround" },
+    { import = "plugins.editor.ts-comments" },
+    { import = "plugins.editor.vim-matchup" },
 
     -- Search and fuzzy finder
     { import = "plugins.search.grug-far" },
