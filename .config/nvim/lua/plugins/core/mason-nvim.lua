@@ -41,7 +41,7 @@ return {
         "google-java-format",
         "gopls",
         "gotests",
-        "groovy-language-server",
+        "gradle-language-server",
         "hadolint",
         "helm-ls",
         "html-lsp",

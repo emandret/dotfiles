@@ -65,7 +65,7 @@ return {
           dockerls = {},
           eslint = {},
           gopls = {},
-          groovyls = {},
+          gradle_ls = {},
           helm_ls = {},
           html = {},
           java_language_server = {},
