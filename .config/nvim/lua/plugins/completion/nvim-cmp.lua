@@ -60,9 +60,18 @@ return {
           { name = "lazydev" },
           { name = "nvim_lsp" },
           { name = "path" },
-          { name = "luasnip", option = { use_show_condition = false } },
-        }, {
-          { name = "buffer" },
+          {
+            name = "luasnip",
+            option = { use_show_condition = false },
+          },
+          {
+            name = "buffer",
+            option = {
+              get_bufnrs = function()
+                return vim.api.nvim_list_bufs()
+              end,
+            },
+          },
         }),
         formatting = {
           format = function(_, item)
