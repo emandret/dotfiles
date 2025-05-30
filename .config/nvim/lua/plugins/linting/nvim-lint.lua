@@ -12,7 +12,6 @@ return {
         env = { "dotenv_linter" },
         go = { "golangcilint" },
         json = { "jsonlint" },
-        lua = { "luacheck" },
         markdown = { "markdownlint" },
         python = { "flake8", "pylint" },
         rego = { "regal", "opa_check" },

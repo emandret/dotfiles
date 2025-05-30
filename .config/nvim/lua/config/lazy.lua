@@ -99,21 +99,36 @@ vim.api.nvim_create_autocmd("User", {
   end,
 })
 
--- Open directories provided as args
+-- Open the first dir passed as an argument on the command line
 vim.api.nvim_create_autocmd("VimEnter", {
-  callback = function(data)
-    local directory = vim.fn.isdirectory(data.file) == 1
+  callback = function()
+    local args = vim.fn.argv()
 
-    -- Exit if not a directory
-    if not directory then
+    local dirs = {}
+    for _, arg in ipairs(args) do
+      if vim.fn.isdirectory(arg) == 1 then
+        table.insert(dirs, arg)
+      end
+    end
+
+    -- Exit if no dirs are found
+    if #dirs == 0 then
       return
     end
 
-    vim.cmd.enew() -- Create a new empty buffer
-    vim.cmd.bw(data.buf) -- Wipeout the directory buffer
-    vim.cmd.cd(data.file) -- Change to the directory
+    -- Wipeout buffers associated with dirs
+    for _, dir in ipairs(dirs) do
+      local bufnr = vim.fn.bufnr(dir)
+      if bufnr ~= -1 then
+        vim.cmd.bw(bufnr)
+      end
+    end
 
-    -- Open the directory tree
+    -- Create a new empty unnamed buffer and cd into the first dir
+    vim.cmd.enew()
+    vim.cmd.cd(dirs[1])
+
+    -- Open nvim-tree
     require("nvim-tree.api").tree.open()
   end,
 })
