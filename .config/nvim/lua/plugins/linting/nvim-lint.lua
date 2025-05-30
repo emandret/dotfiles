@@ -6,21 +6,24 @@ return {
       -- Event to trigger linters
       events = { "BufWritePost", "BufReadPost", "InsertLeave" },
       linters_by_ft = {
-        sh = { "shellcheck" },
+        ansible = { "ansible_lint" },
         bash = { "shellcheck" },
+        sh = { "shellcheck" },
         c = { "clangtidy" },
         cpp = { "clangtidy" },
-        dockerfile = { "hadolint" },
-        ansible = { "ansible_lint" },
-        python = { "flake8" },
-        javascript = { "eslint_d" },
-        typescript = { "eslint_d" },
-        yaml = { "yamllint" },
+        dockerfile = { "hadolint", "trivy" },
+        go = { "golangci_lint" },
         json = { "jsonlint" },
+        lua = { "luacheck" },
+        markdown = { "markdownlint" },
+        python = { "flake8", "pylint" },
+        sql = { "sqlfluff" },
+        terraform = { "tflint", "trivy" },
+        yaml = { "yamllint" },
         -- Use the "*" filetype to run linters on all filetypes.
         -- ['*'] = { 'global linter' },
         -- Use the "_" filetype to run linters on filetypes that don't have other linters configured.
-        -- ['_'] = { 'fallback linter' },
+        ["_"] = { "ast_grep" },
         -- ["*"] = { "typos" },
       },
       -- LazyVim extension to easily override linter options
