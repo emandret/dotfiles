@@ -27,8 +27,6 @@ return {
         "cmake-language-server",
         "cmakelint",
         "crlfmt",
-        "csharpier",
-        "csharp-language-server",
         "css-lsp",
         "docker-compose-language-service",
         "dockerfile-language-server",

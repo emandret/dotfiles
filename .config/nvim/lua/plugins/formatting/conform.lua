@@ -31,7 +31,6 @@ return {
           c = { "clang-format" },
           cmake = { "cmake_format" },
           cpp = { "clang-format" },
-          cs = { "csharpier" },
           css = { "prettier" },
           dockerfile = { "prettier" },
           go = { "goimports", "golines" },
