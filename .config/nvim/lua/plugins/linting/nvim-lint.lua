@@ -55,7 +55,7 @@ return {
           },
           stdin = false,
           stream = "stdout",
-          ignore_exitcode = false,
+          ignore_exitcode = true,
         },
       },
     },
