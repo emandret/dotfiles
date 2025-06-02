@@ -63,10 +63,7 @@ return {
           { name = "lazydev" },
           { name = "nvim_lsp" },
           { name = "path" },
-          {
-            name = "luasnip",
-            option = { use_show_condition = false },
-          },
+          { name = "luasnip", option = { use_show_condition = false } },
           {
             name = "buffer",
             option = {
