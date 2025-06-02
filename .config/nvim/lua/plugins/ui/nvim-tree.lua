@@ -27,8 +27,8 @@ return {
           open_win_config = function()
             local screen_w = vim.opt.columns:get()
             local screen_h = vim.opt.lines:get() - vim.opt.cmdheight:get()
-            local window_w = screen_w * 0.5
-            local window_h = screen_h * 0.5
+            local window_w = screen_w * 0.8
+            local window_h = screen_h * 0.8
             local window_w_int = math.floor(window_w)
             local window_h_int = math.floor(window_h)
             local center_x = (screen_w - window_w) / 2
@@ -44,7 +44,7 @@ return {
           end,
         },
         width = function()
-          return math.floor(vim.opt.columns:get() * 0.5)
+          return math.floor(vim.opt.columns:get() * 0.8)
         end,
       },
       on_attach = function(bufnr)
