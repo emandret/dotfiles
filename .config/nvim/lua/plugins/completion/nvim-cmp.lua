@@ -6,15 +6,18 @@ return {
       "hrsh7th/cmp-nvim-lsp",
       "hrsh7th/cmp-buffer",
       "hrsh7th/cmp-path",
+      "hrsh7th/cmp-cmdline",
       "saadparwaiz1/cmp_luasnip",
     },
-    opts = function()
+    config = function()
       vim.api.nvim_set_hl(0, "CmpGhostText", { link = "Comment", default = true })
+
       local cmp = require("cmp")
       local luasnip = require("luasnip")
       local defaults = require("cmp.config.default")()
       local auto_select = true
-      return {
+
+      cmp.setup({
         snippet = {
           expand = function(args)
             luasnip.lsp_expand(args.body)
@@ -82,7 +85,7 @@ return {
 
             for key, width in pairs(widths) do
               if item[key] and vim.fn.strdisplaywidth(item[key]) > width then
-                item[key] = vim.fn.strcharpart(item[key], 0, width - 1) .. "…"
+                item[key] = vim.fn.strcharpart(item[key], 0, width - 1) .. "\u{2026}"
               end
             end
 
@@ -95,7 +98,24 @@ return {
           } or false,
         },
         sorting = defaults.sorting,
-      }
+      })
+
+      -- Command-line completion for :
+      cmp.setup.cmdline(":", {
+        mapping = cmp.mapping.preset.cmdline(),
+        sources = cmp.config.sources({
+          { name = "path" },
+          { name = "cmdline" },
+        }),
+      })
+
+      -- Command-line completion for / and ?
+      cmp.setup.cmdline({ "/", "?" }, {
+        mapping = cmp.mapping.preset.cmdline(),
+        sources = {
+          { name = "buffer" },
+        },
+      })
     end,
   },
 }
