@@ -33,9 +33,15 @@ map("v", "<Down>", "<NOP>", opts)
 map("v", "<Up>", "<NOP>", opts)
 map("v", "<Right>", "<NOP>", opts)
 
--- Use arrow keys to navigate the wildmenu in command-line mode
+-- Use the up and down arrow keys to navigate the wildmenu in command-line mode
 map("c", "<Up>", [[pumvisible() ? "\<C-p>" : "\<Up>"]], { expr = true })
 map("c", "<Down>", [[pumvisible() ? "\<C-n>" : "\<Down>"]], { expr = true })
+
+-- Use the left arrow key to cancel a suggestion
+map("c", "<Left>", [[pumvisible() ? "\<C-e>" : "\<Left>"]], { expr = true })
+
+-- Use the right arrow key to accept a suggestion
+map("c", "<Right>", [[pumvisible() ? "\<C-y>" : "\<Right>"]], { expr = true })
 
 -- Enable shell-like keybindings in command-line mode
 map("c", "<C-a>", "<Home>", opts)
