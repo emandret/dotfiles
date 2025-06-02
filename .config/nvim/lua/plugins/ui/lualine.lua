@@ -10,6 +10,16 @@ return {
           winbar = {},
         },
       },
+      sections = {
+        lualine_c = {
+          {
+            function()
+              return vim.fn.fnamemodify(vim.fn.getcwd(), ":~")
+            end,
+          },
+          { "filename", path = 1 },
+        },
+      },
     },
   },
 }
