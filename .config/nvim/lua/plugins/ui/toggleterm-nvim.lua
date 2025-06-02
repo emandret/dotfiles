@@ -6,7 +6,7 @@ return {
       require("toggleterm").setup({
         open_mapping = [[<C-\>]],
         direction = "vertical",
-        size = 80,
+        size = 120,
         insert_mappings = true,
         terminal_mappings = true,
         start_in_insert = true,
