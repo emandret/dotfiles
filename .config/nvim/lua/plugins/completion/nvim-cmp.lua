@@ -3,10 +3,9 @@ return {
     "hrsh7th/nvim-cmp",
     event = "InsertEnter",
     dependencies = {
-      "hrsh7th/cmp-nvim-lsp",
       "hrsh7th/cmp-buffer",
+      "hrsh7th/cmp-nvim-lsp",
       "hrsh7th/cmp-path",
-      "hrsh7th/cmp-cmdline",
       "saadparwaiz1/cmp_luasnip",
     },
     config = function()
@@ -90,28 +89,9 @@ return {
           end,
         },
         experimental = {
-          ghost_text = vim.g.ai_cmp and {
-            hl_group = "CmpGhostText",
-          } or false,
+          ghost_text = vim.g.ai_cmp and { hl_group = "CmpGhostText" } or false,
         },
         sorting = defaults.sorting,
-      })
-
-      -- Command-line completion for :
-      cmp.setup.cmdline(":", {
-        mapping = cmp.mapping.preset.cmdline(),
-        sources = cmp.config.sources({
-          { name = "path" },
-          { name = "cmdline" },
-        }),
-      })
-
-      -- Command-line completion for / and ?
-      cmp.setup.cmdline({ "/", "?" }, {
-        mapping = cmp.mapping.preset.cmdline(),
-        sources = {
-          { name = "buffer" },
-        },
       })
     end,
   },

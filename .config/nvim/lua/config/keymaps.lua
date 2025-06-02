@@ -32,3 +32,14 @@ map("v", "<Left>", "<NOP>", opts)
 map("v", "<Down>", "<NOP>", opts)
 map("v", "<Up>", "<NOP>", opts)
 map("v", "<Right>", "<NOP>", opts)
+
+-- Use arrow keys to navigate the wildmenu in command-line mode
+map("c", "<Up>", [[pumvisible() ? "\<C-p>" : "\<Up>"]], { expr = true })
+map("c", "<Down>", [[pumvisible() ? "\<C-n>" : "\<Down>"]], { expr = true })
+
+-- Enable shell-like keybindings in command-line mode
+map("c", "<C-a>", "<Home>", opts)
+map("c", "<C-e>", "<End>", opts)
+map("c", "<C-h>", "<BS>", opts)
+map("c", "<C-u>", "<C-u>", opts)
+map("c", "<C-w>", "<C-w>", opts)

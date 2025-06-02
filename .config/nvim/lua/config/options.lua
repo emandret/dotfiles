@@ -68,6 +68,11 @@ set.incsearch = true
 -- Highlight matching pairs of brackets, curly braces, parentheses
 set.showmatch = true
 
+-- Enable wildmenu
+set.wildmenu = true
+set.wildmode = "longest:full,full"
+set.wildoptions = "pum"
+
 -- -----------------------------------------------------------------------------
 -- INDENTATION SETTINGS
 -- -----------------------------------------------------------------------------
