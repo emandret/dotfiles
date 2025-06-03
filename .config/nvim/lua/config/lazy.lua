@@ -39,6 +39,7 @@ require("lazy").setup({
     { import = "plugins.ui.flash" },
     { import = "plugins.ui.git-signs" },
     { import = "plugins.ui.lualine" },
+    { import = "plugins.ui.nvim-tree" },
     { import = "plugins.ui.toggleterm-nvim" },
     { import = "plugins.ui.which-key" },
 
