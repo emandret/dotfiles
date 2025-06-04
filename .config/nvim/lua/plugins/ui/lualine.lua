@@ -53,7 +53,7 @@ return {
       end
 
       local function hide_in_width()
-        return vim.fn.winwidth(0) > 210
+        return vim.go.columns > 210
       end
 
       require("lualine").setup({
