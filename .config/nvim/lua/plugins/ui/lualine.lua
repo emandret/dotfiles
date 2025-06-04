@@ -52,6 +52,10 @@ return {
         return ""
       end
 
+      local function hide_in_width()
+        return vim.fn.winwidth(0) > 210
+      end
+
       require("lualine").setup({
         options = {
           theme = "catppuccin",
@@ -62,8 +66,8 @@ return {
         sections = process_sections({
           lualine_a = { "mode" },
           lualine_b = {
-            "branch",
-            "diff",
+            { "branch" },
+            { "diff" },
             {
               "diagnostics",
               source = { "nvim" },
@@ -80,9 +84,18 @@ return {
               function()
                 return vim.fn.fnamemodify(vim.fn.getcwd(), ":~")
               end,
+              cond = hide_in_width,
             },
-            { "filename", file_status = false, path = 1 },
-            { modified, color = { bg = colors.red, fg = colors.base } },
+            {
+              "filename",
+              file_status = false,
+              path = 1,
+              cond = hide_in_width,
+            },
+            {
+              modified,
+              color = { bg = colors.red, fg = colors.base },
+            },
             {
               "%w",
               cond = function()
