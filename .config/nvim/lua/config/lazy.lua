@@ -39,7 +39,6 @@ require("lazy").setup({
     { import = "plugins.ui.flash" },
     { import = "plugins.ui.git-signs" },
     { import = "plugins.ui.lualine" },
-    { import = "plugins.ui.nvim-tree" },
     { import = "plugins.ui.toggleterm-nvim" },
     { import = "plugins.ui.which-key" },
 
@@ -99,7 +98,7 @@ vim.api.nvim_create_autocmd("User", {
   end,
 })
 
--- Open the first dir passed as an argument on the command line
+-- Open the first directory argument
 vim.api.nvim_create_autocmd("VimEnter", {
   callback = function()
     local args = vim.fn.argv()
@@ -111,12 +110,12 @@ vim.api.nvim_create_autocmd("VimEnter", {
       end
     end
 
-    -- Exit if no dirs are found
+    -- Exit if no directory is found
     if #dirs == 0 then
       return
     end
 
-    -- Wipeout buffers associated with dirs
+    -- Wipeout buffers associated with directories
     for _, dir in ipairs(dirs) do
       local bufnr = vim.fn.bufnr(dir)
       if bufnr ~= -1 then
@@ -124,11 +123,10 @@ vim.api.nvim_create_autocmd("VimEnter", {
       end
     end
 
-    -- Create a new empty unnamed buffer and cd into the first dir
-    vim.cmd.enew()
+    -- Change the cwd
     vim.cmd.cd(dirs[1])
 
-    -- Open nvim-tree
-    require("nvim-tree.api").tree.open()
+    -- Open telescope-file-browser
+    require("telescope").extensions.file_browser.file_browser()
   end,
 })
