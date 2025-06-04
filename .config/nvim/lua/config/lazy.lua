@@ -110,12 +110,11 @@ vim.api.nvim_create_autocmd("VimEnter", {
       end
     end
 
-    -- Exit if no directory is found
+    -- Exit early
     if #dirs == 0 then
       return
     end
 
-    -- Wipeout buffers associated with directories
     for _, dir in ipairs(dirs) do
       local bufnr = vim.fn.bufnr(dir)
       if bufnr ~= -1 then
@@ -123,10 +122,15 @@ vim.api.nvim_create_autocmd("VimEnter", {
       end
     end
 
-    -- Change the cwd
-    vim.cmd.cd(dirs[1])
+    -- Change directory
+    if vim.fn.getcwd() ~= dirs[1] then
+      vim.fn.chdir(dirs[1])
+    end
 
-    -- Open telescope-file-browser
-    require("telescope").extensions.file_browser.file_browser()
+    -- Open Telescope to find files
+    vim.schedule(function()
+      require("project_nvim").setup({ manual_mode = true })
+      require("telescope.builtin").find_files()
+    end)
   end,
 })
