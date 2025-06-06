@@ -129,7 +129,6 @@ vim.api.nvim_create_autocmd("VimEnter", {
 
     -- Open Telescope to find files
     vim.schedule(function()
-      require("project_nvim").setup({ manual_mode = true })
       require("telescope.builtin").find_files()
     end)
   end,

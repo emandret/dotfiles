@@ -14,56 +14,37 @@ return {
           end
         end,
       },
-      {
-        "ahmedkhalf/project.nvim",
-        config = function()
-          require("project_nvim").setup({
-            detection_methods = { "pattern" },
-            patterns = { ".git" },
-          })
-          require("telescope").load_extension("projects")
-        end,
-      },
     },
     keys = {
       { "<Leader>b", "<Cmd>Telescope buffers<CR>", desc = "Find Buffers" },
       { "<Leader>h", "<Cmd>Telescope help_tags<CR>", desc = "Help Tags" },
       {
-        "<Leader>p",
-        function()
-          vim.schedule(function()
-            require("telescope").extensions.projects.projects()
-          end)
-        end,
-        desc = "Find Projects",
-      },
-      {
         "<Leader>ff",
         function()
           require("telescope.builtin").find_files({ cwd = vim.fn.getcwd() })
         end,
-        desc = "Find Files (Project Root)",
+        desc = "Find Files",
       },
       {
         "<Leader>f.",
         function()
           require("telescope.builtin").find_files({ cwd = vim.fn.expand("%:p:h") })
         end,
-        desc = "Find Files (File Directory)",
+        desc = "Find Files (file directory)",
       },
       {
         "<Leader>fg",
         function()
           require("telescope.builtin").live_grep({ cwd = vim.fn.getcwd() })
         end,
-        desc = "Live Grep (Project Root)",
+        desc = "Live Grep",
       },
       {
         "<Leader>g.",
         function()
           require("telescope.builtin").live_grep({ cwd = vim.fn.expand("%:p:h") })
         end,
-        desc = "Live Grep (File Directory)",
+        desc = "Live Grep (file directory)",
       },
     },
     opts = function()
