@@ -1,5 +1,5 @@
 # If you come from bash you might have to change your $PATH.
-export PATH=$HOME/bin:$HOME/.local/bin:/usr/local/bin:$PATH
+# export PATH=$HOME/bin:$HOME/.local/bin:/usr/local/bin:$PATH
 
 # Path to your Oh My Zsh installation.
 export ZSH="$HOME/.oh-my-zsh"
@@ -62,8 +62,7 @@ ZSH_THEME="robbyrussell"
 # see 'man strftime' for details.
 # HIST_STAMPS="mm/dd/yyyy"
 
-# Would you like to use another custom folder than $ZSH/custom?
-# ZSH_CUSTOM=/path/to/new-custom-folder
+ZSH_CUSTOM=~/.zsh-custom
 
 # Which plugins would you like to load?
 # Standard plugins can be found in $ZSH/plugins/
@@ -71,10 +70,11 @@ ZSH_THEME="robbyrussell"
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(
-  git
-  docker
-  kubectl
   colored-man-pages
+  docker
+  gitfast
+  kubectl
+  terraform
   zsh-syntax-highlighting
 )
 
@@ -82,22 +82,19 @@ source $ZSH/oh-my-zsh.sh
 
 # User configuration
 
-# Custom bindings
-bindkey \^U backward-kill-line
-
 # export MANPATH="/usr/local/man:$MANPATH"
 export GPG_TTY=$(tty)
 export ANSIBLE_VAULT_PASSWORD_FILE=~/.ansible_vault_password_file
 
 # You may need to manually set your language environment
-# export LANG=en_US.UTF-8
+export LANG=en_US.UTF-8
 
 # Preferred editor for local and remote sessions
-# if [[ -n $SSH_CONNECTION ]]; then
-#   export EDITOR='vim'
-# else
-#   export EDITOR='nvim'
-# fi
+if [[ -n $SSH_CONNECTION ]]; then
+  export EDITOR='vim'
+else
+  export EDITOR='nvim'
+fi
 
 # Compilation flags
 # export ARCHFLAGS="-arch $(uname -m)"
@@ -132,3 +129,4 @@ unset MANPATH; MANPATH="${NPM_PACKAGES}/share/man:$(manpath)"
 autoload -U +X compinit && compinit
 autoload -U +X bashcompinit && bashcompinit
 source <(kubectl completion zsh)
+
