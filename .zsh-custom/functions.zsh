@@ -37,7 +37,12 @@ kge() {
 }
 
 tigera() {
-  local cmd="$1"; shift
+  local cmd
+
+  if [[ $# -gt 0 ]]; then
+    cmd="$1"
+    shift
+  fi
 
   case "$cmd" in
     token)
@@ -49,21 +54,29 @@ tigera() {
       ;;
 
     egw)
-      local egw
-      if ! egw="$(kubectl -n egress-gateways get po -l egress-gateway="$1" -o jsonpath='{.items[0].metadata.name}')"; then
+      if [[ $# -lt 1 ]]; then
+        echo "Usage: $0 egw <egress-gateway-name>" >&2
+        echo
+        echo "Start an ephemeral debug container in the EGW pod in the same PID namespace."
+        return 1
+      fi
+
+      if ! egw_pod="$(kubectl -n egress-gateways get po -l egress-gateway="$1" -o jsonpath='{.items[0].metadata.name}')"; then
         echo 'Failed to retrieve EGW pod name' >&2
         return 1
       fi
 
-      kubectl -n egress-gateways debug -it $egw --image=docker.io/wbitt/network-multitool --target=egress-gateway -- bash
+      kubectl -n egress-gateways debug -it $egw_pod --image=docker.io/wbitt/network-multitool --target=egress-gateway -- bash
       ;;
 
     *)
       echo "Usage: $0 <command>"
+      echo
       echo "Commands:"
       echo "  token       get a long-lived token for tigera-manager"
       echo "  es-user     get the tigera-elasticsearch password"
-      echo "  egw <name>  start an ephemeral debug container in the given EGW pod"
+      echo "  egw <name>  start an ephemeral debug container in the given EGW"
+
       return 1
       ;;
   esac
