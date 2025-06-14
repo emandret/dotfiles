@@ -1,24 +1,24 @@
-jwt-decode() {
-  jq -R 'split(".") | .[0:2] | map(gsub("-"; "+") | gsub("_"; "/") | gsub("%3D"; "=") | @base64d) | map(fromjson)' <<<"${1:-$(cat)}"
-}
+#!/bin/bash
+
+set -o pipefail
+
+unalias kga
+unalias kge
 
 kga() {
   local namespaced=true
+  local resources
   local args=()
 
   for arg in "$@"; do
     case "$arg" in
-      --namespaced | --namespaced=true) namespaced=true ;;
-      --namespaced=false) namespaced=false ;;
-      *) args+=("$arg") ;;
+    --namespaced | --namespaced=true) namespaced=true ;;
+    --namespaced=false) namespaced=false ;;
+    *) args+=("$arg") ;;
     esac
   done
 
-  local resources
-  if ! resources="$(kubectl api-resources --verbs=list --namespaced=$namespaced -oname | paste -sd, -)"; then
-    echo 'Failed to retrieve API resources' >&2
-    return 1
-  fi
+  resources="$(kubectl api-resources --verbs=list --namespaced=$namespaced -oname | paste -sd, -)" || return 1
 
   kubectl get "$resources" --show-kind --ignore-not-found "${args[@]}"
 }
@@ -36,48 +36,6 @@ kge() {
   kubectl get events "${args[@]}"
 }
 
-tigera() {
-  local cmd
-
-  if [[ $# -gt 0 ]]; then
-    cmd="$1"
-    shift
-  fi
-
-  case "$cmd" in
-    token)
-      kubectl create token tigera-manager -n tigera-manager --duration=84600s
-      ;;
-
-    es-user)
-      kubectl get secret tigera-secure-es-elastic-user -n tigera-elasticsearch -o go-template='{{.data.elastic | base64decode}}'
-      ;;
-
-    egw)
-      if [[ $# -lt 1 ]]; then
-        echo "Usage: $0 egw <egress-gateway-name>" >&2
-        echo
-        echo "Start an ephemeral debug container in the EGW pod in the same PID namespace."
-        return 1
-      fi
-
-      if ! egw_pod="$(kubectl -n egress-gateways get po -l egress-gateway="$1" -o jsonpath='{.items[0].metadata.name}')"; then
-        echo 'Failed to retrieve EGW pod name' >&2
-        return 1
-      fi
-
-      kubectl -n egress-gateways debug -it $egw_pod --image=docker.io/wbitt/network-multitool --target=egress-gateway -- bash
-      ;;
-
-    *)
-      echo "Usage: $0 <command>"
-      echo
-      echo "Commands:"
-      echo "  token       get a long-lived token for tigera-manager"
-      echo "  es-user     get the tigera-elasticsearch password"
-      echo "  egw <name>  start an ephemeral debug container in the given EGW"
-
-      return 1
-      ;;
-  esac
+jwt-decode() {
+  jq -R 'split(".") | .[0:2] | map(gsub("-"; "+") | gsub("_"; "/") | gsub("%3D"; "=") | @base64d) | map(fromjson)' <<<"${1:-$(cat)}"
 }

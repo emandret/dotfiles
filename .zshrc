@@ -1,5 +1,5 @@
 # If you come from bash you might have to change your $PATH.
-# export PATH=$HOME/bin:$HOME/.local/bin:/usr/local/bin:$PATH
+export PATH=~/bin:~/.local/bin:$PATH
 
 # Path to your Oh My Zsh installation.
 export ZSH="$HOME/.oh-my-zsh"
@@ -62,7 +62,8 @@ ZSH_THEME="robbyrussell"
 # see 'man strftime' for details.
 # HIST_STAMPS="mm/dd/yyyy"
 
-ZSH_CUSTOM=~/.zsh-custom
+# Would you like to use another custom folder than $ZSH/custom?
+ZSH_CUSTOM="$HOME/.zsh-custom"
 
 # Which plugins would you like to load?
 # Standard plugins can be found in $ZSH/plugins/
@@ -70,11 +71,10 @@ ZSH_CUSTOM=~/.zsh-custom
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(
-  colored-man-pages
+  git
   docker
-  gitfast
   kubectl
-  terraform
+  colored-man-pages
   zsh-syntax-highlighting
 )
 
@@ -82,19 +82,22 @@ source $ZSH/oh-my-zsh.sh
 
 # User configuration
 
+# Custom bindings
+# bindkey \^U backward-kill-line
+
 # export MANPATH="/usr/local/man:$MANPATH"
 export GPG_TTY=$(tty)
 export ANSIBLE_VAULT_PASSWORD_FILE=~/.ansible_vault_password_file
 
 # You may need to manually set your language environment
-export LANG=en_US.UTF-8
+# export LANG=en_US.UTF-8
 
 # Preferred editor for local and remote sessions
-if [[ -n $SSH_CONNECTION ]]; then
-  export EDITOR='vim'
-else
-  export EDITOR='nvim'
-fi
+# if [[ -n $SSH_CONNECTION ]]; then
+#   export EDITOR='vim'
+# else
+#   export EDITOR='nvim'
+# fi
 
 # Compilation flags
 # export ARCHFLAGS="-arch $(uname -m)"
@@ -111,22 +114,11 @@ fi
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
-# Store npm packages in $HOME
-export NPM_PACKAGES=~/.npm-packages
-
-if [[ ! -s ~/.npmrc ]]; then
-  echo 'prefix=${NPM_PACKAGES}' >~/.npmrc
-fi
-
-# Update both PATH and NODE_PATH for node modules
-PATH="${NPM_PACKAGES}/bin:$PATH"
-NODE_PATH="${NPM_PACKAGES}/lib/node_modules:${NODE_PATH}"
-
-# Unset MANPATH so we can inherit from /etc/manpath
-unset MANPATH; MANPATH="${NPM_PACKAGES}/share/man:$(manpath)"
-
-# Completions
+# Command autocomplete
 autoload -U +X compinit && compinit
 autoload -U +X bashcompinit && bashcompinit
 source <(kubectl completion zsh)
 
+# For Java
+export PATH="/usr/local/opt/openjdk/bin:$PATH"
+export CPPFLAGS="-I/usr/local/opt/openjdk/include"

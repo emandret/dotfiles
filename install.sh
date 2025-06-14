@@ -4,7 +4,7 @@ set -eu
 
 cd -- "$(dirname -- "$(readlink -f -- "$0")")" &>/dev/null && pwd
 
-install_brew_packages() {
+brew() {
   if [[ ! -d ~/.local/bin ]]; then
     mkdir -p ~/.local/bin
   fi
@@ -42,7 +42,7 @@ install_brew_packages() {
   fi
 }
 
-install_vim() {
+vim() {
   rm -rf ~/.{vim,vimrc,viminfo}
 
   curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
@@ -54,18 +54,22 @@ install_vim() {
   vim -T dumb --noplugin -u ~/.config/vim/plugins/list.vim +PlugInstall +qall
 }
 
-install_nvim() {
+nvim() {
   rm -rf ~/.config/nvim && ln -sf "$(pwd)/.config/nvim" ~/.config/nvim
 }
 
-install_zsh() {
+zsh() {
   cp .zshrc ~
+  cp -r .zsh-custom ~
+
+  git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting || true
+
   sudo chsh -s "$(which zsh)" "$(whoami)"
 }
 
 if [[ "$#" -gt 0 ]]; then
-  for fn in $@; do
+  for fn in "$@"; do
     shift
-    eval $fn $@
+    $fn "$@"
   done
 fi
