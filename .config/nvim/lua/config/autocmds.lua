@@ -27,14 +27,6 @@ autocmd("BufWritePre", {
   command = [[%s/\s\+$//e]],
 })
 
--- Format on save
-autocmd("BufWritePre", {
-  pattern = "*",
-  callback = function()
-    vim.lsp.buf.format({ async = false })
-  end,
-})
-
 -- Highlight yanked text
 autocmd("TextYankPost", {
   pattern = "*",
@@ -43,10 +35,7 @@ autocmd("TextYankPost", {
   end,
 })
 
--- -----------------------------------------------------------------------------
--- FORMATTERS
--- -----------------------------------------------------------------------------
-
+-- Use tabs for Makefiles
 autocmd("FileType", {
   pattern = "make",
   callback = function()
@@ -56,6 +45,10 @@ autocmd("FileType", {
     vim.bo.expandtab = false
   end,
 })
+
+-- -----------------------------------------------------------------------------
+-- FORMATTERS
+-- -----------------------------------------------------------------------------
 
 autocmd("FileType", {
   pattern = "markdown",
@@ -88,6 +81,6 @@ autocmd("FileType", {
 autocmd("FileType", {
   pattern = "yaml",
   callback = function()
-    vim.bo.equalprg = "yamlfmt"
+    vim.bo.equalprg = "yamlfmt -"
   end,
 })

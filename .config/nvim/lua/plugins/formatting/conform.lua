@@ -6,23 +6,37 @@ return {
     cmd = "ConformInfo",
     keys = {
       {
-        "<Leader>cF",
+        "<Leader>cf",
         function()
-          require("conform").format({ formatters = { "injected" }, timeout_ms = 3000 })
+          local conform = require("conform")
+          local mode = vim.api.nvim_get_mode().mode
+
+          -- Check whether we are in visual or visual line mode
+          if mode:match("^[vV]") then
+            conform.format({
+              range = {
+                ["start"] = vim.api.nvim_buf_get_mark(0, "<"),
+                ["end"] = vim.api.nvim_buf_get_mark(0, ">"),
+              },
+            })
+          else
+            conform.format()
+          end
         end,
         mode = { "n", "v" },
         desc = "Format Injected Langs",
       },
     },
     opts = function()
-      local plugin = require("lazy.core.config").plugins["conform.nvim"]
       ---@type conform.setupOpts
       local opts = {
-        default_format_opts = {
+        format_on_save = {
           timeout_ms = 3000,
+        },
+        default_format_opts = {
+          lsp_format = "fallback", -- Not recommended to change
           async = false, -- Not recommended to change
           quiet = false, -- Not recommended to change
-          lsp_format = "fallback", -- Not recommended to change
         },
         formatters_by_ft = {
           asm = { "asmfmt" },
@@ -41,7 +55,7 @@ return {
           jsonnet = { "jsonnetfmt" },
           lua = { "stylua" },
           markdown = { "prettier" },
-          php = { "php-cs-fixer" },
+          php = { "php_cs_fixer" },
           python = { "isort", "black" },
           ruby = { "rubyfmt" },
           rust = { "rustfmt" },
@@ -55,7 +69,7 @@ return {
         -- You can also define any custom formatters here.
         ---@type table<string, conform.FormatterConfigOverride|fun(bufnr: integer): nil|conform.FormatterConfigOverride>
         formatters = {
-          injected = { options = { ignore_errors = true } },
+          injected = { options = { ignore_errors = false } },
           -- # Example of using dprint only when a dprint.json file is present
           -- dprint = {
           --   condition = function(ctx)

@@ -145,15 +145,15 @@ nnoremap gj j
 nnoremap gk k
 
 " disable arrows keys and backspace except in insert mode
-nnoremap <LEFT> <NOP>
-nnoremap <DOWN> <NOP>
-nnoremap <UP> <NOP>
-nnoremap <RIGHT> <NOP>
+nnoremap <Left> <nop>
+nnoremap <Down> <nop>
+nnoremap <Up> <nop>
+nnoremap <Right> <nop>
 
-vnoremap <LEFT> <NOP>
-vnoremap <DOWN> <NOP>
-vnoremap <UP> <NOP>
-vnoremap <RIGHT> <NOP>
+vnoremap <Left> <nop>
+vnoremap <Down> <nop>
+vnoremap <Up> <nop>
+vnoremap <Right> <nop>
 
 " ------------------------------------------------------------------------------
 " FILETYPES
@@ -174,4 +174,4 @@ autocmd FileType markdown set equalprg=prettier\ --parser\ markdown
 autocmd FileType cpp set equalprg=clang-format\ -style=Microsoft
 autocmd FileType python set equalprg=black\ --quiet\ -
 autocmd FileType terraform set equalprg=terraform\ fmt\ -
-autocmd FileType yaml set equalprg=yamlfmt
+autocmd FileType yaml set equalprg=yamlfmt\ -
