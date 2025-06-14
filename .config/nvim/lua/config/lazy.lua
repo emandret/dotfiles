@@ -45,6 +45,7 @@ require("lazy").setup({
     -- Editor
     { import = "plugins.editor.mini-nvim" },
     { import = "plugins.editor.nvim-surround" },
+    { import = "plugins.editor.rainbow-delimiters" },
     { import = "plugins.editor.ts-comments" },
     { import = "plugins.editor.vim-matchup" },
 
