@@ -10,6 +10,7 @@ return {
     build = ":MasonUpdate",
     opts_extend = { "ensure_installed" },
     opts = {
+      PATH = "skip", -- Don't append Mason's bin path to PATH
       ensure_installed = {
         "ansible-language-server",
         "ansible-lint",
