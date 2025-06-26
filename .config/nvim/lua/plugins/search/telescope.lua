@@ -21,30 +21,24 @@ return {
       {
         "<Leader>ff",
         function()
-          require("telescope.builtin").find_files({ cwd = vim.fn.getcwd() })
+          require("telescope.builtin").find_files({
+            cwd = vim.fn.getcwd(),
+            hidden = false,
+            no_ignore = true,
+          })
         end,
         desc = "Find Files",
       },
       {
-        "<Leader>f.",
-        function()
-          require("telescope.builtin").find_files({ cwd = vim.fn.expand("%:p:h") })
-        end,
-        desc = "Find Files (file directory)",
-      },
-      {
         "<Leader>fg",
         function()
-          require("telescope.builtin").live_grep({ cwd = vim.fn.getcwd() })
+          require("telescope.builtin").live_grep({
+            cwd = vim.fn.getcwd(),
+            hidden = false,
+            no_ignore = true,
+          })
         end,
         desc = "Live Grep",
-      },
-      {
-        "<Leader>g.",
-        function()
-          require("telescope.builtin").live_grep({ cwd = vim.fn.expand("%:p:h") })
-        end,
-        desc = "Live Grep (file directory)",
       },
     },
     opts = function()
