@@ -16,8 +16,9 @@ return {
       },
     },
     keys = {
-      { "<Leader>b", "<Cmd>Telescope buffers<CR>", desc = "Find Buffers" },
+      { "<Leader>b", "<Cmd>Telescope buffers<CR>", desc = "Buffers" },
       { "<Leader>h", "<Cmd>Telescope help_tags<CR>", desc = "Help Tags" },
+      { "<Leader>ws", "<Cmd>Telescope lsp_dynamic_workspace_symbols<CR>", desc = "LSP Dynamic Workspace Symbols" },
       {
         "<Leader>ff",
         function()

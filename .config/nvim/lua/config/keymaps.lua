@@ -86,3 +86,18 @@ map("n", "gq", "<Cmd>lua vim.lsp.buf.format({ async = true })<CR>", opts)
 
 -- Show function signature help while in insert mode
 map("i", "<C-s>", "<Cmd>lua vim.lsp.buf.signature_help()<CR>", opts)
+
+-- Jump to the previous diagnostic in the buffer
+map("n", "[d", "<Cmd>lua vim.diagnostic.goto_prev()<CR>", opts)
+
+-- Jump to the next diagnostic in the buffer
+map("n", "]d", "<Cmd>lua vim.diagnostic.goto_next()<CR>", opts)
+
+-- Jump to the first diagnostic in the buffer
+map("n", "[D", "<Cmd>lua vim.diagnostic.goto_first()<CR>", opts)
+
+-- Jump to the last diagnostic in the buffer
+map("n", "]D", "<Cmd>lua vim.diagnostic.goto_last()<CR>", opts)
+
+-- Show diagnostics at the cursor position
+map("n", "<C-w>d", "<Cmd>lua vim.diagnostic.open_float()<CR>", opts)
