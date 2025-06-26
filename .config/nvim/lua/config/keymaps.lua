@@ -50,15 +50,39 @@ map("c", "<C-h>", "<BS>", opts)
 map("c", "<C-u>", "<C-u>", opts)
 map("c", "<C-w>", "<C-w>", opts)
 
--- LSP client keymaps
+-- -----------------------------------------------------------------------------
+-- LSP CLIENT KEYMAPS
+-- -----------------------------------------------------------------------------
+
+-- Go to definition of symbol under cursor
 map("n", "gd", "<Cmd>lua vim.lsp.buf.definition()<CR>", opts)
+
+-- List all symbols in the current document (e.g. functions, classes, etc.)
 map("n", "gO", "<Cmd>lua vim.lsp.buf.document_symbol()<CR>", opts)
+
+-- Trigger available code actions (e.g. quick fixes, refactors)
 map("n", "gra", "<Cmd>lua vim.lsp.buf.code_action()<CR>", opts)
+
+-- Go to declaration of symbol under cursor
 map("n", "grd", "<Cmd>lua vim.lsp.buf.declaration()<CR>", opts)
+
+-- Go to implementation of the symbol (e.g. where interface is implemented)
 map("n", "gri", "<Cmd>lua vim.lsp.buf.implementation()<CR>", opts)
+
+-- Rename all references to the symbol under cursor
 map("n", "grn", "<Cmd>lua vim.lsp.buf.rename()<CR>", opts)
+
+-- List all references to the symbol under cursor
 map("n", "grr", "<Cmd>lua vim.lsp.buf.references()<CR>", opts)
+
+-- Go to type definition of the symbol (e.g. the class or interface)
 map("n", "grt", "<Cmd>lua vim.lsp.buf.type_definition()<CR>", opts)
+
+-- Show hover information (e.g. type info or documentation)
 map("n", "K", "<Cmd>lua vim.lsp.buf.hover()<CR>", opts)
+
+-- Format the current buffer using the LSP server
 map("n", "gq", "<Cmd>lua vim.lsp.buf.format({ async = true })<CR>", opts)
+
+-- Show function signature help while in insert mode
 map("i", "<C-s>", "<Cmd>lua vim.lsp.buf.signature_help()<CR>", opts)
