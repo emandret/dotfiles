@@ -50,7 +50,7 @@ map("c", "<C-h>", "<BS>", opts)
 map("c", "<C-u>", "<C-u>", opts)
 map("c", "<C-w>", "<C-w>", opts)
 
--- LSP keymaps
+-- LSP client keymaps
 map("n", "gd", "<Cmd>lua vim.lsp.buf.definition()<CR>", opts)
 map("n", "gO", "<Cmd>lua vim.lsp.buf.document_symbol()<CR>", opts)
 map("n", "gra", "<Cmd>lua vim.lsp.buf.code_action()<CR>", opts)
