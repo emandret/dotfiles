@@ -28,16 +28,15 @@ return {
             },
           },
         },
-        -- Enable inlay hints for Neovim >= 0.10.0
+        -- Enable inlay hints
         inlay_hints = {
           enabled = true,
-          exclude = { "vue" }, -- filetypes for which you don't want to enable inlay hints
         },
-        -- Enable code lenses for Neovim >= 0.10.0
+        -- Disable code lenses
         codelens = {
           enabled = false,
         },
-        -- add any global capabilities here
+        -- Add any global capabilities here
         capabilities = {
           workspace = {
             fileOperations = {
@@ -46,7 +45,7 @@ return {
             },
           },
         },
-        -- options for vim.lsp.buf.format
+        -- Options for vim.lsp.buf.format
         format = {
           formatting_options = nil,
           timeout_ms = nil,
@@ -64,7 +63,18 @@ return {
           docker_compose_language_service = {},
           dockerls = {},
           eslint = {},
-          gopls = {},
+          gopls = {
+            settings = {
+              gopls = {
+                analyses = {
+                  unusedparams = true,
+                  unreachable = true,
+                },
+                staticcheck = true,
+                completeUnimported = true,
+              },
+            },
+          },
           groovyls = {},
           helm_ls = {},
           html = {},
@@ -125,26 +135,11 @@ return {
     end,
     ---@param opts PluginLspOpts
     config = function(_, opts)
-      -- Setup autoformat
-      vim.lsp.handlers["textDocument/formatting"] = vim.lsp.with(vim.lsp.handlers["textDocument/formatting"], {
-        timeout_ms = 2000,
-      })
-
-      -- Setup keymaps
-      vim.lsp.handlers["textDocument/hover"] = function(_, result, ctx, config)
-        if result then
-          vim.lsp.util.focusable_float(ctx.bufnr, result.contents)
-        end
-      end
-
-      -- Diagnostics signs
-      if vim.fn.has("nvim-0.10.0") == 0 then
-        if type(opts.diagnostics.signs) ~= "boolean" then
-          for severity, icon in pairs(opts.diagnostics.signs.text) do
-            local name = vim.diagnostic.severity[severity]:lower():gsub("^%l", string.upper)
-            name = "DiagnosticSign" .. name
-            vim.fn.sign_define(name, { text = icon, texthl = name, numhl = "" })
-          end
+      if type(opts.diagnostics.signs) ~= "boolean" then
+        for severity, icon in pairs(opts.diagnostics.signs.text) do
+          local name = vim.diagnostic.severity[severity]:lower():gsub("^%l", string.upper)
+          name = "DiagnosticSign" .. name
+          vim.fn.sign_define(name, { text = icon, texthl = name, numhl = "" })
         end
       end
 
@@ -180,7 +175,7 @@ return {
         require("lspconfig")[server].setup(server_opts)
       end
 
-      -- get all the servers that are available through mason-lspconfig
+      -- Get all the servers that are available through mason-lspconfig
       local have_mason, mlsp = pcall(require, "mason-lspconfig")
       local all_mslp_servers = {}
       if have_mason then
@@ -192,7 +187,7 @@ return {
         if server_opts then
           server_opts = server_opts == true and {} or server_opts
           if server_opts.enabled ~= false then
-            -- run manual setup if mason=false or if this is a server that cannot be installed with mason-lspconfig
+            -- Run manual setup if mason=false or if this is a server that cannot be installed with mason-lspconfig
             if server_opts.mason == false or not vim.tbl_contains(all_mslp_servers, server) then
               setup(server)
             else
@@ -204,6 +199,7 @@ return {
 
       if have_mason then
         mlsp.setup({
+          automatic_enable = true,
           ensure_installed = ensure_installed,
           handlers = { setup },
         })
