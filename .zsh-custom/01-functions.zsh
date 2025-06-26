@@ -1,9 +1,4 @@
-#!/bin/bash
-
 set -o pipefail
-
-unalias kga
-unalias kge
 
 kga() {
   local namespaced=true
