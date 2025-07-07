@@ -59,10 +59,13 @@ nvim() {
 }
 
 zsh() {
-  cp .zshrc ~
-  cp -r .zsh-custom ~
+  rm -rf ~/.oh-my-zsh
 
-  git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting || true
+  git clone https://github.com/ohmyzsh/ohmyzsh.git ~/.oh-my-zsh
+  git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting
+
+  cp .zshrc ~
+  cp .zsh_aliases.zsh ~
 
   sudo chsh -s "$(which zsh)" "$(whoami)"
 }
