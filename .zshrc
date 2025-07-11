@@ -4,12 +4,12 @@ export ZSH=${HOME}/.oh-my-zsh
 ZSH_THEME=robbyrussell
 
 plugins=(
-  colored-man-pages
-  docker
-  gitfast
-  kubectl
-  terraform
-  zsh-syntax-highlighting
+	colored-man-pages
+	docker
+	gitfast
+	kubectl
+	terraform
+	zsh-syntax-highlighting
 )
 
 source ${ZSH}/oh-my-zsh.sh
@@ -19,13 +19,13 @@ export LANG=en_US.UTF-8
 
 # Source aliases
 if [[ -f ~/.zsh_aliases.zsh ]]; then
-  source ~/.zsh_aliases.zsh
+	source ~/.zsh_aliases.zsh
 fi
 
 if [[ -n $SSH_CONNECTION ]]; then
-  export EDITOR=vim
+	export EDITOR=vim
 else
-  export EDITOR=nvim
+	export EDITOR=nvim
 fi
 
 export GPG_TTY=$(tty)
@@ -36,8 +36,8 @@ export ARCHFLAGS="-arch $(uname -m)"
 # Store npm packages in $HOME
 export NPM_PACKAGES=${NPM_PACKAGES:-$HOME/.npm-packages}
 
-if ! grep -q '^prefix=' ~/.npmrc; then
-  echo 'prefix=${NPM_PACKAGES}' >>~/.npmrc
+if ! grep -q '^prefix=' ~/.npmrc >/dev/null 2>&1; then
+	echo 'prefix=${NPM_PACKAGES}' >>~/.npmrc
 fi
 
 # Update both PATH and NODE_PATH for node modules
