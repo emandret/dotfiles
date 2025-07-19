@@ -21,10 +21,10 @@ return {
           severity_sort = true,
           signs = {
             text = {
-              [vim.diagnostic.severity.ERROR] = "\u{274C}", -- Unicode for cross mark (U+274C)
-              [vim.diagnostic.severity.WARN] = "\u{26A0}\u{FE0F}", -- Unicode for warning sign (U+26A0) + emoji rendering (U+FE0F)
               [vim.diagnostic.severity.HINT] = "\u{1F4A1}", -- Unicode for light bulb (U+1F4A1)
               [vim.diagnostic.severity.INFO] = "\u{2139}\u{FE0F}", -- Unicode for information (U+2139) + emoji rendering (U+FE0F)
+              [vim.diagnostic.severity.WARN] = "\u{26A0}\u{FE0F}", -- Unicode for warning sign (U+26A0) + emoji rendering (U+FE0F)
+              [vim.diagnostic.severity.ERROR] = "\u{274C}", -- Unicode for cross mark (U+274C)
             },
           },
         },
