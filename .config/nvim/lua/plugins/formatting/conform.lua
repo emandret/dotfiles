@@ -11,16 +11,17 @@ return {
           local conform = require("conform")
           local mode = vim.api.nvim_get_mode().mode
 
-          -- Check whether we are in visual or visual line mode
           if mode:match("^[vV]") then
             conform.format({
               range = {
                 ["start"] = vim.api.nvim_buf_get_mark(0, "<"),
                 ["end"] = vim.api.nvim_buf_get_mark(0, ">"),
               },
+              async = true,
+              lsp_fallback = true,
             })
           else
-            conform.format()
+            conform.format({ async = true, lsp_fallback = true })
           end
         end,
         mode = { "n", "v" },
