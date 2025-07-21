@@ -34,9 +34,9 @@ return {
           timeout_ms = 3000,
         },
         default_format_opts = {
-          lsp_format = "fallback", -- Not recommended to change
-          async = false, -- Not recommended to change
-          quiet = false, -- Not recommended to change
+          lsp_format = "fallback",
+          async = true,
+          quiet = false,
         },
         formatters_by_ft = {
           asm = { "asmfmt" },
