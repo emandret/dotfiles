@@ -199,6 +199,9 @@ return {
     ---@param opts TSConfig
     config = function(_, opts)
       require("nvim-treesitter.configs").setup(opts)
+
+      -- Parse Helm as Go template
+      vim.treesitter.language.register("gotmpl", "helm")
     end,
   },
 }
