@@ -113,6 +113,8 @@ vim.filetype.add({
     [".*%.mk"] = "make",
     [".*%.tf"] = "terraform",
     [".*%.tfvars"] = "terraform",
+    [".*/templates/.*%.ya?ml"] = "helm",
+    [".*/charts/.*%.ya?ml"] = "helm",
     [".*%.ya?ml"] = "yaml",
   },
 })
