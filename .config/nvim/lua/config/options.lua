@@ -95,6 +95,30 @@ set.softtabstop = -1
 -- FILETYPES
 -- -----------------------------------------------------------------------------
 
+local uv = vim.uv or vim.loop
+
+local function is_helm_chart(path)
+  if not path then
+    return nil
+  end
+  path = uv.fs_realpath(path) or path
+  local hit = vim.fs.find("Chart.yaml", { upward = true, path = vim.fs.dirname(path) })[1]
+  return hit and vim.fs.dirname(hit) or nil
+end
+
+local function helm_ft_from_path(path, bufnr)
+  path = path or vim.api.nvim_buf_get_name(bufnr)
+  if not path then
+    return nil
+  end
+  path = uv.fs_realpath(path) or path
+  if is_helm_chart(path) then
+    return "helm"
+  end
+  return "yaml"
+end
+
+-- Define filetypes here
 vim.filetype.add({
   filename = {
     ["Makefile"] = "make",
@@ -102,6 +126,12 @@ vim.filetype.add({
     ["Jenkinsfile"] = "groovy",
   },
   pattern = {
+    -- Helm-aware detection
+    [".*%.ya?ml"] = function(path, bufnr)
+      return helm_ft_from_path(path, bufnr)
+    end,
+
+    -- Filename pattern matching
     [".*%.c"] = "cpp",
     [".*%.cc"] = "cpp",
     [".*%.h"] = "cpp",
@@ -113,8 +143,5 @@ vim.filetype.add({
     [".*%.mk"] = "make",
     [".*%.tf"] = "terraform",
     [".*%.tfvars"] = "terraform",
-    [".*/templates/.*%.ya?ml"] = "helm",
-    [".*/charts/.*%.ya?ml"] = "helm",
-    [".*%.ya?ml"] = "yaml",
   },
 })
