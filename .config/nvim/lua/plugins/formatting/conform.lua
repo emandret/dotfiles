@@ -64,6 +64,7 @@ return {
           tex = { "tex-fmt" },
           typescript = { "prettier" },
           yaml = { "yamlfmt", "yamlfix" },
+          helm = {}, -- Disable for Helm templates
         },
         -- The options you set here will be merged with the builtin formatters.
         -- You can also define any custom formatters here.
