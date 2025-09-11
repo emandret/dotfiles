@@ -76,7 +76,16 @@ return {
             },
           },
           groovyls = {},
-          helm_ls = {},
+          helm_ls = {
+            filetypes = { "helm" },
+            root_dir = function(fname)
+              return require("lspconfig.util").root_pattern("Chart.yaml")(fname) or vim.fs.dirname(fname)
+            end,
+            on_attach = function(client, _)
+              client.server_capabilities.documentFormattingProvider = false
+              client.server_capabilities.documentRangeFormattingProvider = false
+            end,
+          },
           html = {},
           java_language_server = {},
           jdtls = {},
