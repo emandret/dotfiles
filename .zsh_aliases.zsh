@@ -3,7 +3,9 @@ set -o pipefail
 unalias kga 2>/dev/null
 unalias kge 2>/dev/null
 
-alias kubectl='kubecolor'
+if command -v kubecolor >/dev/null 2>&1; then
+  alias kubectl='kubecolor'
+fi
 
 alias ip='ip -c'
 alias myip='dig +short myip.opendns.com @resolver4.opendns.com'
@@ -44,3 +46,4 @@ kge() {
 jwt-decode() {
   jq -R 'split(".") | .[0:2] | map(gsub("-"; "+") | gsub("_"; "/") | gsub("%3D"; "=") | @base64d) | map(fromjson)' <<<"${1:-$(cat)}"
 }
+
