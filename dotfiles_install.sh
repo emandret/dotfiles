@@ -27,6 +27,7 @@ dotfiles_run_function() {
 		fi
 
 		"$func" "$@"
+		exit $?
 	)
 }
 
@@ -76,8 +77,10 @@ for ((i = 1; i <= $#; i++)); do
 		continue
 	fi
 
-	wait "$pid"
-	exit_code=$?
+	{
+		wait "$pid"
+		exit_code=$?
+	} || true
 
 	if [[ $exit_code -ne 0 ]]; then
 		printf "%-9s %-12s %9s\n" "$component" error "$exit_code"
