@@ -42,10 +42,10 @@ dotfiles_can_install() {
 }
 
 if [[ $# -eq 0 ]]; then
-  printf "%-9s %-16s\n" COMPONENT CAN_BE_INSTALLED
+  printf "%-15s %-16s\n" COMPONENT_NAME CAN_BE_INSTALLED
   for file in ./dotfiles_install.d/*.sh; do
     component="$(basename "$file" .sh)"
-    printf "%-9s %-16s\n" "$component" "$(dotfiles_can_install "$component" && echo yes || echo no)"
+    printf "%-15s %-16s\n" "$component" "$(dotfiles_can_install "$component" && echo yes || echo no)"
   done
   exit 1
 fi
@@ -67,13 +67,13 @@ for ((i = 1; i <= $#; i++)); do
   fi
 done
 
-printf "%-9s %-12s %-9s\n" COMPONENT IS_INSTALLED EXIT_CODE
+printf "%-15s %-13s %9s\n" COMPONENT_NAME IS_INSTALLED EXIT_CODE
 for ((i = 1; i <= $#; i++)); do
   component=${!i}
   pid=${pids[i]}
 
   if [[ $pid -lt 0 ]]; then
-    printf "%-9s %-12s %9s\n" "$component" skipped -
+    printf "%-15s %-13s %9s\n" "$component" skipped -
     continue
   fi
 
@@ -83,10 +83,10 @@ for ((i = 1; i <= $#; i++)); do
   } || true
 
   if [[ $exit_code -ne 0 ]]; then
-    printf "%-9s %-12s %9s\n" "$component" error "$exit_code"
+    printf "%-15s %-13s %9s\n" "$component" error "$exit_code"
     last_exit_code=$exit_code
   else
-    printf "%-9s %-12s %9s\n" "$component" yes 0
+    printf "%-15s %-13s %9s\n" "$component" yes 0
   fi
 done
 
