@@ -33,6 +33,14 @@ packages=(
   yq
 )
 
+casks=(
+  bitwarden
+  font-dejavu-sans-mono-nerd-font
+  google-chrome
+  iterm2
+  monitorcontrol
+)
+
 dotfiles_can_install() {
   if [[ ! "$(uname)" =~ 'Darwin' ]]; then
     return 1
@@ -48,4 +56,5 @@ dotfiles_run_install() {
 
   brew update && brew upgrade
   brew install "${packages[@]}"
+  brew install --cask "${casks[@]}"
 }
