@@ -3,28 +3,34 @@
 packages=(
   black
   clang-format
+  cmake
   coreutils
+  fzf
   gnupg
   go
   helm
   htop
   jq
   kind
-  kubernetes-cli
+  kubectx
   libvirt
+  neovim
   nmap
   pandoc
   prettier
   pyenv
   qemu
+  ripgrep
   shfmt
+  stylua
   terraform
+  tree
+  tree-sitter-cli
   vim
   watch
   wget
   yamlfmt
   yq
-  kubectx
 )
 
 dotfiles_can_install() {
