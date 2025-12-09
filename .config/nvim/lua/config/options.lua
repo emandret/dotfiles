@@ -145,3 +145,25 @@ vim.filetype.add({
     [".*%.tfvars"] = "terraform",
   },
 })
+
+-- -----------------------------------------------------------------------------
+-- OSC52 CLIPBOARD SUPPORT
+-- -----------------------------------------------------------------------------
+
+-- Enable OSC52 clipboard when running inside an SSH session
+if vim.env.SSH_TTY ~= nil then
+  local ok, osc52 = pcall(require, "vim.ui.clipboard.osc52")
+  if ok then
+    vim.g.clipboard = {
+      name = "osc52",
+      copy = {
+        ["+"] = osc52.copy("+"),
+        ["*"] = osc52.copy("*"),
+      },
+      paste = {
+        ["+"] = osc52.paste("+"),
+        ["*"] = osc52.paste("*"),
+      },
+    }
+  end
+end
