@@ -162,8 +162,12 @@ if vim.env.SSH_TTY ~= nil then
       },
       -- Do not try to read from OSC52, fallback to default paste behavior
       paste = {
-        ["+"] = function() return vim.fn.getreg("+") end,
-        ["*"] = function() return vim.fn.getreg("*") end,
+        ["+"] = function()
+          return vim.fn.getreg("+")
+        end,
+        ["*"] = function()
+          return vim.fn.getreg("*")
+        end,
       },
     }
   end
