@@ -16,9 +16,21 @@ return {
       },
     },
     keys = {
-      { "<Leader>b", "<Cmd>Telescope buffers<CR>", desc = "Buffers" },
-      { "<Leader>h", "<Cmd>Telescope help_tags<CR>", desc = "Help Tags" },
-      { "<Leader>ws", "<Cmd>Telescope lsp_dynamic_workspace_symbols<CR>", desc = "LSP Dynamic Workspace Symbols" },
+      {
+        "<Leader>b",
+        "<Cmd>Telescope buffers<CR>",
+        desc = "Buffers (telescope)",
+      },
+      {
+        "<Leader>h",
+        "<Cmd>Telescope help_tags<CR>",
+        desc = "Help Tags (telescope)",
+      },
+      {
+        "<Leader>ws",
+        "<Cmd>Telescope lsp_dynamic_workspace_symbols<CR>",
+        desc = "LSP Symbols (telescope)",
+      },
       {
         "<Leader>ff",
         function()
@@ -28,7 +40,7 @@ return {
             no_ignore = true,
           })
         end,
-        desc = "Find Files",
+        desc = "Find Files (telescope)",
       },
       {
         "<Leader>fg",
@@ -39,7 +51,7 @@ return {
             no_ignore = true,
           })
         end,
-        desc = "Live Grep",
+        desc = "Live Grep (telescope)",
       },
     },
     opts = function()

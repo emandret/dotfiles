@@ -32,6 +32,7 @@ require("lazy").setup({
     -- Colorscheme
     { import = "plugins.colorscheme.catppuccin" },
     { import = "plugins.colorscheme.kanagawa" },
+    { import = "plugins.colorscheme.modus" },
     { import = "plugins.colorscheme.tokyonight" },
 
     -- User interface
@@ -39,6 +40,7 @@ require("lazy").setup({
     { import = "plugins.ui.flash" },
     { import = "plugins.ui.git-signs" },
     { import = "plugins.ui.lualine" },
+    { import = "plugins.ui.nvim-tree" },
     { import = "plugins.ui.toggleterm-nvim" },
     { import = "plugins.ui.which-key" },
 
@@ -95,7 +97,7 @@ require("lazy").setup({
 vim.api.nvim_create_autocmd("User", {
   pattern = "VeryLazy",
   callback = function()
-    vim.cmd("colorscheme catppuccin")
+    vim.cmd("colorscheme modus")
   end,
 })
 
