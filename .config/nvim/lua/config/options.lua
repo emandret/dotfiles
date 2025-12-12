@@ -150,7 +150,16 @@ vim.filetype.add({
 -- OSC52 CLIPBOARD SUPPORT
 -- -----------------------------------------------------------------------------
 
--- Enable OSC52 clipboard when running inside an SSH session
+local function paste(reg)
+  return function()
+    return {
+      vim.split(vim.fn.getreg(reg), "\n"),
+      vim.fn.getregtype(reg),
+    }
+  end
+end
+
+-- Enable osc52 clipboard when running inside an ssh session
 if vim.env.SSH_TTY ~= nil then
   local ok, osc52 = pcall(require, "vim.ui.clipboard.osc52")
   if ok then
@@ -160,14 +169,10 @@ if vim.env.SSH_TTY ~= nil then
         ["+"] = osc52.copy("+"),
         ["*"] = osc52.copy("*"),
       },
-      -- Do not try to read from OSC52, fallback to default paste behavior
+      -- Do not try to read from osc52, paste from the unnamed register instead
       paste = {
-        ["+"] = function()
-          return vim.fn.getreg("+")
-        end,
-        ["*"] = function()
-          return vim.fn.getreg("*")
-        end,
+        ["+"] = paste(""),
+        ["*"] = paste(""),
       },
     }
   end
