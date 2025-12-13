@@ -4,10 +4,10 @@ return {
     dependencies = { "nvim-tree/nvim-web-devicons" },
     config = function()
       local colors = {
-        bg = "#333333",
-        bg_dark = "#111111",
+        bg = "#202020",
+        bg_dark = "#101010",
         fg = "#FFFFFF",
-        fg_dark = "#666666",
+        fg_dark = "#646464",
         red = "#640000",
         orange = "#643200",
         green = "#006400",
