@@ -83,7 +83,6 @@ return {
             },
           },
           component_separators = "",
-          section_separators = { left = "\u{E0B8}", right = "\u{E0BA}" },
           globalstatus = true,
         },
         sections = process_sections({
