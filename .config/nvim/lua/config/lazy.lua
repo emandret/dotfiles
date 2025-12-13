@@ -32,7 +32,6 @@ require("lazy").setup({
     -- Colorscheme
     { import = "plugins.colorscheme.catppuccin" },
     { import = "plugins.colorscheme.kanagawa" },
-    { import = "plugins.colorscheme.modus" },
     { import = "plugins.colorscheme.tokyonight" },
 
     -- User interface
@@ -97,7 +96,7 @@ require("lazy").setup({
 vim.api.nvim_create_autocmd("User", {
   pattern = "VeryLazy",
   callback = function()
-    vim.cmd("colorscheme modus")
+    vim.cmd("colorscheme kanagawa-dragon")
   end,
 })
 
