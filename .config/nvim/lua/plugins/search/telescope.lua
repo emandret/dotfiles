@@ -17,8 +17,35 @@ return {
     },
     keys = {
       {
+        "<Leader>ff",
+        function()
+          require("telescope.builtin").find_files({
+            cwd = vim.fn.getcwd(),
+            hidden = false,
+            no_ignore = true,
+          })
+        end,
+        desc = "Fuzzy Find (telescope)",
+      },
+      {
+        "<Leader>fg",
+        function()
+          require("telescope.builtin").live_grep({
+            cwd = vim.fn.getcwd(),
+            hidden = false,
+            no_ignore = true,
+          })
+        end,
+        desc = "Fuzzy Grep (telescope)",
+      },
+      {
         "<Leader>b",
-        "<Cmd>Telescope buffers<CR>",
+        function()
+          require("telescope.builtin").buffers({
+            sort_mru = true,
+            ignore_current_buffer = true,
+          })
+        end,
         desc = "Buffers (telescope)",
       },
       {
@@ -30,28 +57,6 @@ return {
         "<Leader>ws",
         "<Cmd>Telescope lsp_dynamic_workspace_symbols<CR>",
         desc = "LSP Symbols (telescope)",
-      },
-      {
-        "<Leader>ff",
-        function()
-          require("telescope.builtin").find_files({
-            cwd = vim.fn.getcwd(),
-            hidden = false,
-            no_ignore = true,
-          })
-        end,
-        desc = "Find Files (telescope)",
-      },
-      {
-        "<Leader>fg",
-        function()
-          require("telescope.builtin").live_grep({
-            cwd = vim.fn.getcwd(),
-            hidden = false,
-            no_ignore = true,
-          })
-        end,
-        desc = "Live Grep (telescope)",
       },
     },
     opts = function()
