@@ -108,7 +108,7 @@ vim.api.nvim_create_autocmd("BufEnter", {
   group = hijack_netrw,
   callback = function()
     -- Early return if current buffer is already hijacked
-    if vim.b[0].telescope_hijacked then
+    if vim.b[0].is_hijacked then
       return
     end
 
@@ -119,12 +119,13 @@ vim.api.nvim_create_autocmd("BufEnter", {
     end
 
     -- Mark current buffer as hijacked and wipeout on hide
-    vim.b[0].telescope_hijacked = true
+    vim.b[0].is_hijacked = true
     vim.bo[0].bufhidden = "wipe"
 
     -- Change window-local cwd
     local dir = vim.fn.expand("%:p:h")
     vim.cmd.lcd(dir)
+    vim.cmd.bw(0)
 
     -- Open Telescope fuzzy finder
     vim.schedule(function()
