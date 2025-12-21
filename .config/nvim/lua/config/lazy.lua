@@ -118,16 +118,11 @@ vim.api.nvim_create_autocmd("BufEnter", {
       return
     end
 
-    -- Mark current buffer as hijacked and wipeout on hide
-    vim.b[0].is_hijacked = true
-    vim.bo[0].bufhidden = "wipe"
+    vim.b[0].is_hijacked = true -- Mark current buffer as hijacked
+    vim.bo[0].bufhidden = "wipe" -- Wipe buffer on hide
+    vim.cmd.lcd(path) -- Change window-local cwd
 
-    -- Change window-local cwd
-    local dir = vim.fn.expand("%:p:h")
-    vim.cmd.lcd(dir)
-    vim.cmd.bw(0)
-
-    -- Open Telescope fuzzy finder
+    -- Run on next event loop tick
     vim.schedule(function()
       require("telescope.builtin").find_files()
     end)
