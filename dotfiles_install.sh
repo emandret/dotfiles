@@ -53,7 +53,7 @@ fi
 pids=()
 last_exit_code=0
 
-logfile="$HOME/dotfiles_install.log"
+logfile="$HOME/.dotfiles_install.log"
 rm -f "$logfile" && touch "$logfile"
 
 for ((i = 1; i <= $#; i++)); do

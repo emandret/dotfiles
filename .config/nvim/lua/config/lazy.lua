@@ -33,6 +33,7 @@ require("lazy").setup({
     { import = "plugins.colorscheme.catppuccin" },
     { import = "plugins.colorscheme.kanagawa" },
     { import = "plugins.colorscheme.tokyonight" },
+    { import = "plugins.colorscheme.cyberdream" },
 
     -- User interface
     { import = "plugins.ui.bufferline" },
@@ -100,42 +101,34 @@ vim.api.nvim_create_autocmd("User", {
   end,
 })
 
--- Open the first directory argument
-vim.api.nvim_create_autocmd("VimEnter", {
+local hijack_netrw = vim.api.nvim_create_augroup("HijackNetrw", { clear = true })
+
+vim.api.nvim_create_autocmd("BufEnter", {
+  pattern = "*",
+  group = hijack_netrw,
   callback = function()
-    local args = vim.fn.argv()
-
-    local dirs = {}
-    for _, arg in ipairs(args) do
-      if vim.fn.isdirectory(arg) == 1 then
-        table.insert(dirs, arg)
-      end
-    end
-
-    -- Exit early
-    if #dirs == 0 then
+    -- Early return if current buffer is already hijacked
+    if vim.b[0].telescope_hijacked then
       return
     end
 
-    for _, dir in ipairs(dirs) do
-      local bufnr = vim.fn.bufnr(dir)
-      if bufnr ~= -1 then
-        vim.cmd.bw(bufnr)
-      end
+    -- Early return if netrw or not a directory
+    local path = vim.fn.expand("%:p")
+    if vim.bo[0].filetype == "netrw" or vim.fn.isdirectory(path) == 0 then
+      return
     end
 
-    -- Change directory
-    if vim.fn.getcwd() ~= dirs[1] then
-      vim.fn.chdir(dirs[1])
-    end
+    -- Mark current buffer as hijacked and wipeout on hide
+    vim.b[0].telescope_hijacked = true
+    vim.bo[0].bufhidden = "wipe"
 
-    -- Open Telescope to find files
+    -- Change window-local cwd
+    local dir = vim.fn.expand("%:p:h")
+    vim.cmd.lcd(dir)
+
+    -- Open Telescope fuzzy finder
     vim.schedule(function()
-      require("telescope.builtin").find_files({
-        cwd = vim.fn.getcwd(),
-        hidden = false,
-        no_ignore = true,
-      })
+      require("telescope.builtin").find_files()
     end)
   end,
 })

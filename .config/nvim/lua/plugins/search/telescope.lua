@@ -19,22 +19,14 @@ return {
       {
         "<Leader>ff",
         function()
-          require("telescope.builtin").find_files({
-            cwd = vim.fn.getcwd(),
-            hidden = false,
-            no_ignore = true,
-          })
+          require("telescope.builtin").find_files()
         end,
         desc = "Fuzzy Find (telescope)",
       },
       {
         "<Leader>fg",
         function()
-          require("telescope.builtin").live_grep({
-            cwd = vim.fn.getcwd(),
-            hidden = false,
-            no_ignore = true,
-          })
+          require("telescope.builtin").live_grep()
         end,
         desc = "Fuzzy Grep (telescope)",
       },
@@ -42,8 +34,8 @@ return {
         "<Leader>b",
         function()
           require("telescope.builtin").buffers({
-            sort_mru = true,
             ignore_current_buffer = true,
+            sort_mru = true,
           })
         end,
         desc = "Buffers (telescope)",
