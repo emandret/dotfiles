@@ -56,13 +56,16 @@ last_exit_code=0
 logfile="$HOME/.dotfiles_install.log"
 rm -f "$logfile" && touch "$logfile"
 
+# kill the process group whose ID is equal to the PID of this shell
+trap 'kill -TERM -- -$$' EXIT
+
 for ((i = 1; i <= $#; i++)); do
   component=${!i}
   if dotfiles_can_install "$component"; then
     dotfiles_run_function "$component" dotfiles_run_install >>"$logfile" 2>&1 &
-    pids[i]=$!
+    pids[i]=$! # last background process PID
   else
-    pids[i]=-1
+    pids[i]=-1 # invalid PID
   fi
 done
 
