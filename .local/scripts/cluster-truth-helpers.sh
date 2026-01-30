@@ -3,7 +3,7 @@
 set -eu
 set -o pipefail
 
-cd -- "$(dirname -- "$(readlink -f -- "$0")")/../" >/dev/null 2>&1
+cd -- "$(dirname -- "$(readlink -f -- "$0")")" >/dev/null 2>&1
 
 _ct_chart_versions() {
   local bundle_file bundle_name chart_version cluster_file
