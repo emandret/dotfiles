@@ -1,5 +1,10 @@
 #!/bin/bash
 
+set -eu
+set -o pipefail
+
+cd -- "$(dirname -- "$(readlink -f -- "$0")")/../" >/dev/null 2>&1
+
 _ct_chart_versions() {
   local bundle_file bundle_name chart_version cluster_file
 
@@ -48,3 +53,26 @@ _ct_cluster_versions() {
 _ct_cluster_bastions() {
   find ./data/ospr-k8s -name 'ospr-k8s-*' -type d -printf '%f\n' | sed -e 's/-\([dsp]\)-/-\1./g' -e 's/^/cpebastion1./g' -e 's/$/.c3.zone/g'
 }
+
+declare -r PROGRAM_NAME=${0##*/}
+
+opts=()
+args=()
+while (($# > 0)); do
+  case $1 in
+    --)
+      # End of options
+      shift
+      break
+      ;;
+    -*)
+      opts+=("$1")
+      ;;
+    *)
+      args+=("$1")
+      ;;
+  esac
+  shift
+done
+
+"_ct_${PROGRAM_NAME//-/_}" "${opts[*]:-}" "${args[@]:-}"
