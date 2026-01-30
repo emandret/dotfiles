@@ -25,11 +25,6 @@ source ${ZSH}/oh-my-zsh.sh
 # User configuration
 export LANG=en_US.UTF-8
 
-# Source aliases
-if [[ -f ~/.zsh_aliases.zsh ]]; then
-  source ~/.zsh_aliases.zsh
-fi
-
 if [[ -n $SSH_CONNECTION ]]; then
   export EDITOR=vim
 else
@@ -63,6 +58,10 @@ MANPATH=${NPM_PACKAGES}/share/man:$(manpath)
 autoload -U +X compinit && compinit
 autoload -U +X bashcompinit && bashcompinit
 source <(kubectl completion zsh)
+
+# Functions and aliases
+[[ ! -f ~/.zsh_functions ]] || source ~/.zsh_functions.zsh
+[[ ! -f ~/.zsh_aliases ]] || source ~/.zsh_aliases.zsh
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
