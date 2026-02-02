@@ -1,4 +1,3 @@
-set -eu
 set -o pipefail
 
 _jwt_decode() {
