@@ -3,11 +3,11 @@ BasedOnStyle: LLVM
 Language: Cpp
 
 # layout
-AllowShortFunctionsOnASingleLine: None
 ColumnLimit: 120
 IndentWidth: 4
 ContinuationIndentWidth: 8
 BreakBeforeBraces: Linux
+AllowShortFunctionsOnASingleLine: None
 
 # constructor initializer handling
 PackConstructorInitializers: Never
