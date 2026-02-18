@@ -4,14 +4,12 @@ Language: Cpp
 
 # layout
 AllowShortFunctionsOnASingleLine: None
-BinPackArguments: false
-BinPackParameters: false
-ColumnLimit: 80
+ColumnLimit: 120
+IndentWidth: 4
 ContinuationIndentWidth: 8
 
 # braces
 BreakBeforeBraces: Linux
-
 # constructor initializer handling
 PackConstructorInitializers: Never
 BreakConstructorInitializers: BeforeComma
@@ -23,3 +21,10 @@ ReferenceAlignment: Right
 
 # comments
 ReflowComments: true
+
+# functions
+BinPackArguments: false
+BinPackParameters: false
+AlignAfterOpenBracket: true
+AllowAllArgumentsOnNextLine: false
+AllowAllParametersOfDeclarationOnNextLine: false
