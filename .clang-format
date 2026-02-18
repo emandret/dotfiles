@@ -7,9 +7,8 @@ AllowShortFunctionsOnASingleLine: None
 ColumnLimit: 120
 IndentWidth: 4
 ContinuationIndentWidth: 8
-
-# braces
 BreakBeforeBraces: Linux
+
 # constructor initializer handling
 PackConstructorInitializers: Never
 BreakConstructorInitializers: BeforeComma
