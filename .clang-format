@@ -1,26 +1,23 @@
 # stable base style
 BasedOnStyle: LLVM
 Language: Cpp
-
 # layout
+AllowShortFunctionsOnASingleLine: None
 ColumnLimit: 120
 IndentWidth: 4
 ContinuationIndentWidth: 8
+AlignConsecutiveDeclarations: AcrossEmptyLines
+# braces
 BreakBeforeBraces: Linux
-AllowShortFunctionsOnASingleLine: None
-
 # constructor initializer handling
 PackConstructorInitializers: Never
 BreakConstructorInitializers: BeforeComma
 ConstructorInitializerIndentWidth: 4
-
 # pointer/reference alignment
 PointerAlignment: Left
 ReferenceAlignment: Right
-
 # comments
 ReflowComments: true
-
 # functions
 BinPackArguments: false
 BinPackParameters: false
