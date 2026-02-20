@@ -14,8 +14,8 @@ PackConstructorInitializers: Never
 BreakConstructorInitializers: BeforeComma
 ConstructorInitializerIndentWidth: 4
 # pointer/reference alignment
-PointerAlignment: Left
-ReferenceAlignment: Right
+PointerAlignment: Right
+ReferenceAlignment: Left
 # comments
 ReflowComments: true
 # functions
@@ -24,3 +24,5 @@ BinPackParameters: false
 AlignAfterOpenBracket: true
 AllowAllArgumentsOnNextLine: false
 AllowAllParametersOfDeclarationOnNextLine: false
+# templates
+AlwaysBreakTemplateDeclarations: true
