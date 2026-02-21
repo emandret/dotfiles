@@ -1,28 +1,35 @@
-# stable base style
+# Stable base style
 BasedOnStyle: LLVM
 Language: Cpp
-# layout
+
+# Layout
 AllowShortFunctionsOnASingleLine: None
 ColumnLimit: 120
 IndentWidth: 4
 ContinuationIndentWidth: 8
-AlignConsecutiveDeclarations: AcrossEmptyLines
-# braces
+AlignConsecutiveDeclarations: None
+
+# Braces
 BreakBeforeBraces: Linux
-# constructor initializer handling
+
+# Constructor initializer handling
 PackConstructorInitializers: Never
 BreakConstructorInitializers: BeforeComma
 ConstructorInitializerIndentWidth: 4
-# pointer/reference alignment
+
+# Pointer/reference alignment
 PointerAlignment: Right
 ReferenceAlignment: Left
-# comments
+
+# Comments
 ReflowComments: true
-# functions
+
+# Functions
 BinPackArguments: false
 BinPackParameters: false
 AlignAfterOpenBracket: true
 AllowAllArgumentsOnNextLine: false
 AllowAllParametersOfDeclarationOnNextLine: false
-# templates
+
+# Templates
 AlwaysBreakTemplateDeclarations: true
