@@ -23,23 +23,6 @@ return {
         return self.status
       end
 
-      local function process_sections(sections)
-        for name, section in pairs(sections) do
-          local left = name:sub(9, 10) < "x"
-          for pos = 1, name ~= "lualine_z" and #section or #section - 1 do
-            table.insert(section, pos * 2, { empty, color = { bg = colors.fg_dark, fg = colors.fg_dark } })
-          end
-          for id, comp in ipairs(section) do
-            if type(comp) ~= "table" then
-              comp = { comp }
-              section[id] = comp
-            end
-            comp.separator = left and { right = "\u{E0B8}" } or { left = "\u{E0BA}" }
-          end
-        end
-        return sections
-      end
-
       local function search_result()
         if vim.v.hlsearch == 0 then
           return ""
@@ -61,10 +44,6 @@ return {
         return ""
       end
 
-      local function hide_in_width()
-        return vim.go.columns > 210
-      end
-
       require("lualine").setup({
         options = {
           theme = {
@@ -82,11 +61,17 @@ return {
               c = { fg = colors.fg_dark, bg = colors.bg_dark },
             },
           },
-          component_separators = "",
+          section_separators = { left = "", right = "" },
+          component_separators = { left = "", right = "" },
           globalstatus = true,
         },
-        sections = process_sections({
-          lualine_a = { "mode" },
+        sections = {
+          lualine_a = {
+            {
+              "mode",
+              padding = { left = 0, right = 1 },
+            },
+          },
           lualine_b = {
             { "branch" },
             { "diff" },
@@ -101,18 +86,6 @@ return {
               source = { "nvim" },
               sections = { "warn" },
               diagnostics_color = { warn = { bg = colors.orange, fg = colors.fg } },
-            },
-            {
-              function()
-                return vim.fn.fnamemodify(vim.fn.getcwd(), ":~")
-              end,
-              cond = hide_in_width,
-            },
-            {
-              "filename",
-              file_status = false,
-              path = 1,
-              cond = hide_in_width,
             },
             {
               modified,
@@ -137,15 +110,25 @@ return {
               end,
             },
           },
-          lualine_c = {},
+          lualine_c = {
+            function()
+              if vim.go.columns > 210 then
+                return vim.fn.expand("%:~")
+              end
+              return vim.fn.expand("%f:h")
+            end,
+          },
           lualine_x = {},
           lualine_y = { search_result, "filetype" },
-          lualine_z = { "%l:%c", "%p%%/%L" },
-        }),
-        inactive_sections = {
-          lualine_c = { "%f %y %m" },
-          lualine_x = {},
+          lualine_z = {
+            { "%l:%c" },
+            {
+              "%p%%/%L",
+              padding = { left = 1, right = 0 },
+            },
+          },
         },
+        inactive_sections = {},
       })
     end,
   },

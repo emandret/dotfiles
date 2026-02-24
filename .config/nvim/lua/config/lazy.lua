@@ -29,12 +29,6 @@ require("lazy").setup({
     { import = "plugins.treesitter.nvim-treesitter-context" },
     { import = "plugins.treesitter.nvim-treesitter-textobjects" },
 
-    -- Colorscheme
-    { import = "plugins.colorscheme.catppuccin" },
-    { import = "plugins.colorscheme.kanagawa" },
-    { import = "plugins.colorscheme.tokyonight" },
-    { import = "plugins.colorscheme.cyberdream" },
-
     -- User interface
     { import = "plugins.ui.bufferline" },
     { import = "plugins.ui.flash" },
@@ -91,14 +85,6 @@ require("lazy").setup({
       },
     },
   },
-})
-
--- Set the colorscheme after Lazy has loaded all plugins
-vim.api.nvim_create_autocmd("User", {
-  pattern = "VeryLazy",
-  callback = function()
-    vim.cmd("colorscheme kanagawa-dragon")
-  end,
 })
 
 local hijack_netrw = vim.api.nvim_create_augroup("HijackNetrw", { clear = true })
