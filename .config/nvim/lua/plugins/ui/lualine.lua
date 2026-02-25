@@ -52,15 +52,6 @@ return {
         return last_search .. "(" .. searchcount.current .. "/" .. searchcount.total .. ")"
       end
 
-      local function modified()
-        if vim.bo.modified then
-          return "+"
-        elseif vim.bo.modifiable == false or vim.bo.readonly == true then
-          return "-"
-        end
-        return ""
-      end
-
       require("lualine").setup({
         options = {
           theme = {
@@ -86,6 +77,7 @@ return {
           lualine_b = {
             { "branch" },
             { "diff" },
+            { "%f%m%r" },
             {
               "diagnostics",
               source = { "nvim" },
@@ -99,27 +91,9 @@ return {
               diagnostics_color = { warn = { bg = colors.orange, fg = colors.fg } },
             },
             {
-              function()
-                if vim.go.columns > 210 then
-                  return vim.fn.expand("%:~")
-                end
-                return vim.fn.expand("%f:h")
-              end,
-            },
-            {
-              modified,
-              color = { bg = colors.red, fg = colors.fg },
-            },
-            {
               "%w",
               cond = function()
                 return vim.wo.previewwindow
-              end,
-            },
-            {
-              "%r",
-              cond = function()
-                return vim.bo.readonly
               end,
             },
             {
@@ -135,7 +109,7 @@ return {
           lualine_z = { "%l:%c", "%p%%/%L" },
         }),
         inactive_sections = {
-          lualine_c = { "%f %y %m" },
+          lualine_c = { "%f%m" },
           lualine_x = {},
         },
       })
