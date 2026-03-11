@@ -1,0 +1,111 @@
+_gitrepo_clone() {
+  local remote_url="$1"
+  local project_root="${2:-}"
+
+  if [[ -z "$remote_url" ]]; then
+    echo "usage: $0 <repo-url> [dir-name]" >&2
+    return 2
+  fi
+
+  if [[ -z "$project_root" ]]; then
+    project_root="${remote_url##*/}"
+    project_root="${project_root%.git}"
+  fi
+
+  mkdir -p "$project_root" || return 1
+  cd -P "$project_root" || return 1
+
+  if [[ -n "$(ls -A 2>/dev/null)" ]]; then
+    echo "$0: error: $project_root is not empty" >&2
+    return 1
+  fi
+
+  git clone --bare "$remote_url" .gitrepo || return 1
+
+  local default_branch
+  default_branch="$(GIT_DIR=.gitrepo git symbolic-ref -q --short HEAD 2>/dev/null)" || default_branch=master
+
+  local worktree="${default_branch//\//_}"
+  GIT_DIR=.gitrepo git worktree add ./"$worktree" "$default_branch" || return 1
+  cd "$worktree" || return 1
+}
+
+_gitrepo_checkout() {
+  local branchname="$1"
+
+  if ! command -v fzf >/dev/null 2>&1; then
+    echo "$0: error: fzf not found in PATH" >&2
+    return 1
+  fi
+
+  _gitrepo_root() {
+    local dir="$PWD"
+    while [[ "$dir" != '/' ]]; do
+      [[ -d "$dir/.gitrepo" ]] && {
+        echo "$dir"
+        return 0
+      }
+      dir="${dir%/*}"
+    done
+    return 1
+  }
+
+  local project_root
+  project_root="$(_gitrepo_root)" || {
+    echo "$0: error: could not find .gitrepo above $PWD" >&2
+    return 1
+  }
+  local git_dir="$project_root/.gitrepo"
+
+  GIT_DIR="$git_dir" git fetch --prune >/dev/null 2>&1 || true
+
+  if [[ -z "$branchname" ]]; then
+    local selected
+    selected="$(GIT_DIR="$git_dir" git for-each-ref --format='%(refname:short)' refs/heads refs/remotes/origin | sort -u | fzf --prompt='branch> ' --height=40% --reverse)" || return 1
+    [[ -z "$selected" ]] && return 1
+    branchname="${selected#origin/}"
+  fi
+
+  local worktree="$project_root/${branchname//\//_}"
+
+  if [[ -d "$worktree" ]]; then
+    if ! GIT_DIR="$git_dir" git worktree list --porcelain | grep -qx "worktree $worktree"; then
+      echo "$0: error: not a worktree: $worktree" >&2
+      return 1
+    fi
+
+    local current
+    current="$(git symbolic-ref -q --short HEAD 2>/dev/null)"
+
+    [[ -z "$current" ]] && {
+      echo "$0: error: $worktree is a worktree but has a detached HEAD" >&2
+      return 1
+    }
+    [[ "$branchname" != "$current" ]] && {
+      echo "$0: error: $worktree must be a worktree for branch $branchname, got $current instead" >&2
+      return 1
+    }
+
+    cd -P "$worktree" && return 0 || return 1
+  fi
+
+  if ! GIT_DIR="$git_dir" git show-ref --verify -q "refs/heads/$branchname"; then
+    local start_point
+
+    start_point="$(GIT_DIR="$git_dir" git symbolic-ref -q --short HEAD 2>/dev/null)"
+
+    if GIT_DIR="$git_dir" git worktree list --porcelain | grep -qE "^worktree $PWD"; then
+      start_point="$(git symbolic-ref -q --short HEAD 2>/dev/null)"
+    fi
+
+    if GIT_DIR="$git_dir" git show-ref --verify -q "refs/remotes/origin/$branchname"; then
+      start_point="origin/$branchname"
+    fi
+
+    echo "$branchname does not exist, creating new branch from $start_point"
+    GIT_DIR="$git_dir" git branch "$branchname" "$start_point" || return 1
+  fi
+
+  GIT_DIR="$git_dir" git worktree add "$worktree" "$branchname" || return 1
+  cd -P "$worktree" && return 0 || return 1
+}
