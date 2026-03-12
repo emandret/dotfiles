@@ -3,7 +3,7 @@ _git_wt_clone() {
   local dir="${2:-}"
 
   if [[ -z "$url" ]]; then
-    echo "usage: $0 <repository> [<directory>]" >&2
+    echo "Usage: $0 <repository> [<directory>]" >&2
     return 1
   fi
 
@@ -15,7 +15,7 @@ _git_wt_clone() {
   mkdir -p "$dir" || return 1
 
   if [[ -n "$(ls -A "$dir" 2>/dev/null)" ]]; then
-    echo "error: $dir is not empty" >&2
+    echo "Error: '$dir' is not empty" >&2
     return 1
   fi
 
@@ -34,13 +34,13 @@ _git_wt_checkout() {
   local branch="$1"
 
   if ! command -v fzf >/dev/null 2>&1; then
-    echo "error: fzf not found" >&2
+    echo "Error: fzf not found" >&2
     return 1
   fi
 
   local repo
   if ! repo="$(git rev-parse --git-common-dir)"; then
-    echo "error: not a git repo" >&2
+    echo "Error: not a git repo" >&2
     return 1
   fi
 
@@ -66,7 +66,7 @@ _git_wt_checkout() {
 
   if [[ -d "$worktree" && -n "$(ls -A "$worktree" 2>/dev/null)" ]]; then
     if ! git -C "$worktree" rev-parse --is-inside-work-tree >/dev/null 2>&1; then
-      echo "error: directory $worktree is not empty and is not a worktree" >&2
+      echo "Error: directory '$worktree' is not empty and is not a worktree" >&2
       return 1
     fi
 
@@ -74,7 +74,7 @@ _git_wt_checkout() {
     worktree_branch="$(git -C "$worktree" symbolic-ref -q --short HEAD 2>/dev/null)"
 
     if [[ "$branch" != "$worktree_branch" ]]; then
-      echo "error: $worktree must be a worktree associated with branch $branch" >&2
+      echo "Error: '$worktree' must be a worktree associated with branch '$branch'" >&2
       return 1
     fi
 
@@ -90,11 +90,10 @@ _git_wt_checkout() {
       start_point="$(git symbolic-ref -q --short HEAD 2>/dev/null)"
     fi
 
-    echo "creating new branch $branch from $start_point"
+    echo "Creating new branch '$branch' from '$start_point'"
     git --git-dir="$repo" branch "$branch" "$start_point" || return 1
   fi
 
-  echo "creating new worktree $worktree on branch $branch"
   git --git-dir="$repo" worktree add "$worktree" "$branch" || return 1
 
   cd "$worktree" && return 0 || return 1
