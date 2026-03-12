@@ -1,4 +1,4 @@
-_git_wt_clone() {
+_wt_git_clone() {
   local url="$1"
   local dir="${2:-}"
 
@@ -30,7 +30,7 @@ _git_wt_clone() {
   cd "$worktree" && return 0 || return 1
 }
 
-_git_wt_checkout() {
+_wt_git_checkout() {
   local branch="$1"
 
   if ! command -v fzf >/dev/null 2>&1; then
