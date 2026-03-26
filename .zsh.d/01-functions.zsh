@@ -1,14 +1,6 @@
-set -o pipefail
-
-# ----------------------------------------
-# jwt-decode
-
 jwt_decode() {
   jq -R 'split(".") | .[0:2] | map(gsub("-"; "+") | gsub("_"; "/") | gsub("%3D"; "=") | @base64d) | map(fromjson)' <<<"${1:-$(cat)}"
 }
-
-# ----------------------------------------
-# kubectl-helpers
 
 kubectl_get_all() {
   local namespaced='true'
@@ -39,9 +31,6 @@ kubectl_get_events() {
 
   kubectl get events "${args[@]}"
 }
-
-# ----------------------------------------
-# git-helpers
 
 git_worktree_clone() {
   local url="$1"
