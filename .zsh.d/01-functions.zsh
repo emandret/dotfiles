@@ -100,7 +100,10 @@ git_worktree_checkout() {
   local default_branch
   default_branch="$(git --git-dir="$repo" symbolic-ref -q --short HEAD 2>/dev/null)"
 
-  git --git-dir="$repo" fetch --prune >/dev/null 2>&1 || true
+  git --git-dir="$repo" fetch --prune >/dev/null 2>&1 || {
+    echo "Error: failed to fetch with --prune" >&2
+    return 1
+  }
 
   if [[ -z "$branch" ]]; then
     local selected
