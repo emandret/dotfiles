@@ -173,10 +173,20 @@ git_worktree_prune() {
     local worktree="$project_root/$safe_branch"
 
     if [[ -d "$worktree" ]]; then
-      echo "Removing stale worktree '$worktree' (branch '$branch' no longer exists)"
-      rm -rf "$worktree" && ((pruned++)) || echo "Warning: could not remove '$worktree'"
+      if git --git-dir="$repo" worktree list --porcelain | grep -q "worktree $worktree"; then
+        echo "Removing stale worktree '$worktree' (branch '$branch' no longer exists)"
+        if git --git-dir="$repo" worktree remove "$worktree" 2>/dev/null; then
+          ((pruned++))
+        else
+          echo "Warning: could not remove worktree '$worktree' (may have uncommitted changes)"
+          echo "Try: git remove worktree --force '$worktree'"
+        fi
+      else
+        echo "Warning: directory '$worktree' exists but is not registered as a worktree, skipping"
+      fi
     fi
   done
 
   echo "Pruned $pruned stale worktree(s)"
 }
+
