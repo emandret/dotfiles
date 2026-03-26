@@ -148,3 +148,42 @@ git_worktree_checkout() {
   git --git-dir="$repo" worktree add "$worktree" "$branch" || return 1
   cd "$worktree" || return 1
 }
+
+git_worktree_prune() {
+  local repo
+  if ! repo="$(git rev-parse --git-common-dir)"; then
+    echo "Error: not a git repository" >&2
+    return 1
+  fi
+
+  local project_root
+  project_root="$(readlink -f "$repo/..")"
+
+  git --git-dir="$repo" fetch --prune >/dev/null 2>&1 || {
+    echo "Error: failed to fetch with --prune" >&2
+    return 1
+  }
+
+  local stale_branches
+  stale_branches="$(
+    git --git-dir="$repo" branch -r --format='%(refname:short)' | while read -r branch; do
+      if ! git --git-dir="$repo" show-ref --verify -q "refs/remotes/origin/$branch" 2>/dev/null; then
+        echo "$branch"
+      fi
+    done
+  )" || return 1
+
+  local pruned=0
+  for branch in $stale_branches; do
+    local safe_branch="${branch//[^a-zA-Z0-9_-]/_}"
+    local worktree="$project_root/$safe_branch"
+
+    if [[ -d "$worktree" ]]; then
+      echo "Removing stale worktree '$worktree' (branch '$branch' no longer exists)"
+      rm -rf "$worktree" && ((pruned++)) || echo "Warning: could not remove '$worktree'"
+    fi
+  done
+
+  echo "Pruned $pruned stale worktree(s)"
+}
+
