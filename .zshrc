@@ -59,9 +59,10 @@ autoload -U +X compinit && compinit
 autoload -U +X bashcompinit && bashcompinit
 source <(kubectl completion zsh)
 
-# Functions and aliases
-[[ ! -f ~/.zsh_functions ]] || source ~/.zsh_functions
-[[ ! -f ~/.zsh_aliases ]] || source ~/.zsh_aliases
+# Source config
+for file (~/.zsh.d/*.zsh(N)); do
+  [[ ! -f "$file" ]] || . "$file"
+done
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
