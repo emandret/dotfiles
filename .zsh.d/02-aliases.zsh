@@ -13,3 +13,4 @@ alias kge='kubectl_get_events'
 
 alias wcl='git_worktree_clone'
 alias wco='git_worktree_checkout'
+alias wpr='git_worktree_checkout'
