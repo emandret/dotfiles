@@ -1,1 +1,152 @@
+set -o pipefail
 
+# ----------------------------------------
+# jwt-decode
+
+jwt_decode() {
+  jq -R 'split(".") | .[0:2] | map(gsub("-"; "+") | gsub("_"; "/") | gsub("%3D"; "=") | @base64d) | map(fromjson)' <<<"${1:-$(cat)}"
+}
+
+# ----------------------------------------
+# kubectl-helpers
+
+kubectl_get_all() {
+  local namespaced='true'
+  local resources
+  local args=()
+
+  for arg in "$@"; do
+    case "$arg" in
+      --namespaced | --namespaced='true') namespaced='true' ;;
+      --namespaced='false') namespaced='false' ;;
+      *) args+=("$arg") ;;
+    esac
+  done
+
+  resources="$(kubectl api-resources --verbs=list --namespaced=$namespaced -oname | paste -sd, -)" || return 1
+  kubectl get "$resources" --show-kind --ignore-not-found "${args[@]}"
+}
+
+kubectl_get_events() {
+  local args=(
+    --all-namespaces
+    --sort-by=.lastTimestamp
+  )
+
+  if [[ $# -gt 0 ]]; then
+    args+=(--field-selector=involvedObject.name="$1" "${@:2}")
+  fi
+
+  kubectl get events "${args[@]}"
+}
+
+# ----------------------------------------
+# git-helpers
+
+git_worktree_clone() {
+  local url="$1"
+  local dir="${2:-}"
+
+  if [[ -z "$url" ]]; then
+    echo "Usage: $0 <repository> [<directory>]" >&2
+    return 1
+  fi
+
+  if [[ -z "$dir" ]]; then
+    dir="${url##*/}"
+    dir="${dir%.git}"
+  fi
+
+  if [[ -e "$dir" ]]; then
+    echo "Error: '$dir' already exists" >&2
+    return 1
+  fi
+
+  mkdir -p "$dir" || return 1
+
+  git clone --bare "$url" "$dir/repo.git" || {
+    rm -rf "$dir"
+    return 1
+  }
+
+  local default_branch
+  default_branch="$(git --git-dir="$dir/repo.git" symbolic-ref -q --short HEAD 2>/dev/null)"
+
+  local safe_branch="${default_branch//[^a-zA-Z0-9_-]/_}"
+  local worktree="$dir/$safe_branch"
+
+  git --git-dir="$dir/repo.git" worktree add "$worktree" "$default_branch" || {
+    rm -rf "$dir"
+    return 1
+  }
+  cd "$worktree" || return 1
+}
+
+git_worktree_checkout() {
+  local branch="$1"
+
+  if ! command -v fzf >/dev/null 2>&1; then
+    echo "Error: fzf not found" >&2
+    return 1
+  fi
+
+  local repo
+  if ! repo="$(git rev-parse --git-common-dir)"; then
+    echo "Error: not a git repository" >&2
+    return 1
+  fi
+
+  local project_root
+  project_root="$(readlink -f "$repo/..")"
+
+  local default_branch
+  default_branch="$(git --git-dir="$repo" symbolic-ref -q --short HEAD 2>/dev/null)"
+
+  git --git-dir="$repo" fetch --prune >/dev/null 2>&1 || true
+
+  if [[ -z "$branch" ]]; then
+    local selected
+    selected="$(
+      git --git-dir="$repo" for-each-ref --format='%(refname:short)' refs/heads refs/remotes/origin |
+        sort -u |
+        fzf --prompt='branch> ' --height=40% --reverse
+    )" || return 1
+    branch="${selected#origin/}"
+  fi
+
+  local safe_branch="${branch//[^a-zA-Z0-9_-]/_}"
+  local worktree="$project_root/$safe_branch"
+
+  if [[ -d "$worktree" && -n "$(ls -A "$worktree" 2>/dev/null)" ]]; then
+    if ! git -C "$worktree" rev-parse --is-inside-work-tree >/dev/null 2>&1; then
+      echo "Error: '$worktree' is not empty and is not a worktree" >&2
+      return 1
+    fi
+
+    local worktree_branch
+    worktree_branch="$(git -C "$worktree" symbolic-ref -q --short HEAD 2>/dev/null)"
+
+    if [[ "$branch" != "$worktree_branch" ]]; then
+      echo "Error: '$worktree' must be a worktree associated with branch '$branch'" >&2
+      return 1
+    fi
+
+    cd "$worktree" || return 1
+  fi
+
+  if ! git --git-dir="$repo" show-ref --verify -q "refs/heads/$branch"; then
+    local start_point="$default_branch"
+
+    if git --git-dir="$repo" show-ref --verify -q "refs/remotes/origin/$branch"; then
+      start_point="origin/$branch"
+    elif git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
+      start_point="$(git symbolic-ref -q --short HEAD 2>/dev/null)"
+    fi
+
+    echo "Creating new branch '$branch' from '$start_point'"
+    git --git-dir="$repo" branch "$branch" "$start_point" || return 1
+  fi
+
+  git --git-dir="$repo" worktree add "$worktree" "$branch" || return 1
+  cd "$worktree" || return 1
+}
