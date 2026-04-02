@@ -158,9 +158,13 @@ git_worktree_checkout() {
     git --git-dir="$repo" branch "$branch" "$start_point" || return 1
   fi
 
+  local stashed=false
+  git stash push -q 2>/dev/null && stashed=true
+
   git --git-dir="$repo" worktree add "$worktree" "$branch" || return 1
 
   cd "$worktree"
+  $stashed && git stash pop -q
 }
 
 git_worktree_remove() {
