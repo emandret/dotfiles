@@ -86,10 +86,10 @@ git_worktree_clone() {
 git_worktree_checkout() {
   local branch="$1"
 
-  if ! command -v fzf >/dev/null 2>&1; then
+  command -v fzf >/dev/null 2>&1 || {
     echo "Error: fzf not found" >&2
     return 1
-  fi
+  }
 
   local repo
   if ! repo="$(git rev-parse --git-common-dir)"; then
@@ -100,27 +100,26 @@ git_worktree_checkout() {
   local project_root
   project_root="$(readlink -f "$repo/..")"
 
-  local default_branch
-  default_branch="$(git --git-dir="$repo" symbolic-ref -q --short HEAD 2>/dev/null)"
-
-  git --git-dir="$repo" fetch origin --prune >/dev/null 2>&1 || {
+  git fetch origin --prune >/dev/null 2>&1 || {
     echo "Error: failed to fetch with --prune" >&2
     return 1
   }
 
-  git --git-dir="$repo" worktree prune >/dev/null 2>&1 || {
+  git worktree prune >/dev/null 2>&1 || {
     echo "Error: failed to prune stale worktree information" >&2
     return 1
   }
 
   if [[ -z "$branch" ]]; then
     local selected
+
     selected="$(
-      git --git-dir="$repo" for-each-ref \
+      git for-each-ref \
         --format='%(refname:short)' refs/heads |
         sort -u |
         fzf --prompt='branch> ' --height=40% --reverse
     )" || return 1
+
     branch="${selected#origin/}"
   fi
 
@@ -145,26 +144,30 @@ git_worktree_checkout() {
     return
   fi
 
-  if ! git --git-dir="$repo" show-ref --verify -q "refs/heads/$branch"; then
-    local start_point="$default_branch"
+  local stashed=false
 
-    if git --git-dir="$repo" show-ref --verify -q "refs/remotes/origin/$branch"; then
+  if ! git show-ref --verify -q "refs/heads/$branch"; then
+    local start_point
+
+    if git show-ref --verify -q "refs/remotes/origin/$branch"; then
+      echo "Found remote branch $branch not checked out locally"
       start_point="origin/$branch"
-    elif git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
+    else
       start_point="$(git symbolic-ref -q --short HEAD 2>/dev/null)"
+      git stash push -q 2>/dev/null && stashed=true
     fi
 
     echo "Creating new branch $branch from $start_point"
-    git --git-dir="$repo" branch "$branch" "$start_point" || return 1
+    git branch "$branch" "$start_point" || return 1
   fi
 
-  local stashed=false
-  git stash push -q 2>/dev/null && stashed=true
+  git worktree add "$worktree" "$branch" || return 1
+  cd "$worktree" || return 1
 
-  git --git-dir="$repo" worktree add "$worktree" "$branch" || return 1
-
-  cd "$worktree"
-  $stashed && git stash pop -q
+  $stashed && {
+    echo "Applying stashed changes"
+    git stash pop -q
+  }
 }
 
 git_worktree_remove() {
@@ -175,20 +178,19 @@ git_worktree_remove() {
     return 1
   fi
 
-  local repo
-  if ! repo="$(git rev-parse --git-common-dir)"; then
+  git rev-parse --git-common-dir >/dev/null 2>&1 || {
     echo "Error: not a git repository" >&2
     return 1
-  fi
+  }
 
-  git --git-dir="$repo" worktree prune >/dev/null 2>&1 || {
+  git worktree prune >/dev/null 2>&1 || {
     echo "Error: failed to prune stale worktree information" >&2
     return 1
   }
 
   local worktree
   worktree="$(
-    git --git-dir="$repo" worktree list --porcelain |
+    git worktree list --porcelain |
       awk -v branch="refs/heads/$branch" \
         '/^worktree/ { wt=$2 }; /^branch/ && $2 == branch { print wt; exit }'
   )"
@@ -204,21 +206,20 @@ git_worktree_remove() {
   fi
 
   echo "Removing worktree $worktree"
-  git --git-dir="$repo" worktree remove "$worktree" || return 1
+  git worktree remove "$worktree" || return 1
 
-  if git --git-dir="$repo" show-ref --verify -q "refs/heads/$branch"; then
-    git --git-dir="$repo" branch -D "$branch" || return 1
+  if git show-ref --verify -q "refs/heads/$branch"; then
+    git branch -D "$branch" || return 1
   fi
 }
 
 git_worktree_prune() {
-  local repo
-  if ! repo="$(git rev-parse --git-common-dir)"; then
+  git rev-parse --git-common-dir >/dev/null 2>&1 || {
     echo "Error: not a git repository" >&2
     return 1
-  fi
+  }
 
-  git --git-dir="$repo" fetch origin --prune >/dev/null 2>&1 || {
+  git fetch origin --prune >/dev/null 2>&1 || {
     echo "Error: failed to fetch with --prune" >&2
     return 1
   }
@@ -226,7 +227,7 @@ git_worktree_prune() {
   while IFS='' read -r branch; do
     [[ -n "$branch" ]] && git_worktree_remove "$branch"
   done < <(
-    git --git-dir="$repo" for-each-ref \
+    git for-each-ref \
       --format='%(refname:short) %(upstream:track)' refs/heads |
       awk '$2 == "[gone]" { print $1 }'
   )
