@@ -69,6 +69,8 @@ git_worktree_clone() {
   local default_branch
   default_branch="$(git --git-dir="$dir/repo.git" symbolic-ref -q --short HEAD 2>/dev/null)"
 
+  git --git-dir="$dir/repo.git" branch --set-upstream-to="origin/$default_branch" "$default_branch" || true
+
   local safe_branch="${default_branch//[^a-zA-Z0-9_-]/_}"
   local worktree="$dir/$safe_branch"
 
