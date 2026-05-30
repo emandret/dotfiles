@@ -171,10 +171,21 @@ git_worktree_checkout() {
 }
 
 git_worktree_remove() {
-  local branch="$1"
+  local force=0
+  local branch=""
+
+  while (( $# )); do
+    case "$1" in
+      -f|--force) force=1 ;;
+      --) shift; branch="$1"; break ;;
+      -*) echo "Unknown option: $1" >&2; return 1 ;;
+      *) branch="$1" ;;
+    esac
+    shift
+  done
 
   if [[ -z "$branch" ]]; then
-    echo "Usage: $0 <branch>" >&2
+    echo "Usage: $0 [-f|--force] <branch>" >&2
     return 1
   fi
 
@@ -205,8 +216,11 @@ git_worktree_remove() {
     return 1
   fi
 
+  local -a remove_args=()
+  (( force )) && remove_args+=(--force)
+
   echo "Removing worktree $worktree"
-  git worktree remove "$worktree" || return 1
+  git worktree remove "${remove_args[@]}" "$worktree" || return 1
 
   if git show-ref --verify -q "refs/heads/$branch"; then
     git branch -D "$branch" || return 1
