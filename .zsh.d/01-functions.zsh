@@ -116,11 +116,19 @@ git_worktree_checkout() {
     selected="$(
       git for-each-ref \
         --format='%(refname:short)' refs/heads |
-        sort -u |
+        sort |
         fzf --prompt='branch> ' --height=40% --reverse
     )" || return 1
 
     branch="${selected#origin/}"
+  fi
+
+  if [[ "$branch" == "-" ]]; then
+    branch="$(git rev-parse --symbolic-full-name '@{-1}' 2>/dev/null)" || {
+      echo "Error: no previous branch" >&2
+      return 1
+    }
+    branch="${branch#refs/heads/}"
   fi
 
   local safe_branch="${branch//[^a-zA-Z0-9_-]/_}"
@@ -153,7 +161,7 @@ git_worktree_checkout() {
       echo "Found remote branch $branch not checked out locally"
       start_point="origin/$branch"
     else
-      start_point="$(git symbolic-ref -q --short HEAD 2>/dev/null)"
+      start_point="$(git symbolic-ref -q --short HEAD 2>/dev/null || git rev-parse HEAD)"
       git stash push -q 2>/dev/null && stashed=true
     fi
 
