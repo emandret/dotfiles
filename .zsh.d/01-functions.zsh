@@ -236,6 +236,17 @@ git_worktree_remove() {
 }
 
 git_worktree_prune() {
+  local force=0
+
+  while (( $# )); do
+    case "$1" in
+      -f|--force) force=1 ;;
+      -*) echo "Unknown option: $1" >&2; return 1 ;;
+      *) echo "Unexpected argument: $1" >&2; return 1 ;;
+    esac
+    shift
+  done
+
   git rev-parse --git-common-dir >/dev/null 2>&1 || {
     echo "Error: not a git repository" >&2
     return 1
@@ -246,8 +257,11 @@ git_worktree_prune() {
     return 1
   }
 
+  local -a remove_args=()
+  (( force )) && remove_args+=(--force)
+
   while IFS='' read -r branch; do
-    [[ -n "$branch" ]] && git_worktree_remove "$branch"
+    [[ -n "$branch" ]] && git_worktree_remove "${remove_args[@]}" "$branch"
   done < <(
     git for-each-ref \
       --format='%(refname:short) %(upstream:track)' refs/heads |
