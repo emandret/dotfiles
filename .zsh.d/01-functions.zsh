@@ -100,6 +100,19 @@ git_worktree_checkout() {
   local project_root
   project_root="$(readlink -f "$repo/..")"
 
+  local current_branch
+  current_branch="$(git symbolic-ref -q --short HEAD 2>/dev/null)"
+
+  local prev_file="$repo/PREVIOUS_WORKTREE"
+
+  if [[ "$branch" == "-" ]]; then
+    if [[ ! -s "$prev_file" ]]; then
+      echo "Error: no previous worktree" >&2
+      return 1
+    fi
+    branch="$(<"$prev_file")"
+  fi
+
   git fetch origin --prune >/dev/null 2>&1 || {
     echo "Error: failed to fetch with --prune" >&2
     return 1
@@ -123,14 +136,6 @@ git_worktree_checkout() {
     branch="${selected#origin/}"
   fi
 
-  if [[ "$branch" == "-" ]]; then
-    branch="$(git rev-parse --symbolic-full-name '@{-1}' 2>/dev/null)" || {
-      echo "Error: no previous branch" >&2
-      return 1
-    }
-    branch="${branch#refs/heads/}"
-  fi
-
   local safe_branch="${branch//[^a-zA-Z0-9_-]/_}"
   local worktree="$project_root/$safe_branch"
 
@@ -148,6 +153,7 @@ git_worktree_checkout() {
       return 1
     fi
 
+    [[ -n "$current_branch" && "$current_branch" != "$branch" ]] && printf '%s\n' "$current_branch" >"$prev_file"
     cd "$worktree"
     return
   fi
@@ -170,6 +176,7 @@ git_worktree_checkout() {
   fi
 
   git worktree add "$worktree" "$branch" || return 1
+  [[ -n "$current_branch" && "$current_branch" != "$branch" ]] && printf '%s\n' "$current_branch" >"$prev_file"
   cd "$worktree" || return 1
 
   $stashed && {
