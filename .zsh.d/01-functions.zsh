@@ -124,16 +124,13 @@ git_worktree_checkout() {
   }
 
   if [[ -z "$branch" ]]; then
-    local selected
-
-    selected="$(
-      git for-each-ref \
-        --format='%(refname:short)' refs/heads |
-        sort |
+    branch="$(
+      git for-each-ref --format='%(refname:short)' refs/heads refs/remotes |
+        grep -v '^origin/HEAD$' |
+        sed 's|^origin/||' |
+        sort -u |
         fzf --prompt='branch> ' --height=40% --reverse
     )" || return 1
-
-    branch="${selected#origin/}"
   fi
 
   local safe_branch="${branch//[^a-zA-Z0-9_-]/_}"
