@@ -13,7 +13,6 @@ packages=(
   jq
   kind
   kubectx
-  libvirt
   neovim
   nmap
   pandoc
@@ -36,7 +35,6 @@ packages=(
 casks=(
   bitwarden
   font-dejavu-sans-mono-nerd-font
-  google-chrome
   iterm2
   monitorcontrol
 )
