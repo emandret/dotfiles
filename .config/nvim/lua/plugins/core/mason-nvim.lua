@@ -75,7 +75,6 @@ return {
         "sqlfluff",
         "sqls",
         "stylua",
-        "systemd-language-server",
         "systemdlint",
         "terraform-ls",
         "terraform",
