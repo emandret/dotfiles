@@ -10,6 +10,7 @@ unalias kga &>/dev/null
 unalias kge &>/dev/null
 alias kga='kubectl_get_all'
 alias kge='kubectl_get_events'
+alias pns="kubectl config view --minify -o jsonpath='{..namespace}'"
 
 alias wcl='git_worktree_clone'
 alias wco='git_worktree_checkout'
