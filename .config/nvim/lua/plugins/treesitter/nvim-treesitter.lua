@@ -5,8 +5,9 @@ return {
     lazy = false,
     build = ":TSUpdate",
     cmd = { "TSInstall", "TSUpdate", "TSUpdateSync", "TSUninstall", "TSLog" },
-    config = function()
-      require("nvim-treesitter").install({
+    opts_extend = { "ensure_installed" },
+    opts = {
+      ensure_installed = {
         "asm",
         "awk",
         "bash",
@@ -136,7 +137,10 @@ return {
         "xml",
         "xresources",
         "yaml",
-      })
+      },
+    },
+    config = function(_, opts)
+      require("nvim-treesitter").install(opts.ensure_installed)
 
       -- Parse Helm as Go template
       vim.treesitter.language.register("gotmpl", "helm")
