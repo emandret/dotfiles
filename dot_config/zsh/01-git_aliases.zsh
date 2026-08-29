@@ -1,43 +1,11 @@
-jwt_decode() {
-  jq -R 'split(".") | .[0:2] | map(gsub("-"; "+") | gsub("_"; "/") | gsub("%3D"; "=") | @base64d) | map(fromjson)' <<<"${1:-$(cat)}"
-}
-
-kubectl_get_all() {
-  local namespaced='true'
-  local resources
-  local args=()
-
-  for arg in "$@"; do
-    case "$arg" in
-      --namespaced | --namespaced='true') namespaced='true' ;;
-      --namespaced='false') namespaced='false' ;;
-      *) args+=("$arg") ;;
-    esac
-  done
-
-  resources="$(kubectl api-resources --verbs=list --namespaced=$namespaced -oname | paste -sd, -)" || return 1
-  kubectl get "$resources" --show-kind --ignore-not-found "${args[@]}"
-}
-
-kubectl_get_events() {
-  local args=(
-    --all-namespaces
-    --sort-by=.lastTimestamp
-  )
-
-  if [[ $# -gt 0 ]]; then
-    args+=(--field-selector=involvedObject.name="$1" "${@:2}")
-  fi
-
-  kubectl get events "${args[@]}"
-}
+# shellcheck shell=zsh
 
 git_worktree_clone() {
   local url="$1"
   local dir="${2:-}"
 
   if [[ -z "$url" ]]; then
-    echo "Usage: $0 <repository> [<directory>]" >&2
+    echo "Usage: wcl <repository> [<directory>]" >&2
     return 1
   fi
 
@@ -63,6 +31,7 @@ git_worktree_clone() {
 
   git --git-dir="$dir/repo.git" fetch origin --prune >/dev/null 2>&1 || {
     echo "Error: failed to fetch with --prune" >&2
+    rm -rf "$dir"
     return 1
   }
 
@@ -80,16 +49,11 @@ git_worktree_clone() {
     return 1
   }
 
-  cd "$worktree"
+  cd "$worktree" || return 1
 }
 
 git_worktree_checkout() {
   local branch="$1"
-
-  command -v fzf >/dev/null 2>&1 || {
-    echo "Error: fzf not found" >&2
-    return 1
-  }
 
   local repo
   if ! repo="$(git rev-parse --git-common-dir)"; then
@@ -124,6 +88,11 @@ git_worktree_checkout() {
   }
 
   if [[ -z "$branch" ]]; then
+    command -v fzf >/dev/null 2>&1 || {
+      echo "Error: fzf not found" >&2
+      return 1
+    }
+
     branch="$(
       git for-each-ref --format='%(refname:short)' refs/heads refs/remotes |
         grep -v '^origin/HEAD$' |
@@ -151,7 +120,7 @@ git_worktree_checkout() {
     fi
 
     [[ -n "$current_branch" && "$current_branch" != "$branch" ]] && printf '%s\n' "$current_branch" >"$prev_file"
-    cd "$worktree"
+    cd "$worktree" || return 1
     return
   fi
 
@@ -186,18 +155,25 @@ git_worktree_remove() {
   local force=0
   local branch=""
 
-  while (( $# )); do
+  while (($#)); do
     case "$1" in
-      -f|--force) force=1 ;;
-      --) shift; branch="$1"; break ;;
-      -*) echo "Unknown option: $1" >&2; return 1 ;;
+      -f | --force) force=1 ;;
+      --)
+        shift
+        branch="$1"
+        break
+        ;;
+      -*)
+        echo "Unknown option: $1" >&2
+        return 1
+        ;;
       *) branch="$1" ;;
     esac
     shift
   done
 
   if [[ -z "$branch" ]]; then
-    echo "Usage: $0 [-f|--force] <branch>" >&2
+    echo "Usage: wrm [-f|--force] <branch>" >&2
     return 1
   fi
 
@@ -229,7 +205,7 @@ git_worktree_remove() {
   fi
 
   local -a remove_args=()
-  (( force )) && remove_args+=(--force)
+  ((force)) && remove_args+=(--force)
 
   echo "Removing worktree $worktree"
   git worktree remove "${remove_args[@]}" "$worktree" || return 1
@@ -242,11 +218,17 @@ git_worktree_remove() {
 git_worktree_prune() {
   local force=0
 
-  while (( $# )); do
+  while (($#)); do
     case "$1" in
-      -f|--force) force=1 ;;
-      -*) echo "Unknown option: $1" >&2; return 1 ;;
-      *) echo "Unexpected argument: $1" >&2; return 1 ;;
+      -f | --force) force=1 ;;
+      -*)
+        echo "Unknown option: $1" >&2
+        return 1
+        ;;
+      *)
+        echo "Unexpected argument: $1" >&2
+        return 1
+        ;;
     esac
     shift
   done
@@ -262,7 +244,7 @@ git_worktree_prune() {
   }
 
   local -a remove_args=()
-  (( force )) && remove_args+=(--force)
+  ((force)) && remove_args+=(--force)
 
   while IFS='' read -r branch; do
     [[ -n "$branch" ]] && git_worktree_remove "${remove_args[@]}" "$branch"
@@ -272,3 +254,8 @@ git_worktree_prune() {
       awk '$2 == "[gone]" { print $1 }'
   )
 }
+
+alias wcl=git_worktree_clone
+alias wco=git_worktree_checkout
+alias wrm=git_worktree_remove
+alias wpr=git_worktree_prune

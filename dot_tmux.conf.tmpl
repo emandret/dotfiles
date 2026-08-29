@@ -1,3 +1,7 @@
+{{- $clip := "xclip -i -sel clip" -}}
+{{- if eq .chezmoi.os "darwin" -}}
+{{- $clip = "pbcopy" -}}
+{{- end -}}
 # Enable xterm support
 set -g default-terminal 'tmux-256color'
 set-option -ga terminal-overrides ',xterm-256color:Tc'
@@ -14,8 +18,10 @@ set -g mouse on
 set -g base-index 1
 unbind -n MouseDown3Pane
 
-# Use zsh as the default shell
-set-option -g default-shell /bin/zsh
+{{ with lookPath "zsh" -}}
+# Use zsh as the default shell.
+set-option -g default-shell {{ . }}
+{{- end }}
 
 # Automatic renaming of tabs and terminal titles based on the current command
 set-window-option -g automatic-rename on
@@ -83,14 +89,14 @@ bind -n M-Right select-pane -R
 
 # Use prefix+[ then v to enter visual mode and y to yank to system clipboard
 bind -Tcopy-mode-vi v send-keys -X begin-selection
-bind -Tcopy-mode-vi y send-keys -X copy-pipe-and-cancel 'xclip -i -sel clip'
+bind -Tcopy-mode-vi y send-keys -X copy-pipe-and-cancel '{{ $clip }}'
 
 # Use the mouse to drag and select text
-bind -Tcopy-mode-vi MouseDragEnd1Pane send -X copy-pipe-and-cancel 'xclip -i -sel clip'
+bind -Tcopy-mode-vi MouseDragEnd1Pane send -X copy-pipe-and-cancel '{{ $clip }}'
 
 # Double-click to select a word and right-click to copy
 bind -n DoubleClick1Pane select-pane \; copy-mode -M \; send-keys -X select-word
-bind -Tcopy-mode-vi MouseUp3Pane send -X copy-pipe-and-cancel 'xclip -i -sel clip'
+bind -Tcopy-mode-vi MouseUp3Pane send -X copy-pipe-and-cancel '{{ $clip }}'
 
 # Theme
 set -g pane-active-border-style     fg=green

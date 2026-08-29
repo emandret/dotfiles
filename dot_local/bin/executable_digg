@@ -1,0 +1,17 @@
+#!/bin/bash
+
+if [[ -z ${1:-} ]]; then
+  echo "Usage: $(basename "${0}") <query>" >&2
+  exit 1
+fi
+
+if [[ -z ${DIGG_ZONES:-} ]]; then
+  echo 'Error: set DIGG_ZONES to a space-separated list of zones' >&2
+  exit 1
+fi
+
+for zone in ${DIGG_ZONES}; do
+  dig "@${DIGG_SERVER:-${zone}}" "${zone}" axfr +noedns |
+    grep -Ei "${1}" |
+    awk '{print $1, $5}'
+done

@@ -9,3 +9,11 @@ trim_trailing_whitespace = true
 [{*.{c,h},Makefile}]
 indent_style = tab
 indent_size = 4
+
+[*.{sh,zsh,lua,tmpl}]
+indent_style = space
+indent_size = 2
+
+[dot_local/bin/*]
+indent_style = space
+indent_size = 2

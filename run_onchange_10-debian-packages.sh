@@ -1,10 +1,33 @@
 #!/bin/bash
 
-set -eux
+set -euxo pipefail
 
 packages=(
   xclip
-  zsh-syntax-highlighting
+
+  # shell config in ~/.config/zsh
+  git
+  fzf
+  jq
+  kubectx
+
+  # editors
+  neovim
+  vim
+
+  # required by nvim mason/LSP servers
+  nodejs
+  npm
+
+  # terminal
+  tmux
+
+  # C/C++
+  clang-format
+  clang-tidy
+
+  # shell
+  shellcheck
 
   # tex
   pandoc
@@ -50,9 +73,24 @@ packages=(
   bpftrace
   xdp-tools # includes xdpdump
 
-  # live stats
-  iftop
-
   # helpers
   ipcalc
 )
+
+optional=(
+  kubectl
+  kubecolor
+)
+
+if ! grep -qsE 'ID=(ubuntu|debian)' /etc/*release*; then
+  echo 'Error: not a debian or ubuntu system' >&2
+  exit 1
+fi
+
+sudo apt-get update
+sudo apt-get install -y "${packages[@]}"
+
+for package in "${optional[@]}"; do
+  sudo apt-get install -y "$package" ||
+    echo "Warning: ${package} unavailable in the configured repositories, skipped" >&2
+done

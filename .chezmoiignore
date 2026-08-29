@@ -1,0 +1,10 @@
+{{ if ne .chezmoi.os "linux" -}}
+10-debian-packages.sh
+{{ end -}}
+
+{{ if ne .chezmoi.os "darwin" -}}
+.local/scripts
+Library
+10-brew.sh
+11-keymap-uk2us.sh
+{{ end -}}

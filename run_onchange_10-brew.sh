@@ -1,28 +1,37 @@
 #!/bin/bash
 
+set -euxo pipefail
+
 packages=(
+  bash
   black
   clang-format
   cmake
   coreutils
   fzf
+  git
   gnupg
   go
   helm
   htop
   jq
   kind
+  kubecolor
   kubectx
+  kubernetes-cli
   neovim
   nmap
+  node
   pandoc
   prettier
   pyenv
   qemu
   ripgrep
+  shellcheck
   shfmt
   stylua
   terraform
+  tmux
   tree
   tree-sitter-cli
   vim
@@ -39,20 +48,11 @@ casks=(
   monitorcontrol
 )
 
-dotfiles_can_install() {
-  if [[ ! "$(uname)" =~ 'Darwin' ]]; then
-    return 1
-  fi
+if ! command -v brew >/dev/null 2>&1; then
+  echo 'Error: Homebrew is not installed; see https://brew.sh' >&2
+  exit 1
+fi
 
-  command -v brew >/dev/null 2>&1
-}
-
-dotfiles_run_install() {
-  if [[ ! -d ~/.local/bin ]]; then
-    mkdir -p ~/.local/bin
-  fi
-
-  brew update && brew upgrade
-  brew install "${packages[@]}"
-  brew install --cask "${casks[@]}"
-}
+brew update
+brew install "${packages[@]}"
+brew install --cask "${casks[@]}"

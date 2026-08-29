@@ -1,6 +1,10 @@
+{{- $name := "Ed Mandret" -}}
+{{- $email := "emandret@student.42.fr" -}}
+{{- if hasKey . "name" }}{{ $name = .name }}{{ end -}}
+{{- if hasKey . "email" }}{{ $email = .email }}{{ end -}}
 [user]
-  name = Edwy MANDRET
-  email = emandret@student.42.fr
+  name = {{ $name }}
+  email = {{ $email }}
 [github]
   user = emandret
 [url "ssh://git@github.com/emandret"]
@@ -22,11 +26,13 @@
   prompt = false
 [alias]
   tree = log --graph --oneline --all
-[credential]
-  credentialStore = gpg
-  helper = /usr/local/bin/git-credential-manager
 [credential "https://git-codecommit.eu-west-1.amazonaws.com"]
   helper = !aws codecommit credential-helper $@
   UseHttpPath = true
-[credential "https://github.com"]
+{{- if eq .chezmoi.os "darwin" }}
+[credential]
   helper = osxkeychain
+{{- else }}
+[credential]
+  helper = cache --timeout=3600
+{{- end }}
