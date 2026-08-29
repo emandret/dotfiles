@@ -3,14 +3,15 @@
 
 set -euxo pipefail
 
-scripts=()
-for f in .scripts/*.sh; do
-  scripts+=("$f")
-done
+parallel_tasks=(
+{{- $scripts := glob (printf "%s/.scripts/*.sh" .chezmoi.sourceDir) -}}
+{{ range $scripts -}}
+  "{{ . }}" # {{ include . | sha256sum }}
+{{ end -}}
+)
 
-if ((${#scripts[@]} == 0)); then
-  echo 'Error: no scripts found' >&2
-  exit 1
+if ((${#parallel_tasks[@]} == 0)); then
+  exit 0
 fi
 
 pids=()
@@ -26,14 +27,14 @@ terminate_components() {
 trap terminate_components INT TERM ERR
 
 set -m
-for s in "${scripts[@]}"; do
+for s in "${parallel_tasks[@]}"; do
   "$s" &
   pids+=("$!")
 done
 set +m
 
-for i in "${!scripts[@]}"; do
-  name="${scripts[i]}"
+for i in "${!parallel_tasks[@]}"; do
+  name="${parallel_tasks[i]}"
 
   exit_code=0
   wait "${pids[i]}" || exit_code=$?
