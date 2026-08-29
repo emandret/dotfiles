@@ -18,17 +18,11 @@ fi
 
 # hidutil replaces the whole UserKeyMapping on every --set, so send all pairs at once
 mappings=()
-
 for i in "${!src_keymaps[@]}"; do
   src="$(printf '0x%x' $((0x700000000 | src_keymaps[i])))"
   dst="$(printf '0x%x' $((0x700000000 | dst_keymaps[i])))"
-
   mappings+=("{\"HIDKeyboardModifierMappingSrc\":${src},\"HIDKeyboardModifierMappingDst\":${dst}}")
 done
 
-joined="$(
-  IFS=,
-  printf '%s' "${mappings[*]}"
-)"
-
+joined="$(IFS=, printf '%s' "${mappings[*]}")"
 hidutil property --set "{\"UserKeyMapping\":[${joined}]}" >/dev/null
