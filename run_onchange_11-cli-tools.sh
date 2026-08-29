@@ -1,11 +1,6 @@
-#!/usr/bin/env bash
+#!/bin/bash
 
 set -euxo pipefail
-
-if ((BASH_VERSINFO[0] < 4)); then
-  echo "Error: bash 4+ required, found ${BASH_VERSION}" >&2
-  exit 1
-fi
 
 install_rust() {
   if command -v rustup >/dev/null 2>&1; then
@@ -17,7 +12,10 @@ install_rust() {
     sh -s -- -y --no-modify-path
 }
 
-mapfile -t installers < <(compgen -A function 'install_' | sort)
+installers=()
+while IFS= read -r fn; do
+  installers+=("$fn")
+done < <(compgen -A function 'install_' | sort)
 
 if ((${#installers[@]} == 0)); then
   echo 'no install_* functions found' >&2
@@ -29,7 +27,6 @@ last_exit_code=0
 
 terminate_components() {
   local pid
-
   for pid in "${pids[@]}"; do
     kill -TERM -- "-${pid}" 2>/dev/null || true
   done
@@ -38,12 +35,10 @@ terminate_components() {
 trap terminate_components INT TERM ERR
 
 set -m
-
 for installer in "${installers[@]}"; do
   "$installer" &
   pids+=("$!")
 done
-
 set +m
 
 for i in "${!installers[@]}"; do
