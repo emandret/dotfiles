@@ -90,15 +90,23 @@ alias myip='dig +short myip.opendns.com @resolver4.opendns.com'
 # Needed for bash completions
 autoload -U +X bashcompinit && bashcompinit
 
-# Setup kubectl completions
+# kubectl completions
 if command -v kubectl >/dev/null; then
   source <(kubectl completion zsh)
 
-  # Use kubecolor instead of kubectl
-  command -v kubecolor >/dev/null && alias kubectl=kubecolor
+  if command -v kubecolor >/dev/null; then
+    # Zsh resolves the alias chain before choosing a completion, so it must be
+    # registered separately
+    alias kubectl=kubecolor
 
+    # Kubecolor colorizes the '__complete' output the completion parser reads
+    # hence the real binary name passed in the 'words' array
+    _kubecolor() { words[1]=${commands[kubectl]}; _kubectl }
+    compdef _kubecolor kubecolor
+  fi
+
+  # No compdef needed: zsh resolves the alias before looking up a completion
   alias k=kubectl
-  compdef __start_kubectl k
 fi
 
 # Source external config
