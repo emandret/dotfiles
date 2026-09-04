@@ -1,0 +1,117 @@
+#!/bin/bash
+
+set -uo pipefail
+
+marker="${HOME}/.local/state/dotfiles-bootstrap-async.done"
+phase_dir="${HOME}/.local/share/dotfiles-bootstrap-async.d"
+
+if [[ ${1:-} == --force ]]; then
+  rm -f "${marker}"
+fi
+
+if [[ -e ${marker} ]]; then
+  echo "Async bootstrap already complete: ${marker}"
+  echo "Re-run with --force to redo."
+  exit 0
+fi
+
+if ! grep -qsE 'ID=(ubuntu|debian)' /etc/*release*; then
+  echo 'Error: not a debian or ubuntu system' >&2
+  exit 1
+fi
+
+shopt -s nullglob
+phase_scripts=("${phase_dir}"/*.sh)
+shopt -u nullglob
+
+if ((${#phase_scripts[@]} == 0)); then
+  echo "Error: no phases found in ${phase_dir}; run chezmoi apply first" >&2
+  exit 1
+fi
+
+phase_names=()
+phase_pids=()
+
+# journald derives a log line's unit from the writer's PID -- log lines written
+# by a child process end up unattributed and `journalctl -u` drops them.
+# Phases write into this FIFO instead; drain_log relays them from this process.
+log_fifo="${XDG_RUNTIME_DIR:-/tmp}/dotfiles-bootstrap-async.$$.fifo"
+mkfifo -m 0600 "${log_fifo}"
+trap 'rm -f "${log_fifo}"' EXIT
+
+for fd in 8 9; do
+  if [[ -e /proc/self/fd/${fd} ]]; then
+    echo "Error: fd ${fd} is already in use" >&2
+    exit 1
+  fi
+done
+
+# <> (r/w open) because there is no peer yet and a write-only open would block
+# waiting for a reader.
+# We never read from fd 9; phases inherit it as their stdout.
+exec 9<>"${log_fifo}"
+
+start_phase() {
+  local script="$1"
+  local name
+
+  name="$(basename "${script}" .sh)"
+  name="${name#[0-9][0-9]-}"
+
+  {
+    "${script}" 2>&1 | sed -u "s/^/[${name}] /"
+    exit "${PIPESTATUS[0]}"
+  } >&9 2>&1 &
+
+  phase_names+=("${name}")
+  phase_pids+=("$!")
+}
+
+drain_log() {
+  local line
+
+  while IFS= read -r line <&8; do
+    echo "${line}"
+  done
+}
+
+echo "==> Starting async bootstrap at $(date -Is)"
+start_epoch="$(date +%s)"
+
+for script in "${phase_scripts[@]}"; do
+  start_phase "${script}"
+done
+
+echo "==> Running phases concurrently: ${phase_names[*]}"
+
+# A read on a FIFO only hits EOF once every write-end on it is closed in every
+# process; fd 9 must be closed otherwise we'd be our own writer.
+# Once fd 9 is closed, the remaining write-end fds belong to the phases -- EOF
+# means the last phase has exited.
+exec 8<"${log_fifo}"
+exec 9>&-
+
+# drain_log reads from fd 8 -- trying to open the FIFO for reading would block
+# if all phases had exited by that point.
+drain_log
+
+overall=0
+for i in "${!phase_pids[@]}"; do
+  rc=0
+  wait "${phase_pids[i]}" || rc=$?
+
+  if ((rc != 0)); then
+    echo "==> Phase ${phase_names[i]} failed (exit ${rc})" >&2
+    overall=1
+  fi
+done
+
+elapsed=$(($(date +%s) - start_epoch))
+if ((overall == 0)); then
+  mkdir -p "$(dirname "${marker}")"
+  touch "${marker}"
+  echo "==> Async bootstrap complete in ${elapsed} sec"
+else
+  echo "==> Async bootstrap finished with errors in ${elapsed} sec; marker not written" >&2
+  exit 1
+fi
