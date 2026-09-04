@@ -3,7 +3,12 @@
 set -euxo pipefail
 
 packages=(
+  # clipboard support
   xclip
+
+  # kubernetes
+  kubectl
+  kubecolor
 
   # shell config in ~/.config/zsh
   git
@@ -11,13 +16,12 @@ packages=(
   jq
   kubectx
 
+  # github CLI
+  gh
+
   # editors
   neovim
   vim
-
-  # required by nvim mason/LSP servers
-  nodejs
-  npm
 
   # terminal
   tmux
@@ -28,13 +32,7 @@ packages=(
 
   # shell
   shellcheck
-
-  # tex
-  pandoc
-  texlive-fonts-extra
-  texlive-fonts-recommended
-  texlive-latex-base
-  texlive-latex-extra
+  shfmt
 
   # kernel/stack introspection
   iproute2  # ip, ss, tc, bridge
@@ -68,18 +66,19 @@ packages=(
   # DNS
   bind9-dnsutils # includes dig, nslookup
 
-  # XDP/TC and BPF tools
-  bpftool
-  bpftrace
-  xdp-tools # includes xdpdump
-
   # helpers
   ipcalc
 )
 
 optional=(
-  kubectl
-  kubecolor
+  # XDP/TC and BPF tools
+  bpftool
+  bpftrace
+  xdp-tools # includes xdpdump
+
+  # required by nvim mason/LSP servers
+  nodejs
+  npm
 )
 
 if ! grep -qsE 'ID=(ubuntu|debian)' /etc/*release*; then
