@@ -8,3 +8,30 @@ Library
 01-brew-packages.sh
 20-keymap-uk2us.sh.tmpl
 {{- end -}}
+
+README.md
+install.sh
+
+# Async bootstrap marker and fallback log -- runtime state
+.local/state
+
+# Claude Code runtime state -- never manage these
+.claude/backups
+.claude/debug
+.claude/file-history
+.claude/history.jsonl
+.claude/ide
+.claude/paste-cache
+.claude/plugins
+.claude/projects
+.claude/session-env
+.claude/sessions
+.claude/shell-snapshots
+.claude/statsig
+.claude/tasks
+.claude/todos
+.claude/.last-cleanup
+
+# All Claude Code JSON is app-owned -- it rewrites these behind our back
+.claude/*.json
+.claude.json*
