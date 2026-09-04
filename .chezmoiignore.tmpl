@@ -1,5 +1,7 @@
 {{- if ne .chezmoi.os "linux" -}}
+.config/systemd
 01-apt-packages.sh
+99-bootstrap-async.sh
 {{- end -}}
 
 {{- if ne .chezmoi.os "darwin" -}}
