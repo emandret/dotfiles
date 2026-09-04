@@ -16,9 +16,10 @@
 [core]
   editor = vim
 [diff]
-  tool = vimdiff
+  tool = nvimdiff
 [difftool]
-  prompt = false
+  prompt = true         # lets you answer "n" to skip a file
+  trustExitCode = true  # makes :cq abort the run
 [merge]
   tool = vimdiff
   conflictstyle = merge
@@ -26,6 +27,7 @@
   prompt = false
 [alias]
   tree = log --graph --oneline --all
+  dt = difftool -d
 [credential "https://git-codecommit.eu-west-1.amazonaws.com"]
   helper = !aws codecommit credential-helper $@
   UseHttpPath = true
