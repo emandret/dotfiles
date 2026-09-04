@@ -1,0 +1,35 @@
+[Unit]
+Description=Dotfiles async bootstrap
+Documentation=file://%h/.local/bin/dotfiles-bootstrap-async
+
+# Skip once a previous run succeeded. A failed condition makes systemd report
+# the unit as skipped rather than failed.
+ConditionPathExists=!%h/.local/state/dotfiles-bootstrap-async.done
+
+# Bail rather than half-run if `chezmoi apply` has not written these yet.
+ConditionPathExists=%h/.local/bin/dotfiles-bootstrap-async
+ConditionPathIsDirectory=%h/.local/share/dotfiles-bootstrap-async.d
+
+# No After=/Wants=network-online.target: that target does not exist in the
+# user manager, so both would be silently dropped.
+
+[Service]
+# Type=oneshot disables TimeoutStartSec by default.
+Type=oneshot
+
+# systemd does not read /etc/environment the way a login shell does.
+# The '-' tolerates the file being absent.
+EnvironmentFile=-/etc/environment
+Environment=PATH=%h/.local/bin:%h/go/bin:/usr/local/go/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+
+WorkingDirectory=%h
+ExecStart=%h/.local/bin/dotfiles-bootstrap-async
+
+# No SyslogIdentifier= needed: it defaults to the ExecStart basename, which is
+# already dotfiles-bootstrap-async, so -t and -u take the same name.
+
+Nice=10
+IOSchedulingClass=best-effort
+IOSchedulingPriority=7
+
+# No [Install] section, so this cannot be enabled.
