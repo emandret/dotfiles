@@ -5,7 +5,6 @@ Host *
 Host github.com
   User git
   Hostname github.com
-  Port 443
   #ProxyCommand nc -X connect -x localhost:3129 %h %p
   PreferredAuthentications publickey
   AddKeysToAgent yes
