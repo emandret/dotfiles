@@ -1,0 +1,45 @@
+{{ if ne .chezmoi.os "linux" -}}
+.config/fontconfig
+.config/systemd
+.local/bin/dotfiles-bootstrap-async
+.local/share/dotfiles-bootstrap-async.d
+10-apt-packages.sh
+12-cli-argocd.sh
+13-cli-etcd.sh
+14-cli-nvim.sh
+15-nerd-fonts.sh
+99-bootstrap-async.sh
+{{ end -}}
+{{ if ne .chezmoi.os "darwin" -}}
+.local/bin/keymap-uk2us
+Library
+11-brew-packages.sh
+20-keymap-uk2us.sh
+{{ end -}}
+install.sh
+lint.sh
+README.md
+
+# Async bootstrap marker and fallback log -- runtime state
+.local/state
+
+# Claude Code runtime state -- never manage these
+.claude/backups
+.claude/debug
+.claude/file-history
+.claude/history.jsonl
+.claude/ide
+.claude/.last-cleanup
+.claude/paste-cache
+.claude/plugins
+.claude/projects
+.claude/session-env
+.claude/sessions
+.claude/shell-snapshots
+.claude/statsig
+.claude/tasks
+.claude/todos
+
+# All Claude Code JSON is app-owned -- it rewrites these behind our back
+.claude.json*
+.claude/*.json

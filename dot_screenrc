@@ -1,0 +1,4 @@
+bindkey "^A^[OA" focus up
+bindkey "^A^[OB" focus down
+bindkey "^A^[OC" focus right
+bindkey "^A^[OD" focus left

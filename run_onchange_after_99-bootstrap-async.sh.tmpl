@@ -1,0 +1,39 @@
+#!/bin/bash
+
+{{ $inputs := list
+     "dot_config/systemd/user/dotfiles-bootstrap-async.service"
+     "dot_local/bin/executable_dotfiles-bootstrap-async" -}}
+{{- $inputs = concat $inputs (glob (joinPath .chezmoi.sourceDir "dot_local/share/dotfiles-bootstrap-async.d/*")) -}}
+{{- $blob := "" -}}
+{{- range $inputs }}{{ $blob = printf "%s%s" $blob (include .) }}{{ end -}}
+# inputs hash: {{ $blob | sha256sum }}
+
+set -eu
+
+unit=dotfiles-bootstrap-async.service
+marker="${HOME}/.local/state/dotfiles-bootstrap-async.done"
+worker="${HOME}/.local/bin/dotfiles-bootstrap-async"
+fallback_log="${HOME}/.local/state/dotfiles-bootstrap-async.log"
+
+if [[ -e ${marker} ]]; then
+  echo "Async bootstrap already complete: ${marker}"
+  exit 0
+fi
+
+if ! systemctl --user is-system-running >/dev/null 2>&1; then
+  echo 'Warning: no systemd user session, running detached instead' >&2
+  mkdir -p "$(dirname "${fallback_log}")"
+  nohup "${worker}" >"${fallback_log}" 2>&1 &
+  disown
+  echo "Logging to ${fallback_log}"
+  exit 0
+fi
+
+# chezmoi has just written the unit file, so the manager needs to re-read it
+systemctl --user daemon-reload
+
+# --no-block returns as soon as the job is queued instead of waiting out the
+# whole install
+systemctl --user start --no-block "${unit}"
+
+echo "Async bootstrap started: journalctl --user -u ${unit} -f"

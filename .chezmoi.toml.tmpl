@@ -1,0 +1,7 @@
+{{- /* Prompted once at `chezmoi init` and persisted into the local chezmoi config */ -}}
+{{- $name := promptStringOnce . "name" "Git author name" "Ed Mandret" -}}
+{{- $email := promptStringOnce . "email" "Git author email" "emandret@student.42.fr" -}}
+
+[data]
+  name = {{ $name | quote }}
+  email = {{ $email | quote }}

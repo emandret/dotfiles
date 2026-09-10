@@ -1,0 +1,110 @@
+{{- $clip := "xclip -i -sel clip" -}}
+{{- if eq .chezmoi.os "darwin" -}}
+{{- $clip = "pbcopy" -}}
+{{- end -}}
+# Enable xterm support
+set -g default-terminal 'tmux-256color'
+set-option -ga terminal-overrides ',xterm-256color:Tc'
+set-window-option -g xterm-keys on
+
+# Enable osc52 clipboard support
+set -s set-clipboard on
+
+# Set word separators as only blanks
+setw -g word-separators " \n"
+
+# Enable mouse support
+set -g mouse on
+set -g base-index 1
+unbind -n MouseDown3Pane
+
+{{ with lookPath "zsh" -}}
+# Use zsh as the default shell.
+set-option -g default-shell {{ . }}
+{{- end }}
+
+# Automatic renaming of tabs and terminal titles based on the current command
+set-window-option -g automatic-rename on
+set-option -g set-titles on
+
+# Enable Vim-style keybinding for the tmux status line and copy mode
+set -g status-keys vi
+setw -g mode-keys vi
+
+# Remove delay for escape sequences
+set -sg escape-time 0
+
+# Set scrollback history buffer to 10k lines
+set -g history-limit 10000
+
+# Highlight tabs where activity occurred
+setw -g monitor-activity on
+
+# Bind the prefix key to C-b
+set -g prefix C-b
+bind C-b send-prefix
+
+# Reload the config
+bind r source-file ~/.tmux.conf
+
+# Rename the current pane
+bind t command-prompt -p "(rename-pane)" -I "#T" "select-pane -T '%%'"
+
+# Tabs
+bind c new-window -c "#{pane_current_path}"
+bind p previous-window
+bind n next-window
+
+# Use Ctrl-Shift-Arrow keys to switch tabs without prefix
+bind -n C-S-Left  previous-window
+bind -n C-S-Right next-window
+
+# Split tab horizontally and vertically
+bind s split-window -v -c "#{pane_current_path}"
+bind v split-window -h -c "#{pane_current_path}"
+
+# Use Vim-style keys to resize panes
+bind H resize-pane -L 20
+bind J resize-pane -D 20
+bind K resize-pane -U 20
+bind L resize-pane -R 20
+
+# Use Vim-style keys to select panes
+bind h select-pane -L
+bind j select-pane -D
+bind k select-pane -U
+bind l select-pane -R
+
+# Use Alt-Vim keys to select panes without prefix
+bind -n M-h select-pane -L
+bind -n M-j select-pane -D
+bind -n M-k select-pane -U
+bind -n M-l select-pane -R
+
+# Use Alt-Arrow keys to select panes without prefix
+bind -n M-Left  select-pane -L
+bind -n M-Down  select-pane -D
+bind -n M-Up    select-pane -U
+bind -n M-Right select-pane -R
+
+# Use prefix+[ then v to enter visual mode and y to yank to system clipboard
+bind -Tcopy-mode-vi v send-keys -X begin-selection
+bind -Tcopy-mode-vi y send-keys -X copy-pipe-and-cancel '{{ $clip }}'
+
+# Use the mouse to drag and select text
+bind -Tcopy-mode-vi MouseDragEnd1Pane send -X copy-pipe-and-cancel '{{ $clip }}'
+
+# Double-click to select a word and right-click to copy
+bind -n DoubleClick1Pane select-pane \; copy-mode -M \; send-keys -X select-word
+bind -Tcopy-mode-vi MouseUp3Pane send -X copy-pipe-and-cancel '{{ $clip }}'
+
+# Theme
+set -g pane-active-border-style     fg=green
+set -g status-style                 bg=default
+set -g status-justify               centre
+set -g status-position              bottom
+set -g status-left-length           0
+set -g status-right-length          0
+set -g status-left                  ''
+set -g status-right                 ''
+set -g window-status-current-format "#[bold,fg=green] #I:#W* "
